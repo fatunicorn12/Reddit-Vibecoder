@@ -1,0 +1,26 @@
+{
+  "description": "A 2D grid-based Pygame where the player controls a character sliding uncontrollably across a lube-covered bathroom floor. The goal is to reach an exit tile without hitting obstacles or falling off the map.",
+  "features": [
+    "Grid-based movement with persistent sliding in one direction until stopped.",
+    "Player character (simple square).",
+    "Static game map with start, exit, and obstacle tiles.",
+    "Collision detection with obstacles and map boundaries.",
+    "Game Over condition upon hitting an obstacle or falling off the map.",
+    "Win condition upon reaching the exit tile.",
+    "Restart mechanism for new game sessions.",
+    "Basic Pygame rendering of grid, player, and status messages."
+  ],
+  "steps": [
+    "1. Initialize Pygame: Set up the game window, title, and clock for frame rate control.",
+    "2. Define Game Constants: Establish `TILE_SIZE`, `GRID_WIDTH`, `GRID_HEIGHT`, and color values for background, player, obstacles, and exit.",
+    "3. Create Game Map: Design a simple 2D list (e.g., 8x8) representing the grid, using integers to denote tile types (e.g., 0: empty/lube, 1: obstacle, 2: player start, 3: exit).",
+    "4. Implement Player State: Store player's current `(x, y)` grid coordinates, `sliding_direction` (e.g., 'NONE', 'UP', 'DOWN', 'LEFT', 'RIGHT'), and `game_state` (e.g., 'PLAYING', 'GAME_OVER', 'WIN'). Initialize player at the 'player start' tile from the map.",
+    "5. Develop Drawing Logic: Create a function to render the game state. It should: a) Draw grid tiles based on the map data (e.g., gray for empty, brown for obstacles, green for exit). b) Draw the player character as a colored square at its current `(x, y)` position. c) Display 'GAME OVER', 'YOU WIN!', or 'Press R to Restart' messages when appropriate.",
+    "6. Implement Movement and Collision Logic: Create a function to handle player movement. If `sliding_direction` is not 'NONE': a) Calculate the next `(x, y)` position based on the current direction. b) Check if the next position is off-map or an obstacle tile; if so, set `game_state` to 'GAME_OVER', stop sliding (set `sliding_direction` to 'NONE'), and ensure player visually stops *before* the collision point. c) Check if the next position is the exit tile; if so, set `game_state` to 'WIN' and stop sliding. d) Otherwise, update player's `(x, y)` to the new position.",
+    "7. Handle User Input: In the main game loop, process Pygame events: a) `QUIT` event to exit the game. b) `KEYDOWN` events for arrow keys: if `game_state` is 'PLAYING' and `sliding_direction` is 'NONE', set `sliding_direction` to the pressed arrow key's direction. c) `KEYDOWN` event for 'R' key: if `game_state` is 'GAME_OVER' or 'WIN', reset player position, `sliding_direction`, and `game_state` to 'PLAYING' to restart the level.",
+    "8. Construct Main Game Loop: Orchestrate the game flow. In each iteration: a) Handle events. b) Update game logic (call movement/collision function). c) Draw all elements to the screen. d) Update the display. e) Control frame rate using `pygame.time.Clock.tick()`."
+  ],
+  "dependencies": [
+    "pygame"
+  ]
+}

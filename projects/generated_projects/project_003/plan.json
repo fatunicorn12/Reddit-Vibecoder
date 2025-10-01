@@ -1,0 +1,21 @@
+{
+  "description": "A static web application designed to help users on their weight loss journey. It presents common 'sabotaging' comments from friends as clickable buttons, and upon clicking, displays a healthy, positive internal thought or counter-argument to reinforce the user's resolve.",
+  "features": [
+    "Display a predefined set of 'sabotaging' comments as interactive buttons.",
+    "Upon clicking a comment button, a specific, positive counter-argument or internal thought is shown.",
+    "Clear separation of content (HTML), styling (CSS), and logic (JavaScript).",
+    "Basic, clean user interface."
+  ],
+  "steps": [
+    "**1. Create `index.html`:** Set up the basic HTML5 structure. Include a `<title>`, link to `style.css`, and link to `script.js` (at the end of `<body>`). Create a header, a `div` to contain the comment buttons, and another `div` to display the positive response.",
+    "**2. Create `style.css`:** Add basic CSS rules for the body (e.g., font, text alignment), a container for the app elements, buttons (e.g., `background-color`, `padding`, `margin`, `border-radius`, `cursor: pointer`), and the response display area (e.g., `font-style`, `margin-top`, `min-height`).",
+    "**3. Create `script.js`:**",
+    "   a. Define a JavaScript array of objects, where each object represents a comment and its corresponding response (e.g., `[{ comment: 'Why only one slice?', response: 'I'm making healthy choices for myself.' }, ...]`).",
+    "   b. Get references to the HTML elements for the button container and the response display `div` using `document.getElementById()` or `document.querySelector()`.",
+    "   c. Loop through the data array: for each item, create a new `<button>` element. Set its `textContent` to the `comment` from the current object. Add a CSS class to the button for styling. Attach a `data-response` attribute to the button, storing the corresponding `response` string.",
+    "   d. Append each created button to the button container `div`.",
+    "   e. Add a single event listener to the button container (event delegation) or to each individual button. When a button is clicked, retrieve the `data-response` attribute from the clicked button and update the `textContent` of the response display `div` with this value.",
+    "   f. Initialize the response display `div` with a default encouraging message when the page loads."
+  ],
+  "dependencies": []
+}

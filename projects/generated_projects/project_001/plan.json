@@ -1,0 +1,31 @@
+{
+  "description": "A console-based rhythm game MVP where a miniature virtual guillotine automatically 'chops' fruit. The game simulates timing accuracy for each chop and provides a score based on performance over a short demo period, then exits.",
+  "features": [
+    "Automatic, timed fruit appearance based on a rhythmic beat.",
+    "Simulated guillotine chop event with randomized timing accuracy (perfect, early, late).",
+    "Scoring system that awards points based on chop accuracy.",
+    "Console output for real-time game events (fruit appearing, chop outcome, score updates).",
+    "Automatic demo mode that runs for a fixed duration (e.g., 5-10 seconds).",
+    "Final summary displaying total score, perfect chops, and missed chops."
+  ],
+  "steps": [
+    "Import necessary standard libraries: `time` for timing and `random` for simulating events.",
+    "Define constants for game parameters: `GAME_DURATION_SECONDS`, `BEAT_INTERVAL_SECONDS` (e.g., 1 second per beat), `PERFECT_SCORE`, `IMPERFECT_SCORE` (or 0).",
+    "Initialize game state variables: `total_score = 0`, `perfect_chops = 0`, `imperfect_chops = 0`.",
+    "Print a 'Game Starting...' message and instructions for the automatic demo.",
+    "Record the `start_time` using `time.time()`.",
+    "Enter the main game loop: `while time.time() - start_time < GAME_DURATION_SECONDS`.",
+    "Inside the loop: Calculate the `next_beat_time` based on `start_time` and the current iteration count.",
+    "Wait until the `next_beat_time` using `time.sleep(max(0, next_beat_time - time.time()))` to maintain rhythm.",
+    "Print a message indicating a 'Fruit appears!'.",
+    "Simulate guillotine timing: Use `random.choice(['perfect', 'early', 'late'])` to determine the chop accuracy.",
+    "Based on accuracy, update `total_score`, `perfect_chops`, or `imperfect_chops` accordingly.",
+    "Print the outcome of the chop (e.g., 'Perfect Chop!', 'Early Chop!', 'Late Chop!') and the current score.",
+    "After the loop, print a 'Game Over!' message.",
+    "Print a final summary: `Total Score`, `Perfect Chops`, `Imperfect Chops`."
+  ],
+  "dependencies": [
+    "time",
+    "random"
+  ]
+}

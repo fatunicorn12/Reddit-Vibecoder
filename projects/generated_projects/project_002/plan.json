@@ -1,0 +1,34 @@
+{
+  "description": "A simple Pygame where the player manages a digital employee by dodging 'boss attacks' to prevent their stress meter from overflowing. The objective is to survive as long as possible, measured in 'days worked', before the employee succumbs to stress.",
+  "features": [
+    "Player-controlled employee character (rectangle) moving horizontally.",
+    "Falling 'boss attack' obstacles (red rectangles) that increase stress on collision.",
+    "Visible stress meter that fills up.",
+    "Game over condition when stress meter is full.",
+    "Score tracking representing 'days worked' (based on survival time).",
+    "Increasing difficulty over time (faster/more boss attacks).",
+    "Restartable gameplay after game over."
+  ],
+  "steps": [
+    "1. Initialize Pygame: Set up the display window (e.g., 600x400 pixels) and title.",
+    "2. Define Game Constants: Colors, screen dimensions, player size/speed, boss attack size/speed, stress meter properties.",
+    "3. Game State Variables: Initialize player position, current stress level (e.g., 0-100), list of active boss attacks, score (days worked), game over flag.",
+    "4. Create Game Loop: Implement the main game loop that runs until the user quits.",
+    "5. Event Handling: Inside the loop, check for `QUIT` event to close the window. Handle `KEYDOWN` events for left/right arrow keys to control the player's horizontal movement. Handle `KEYUP` to stop movement.",
+    "6. Player Movement Logic: Update the player's x-position based on input, ensuring the player stays within screen boundaries.",
+    "7. Boss Attack Generation: Periodically (e.g., every few seconds, or more frequently over time), create new 'boss attack' rectangles at random top screen x-positions with a downward speed. Add them to the list of active boss attacks.",
+    "8. Boss Attack Movement: Iterate through active boss attacks, update their y-position. Remove any attacks that move off the bottom of the screen.",
+    "9. Collision Detection: Check for collisions between the player rectangle and each active boss attack rectangle. If a collision occurs:",
+    "   a. Increase the employee's stress level by a defined amount (e.g., 10-20 points).",
+    "   b. Remove the collided boss attack from the active list.",
+    "   c. If stress level exceeds max, set the `game_over` flag to True.",
+    "10. Score Update: Increment the 'days worked' score based on elapsed game time (e.g., 1 day for every 5-10 seconds of survival).",
+    "11. Drawing: Clear the screen. Draw the player rectangle. Draw all active boss attack rectangles. Draw the stress meter as a colored bar. Draw the current 'days worked' score and 'Game Over' message if applicable.",
+    "12. Update Display: Use `pygame.display.flip()` to show the rendered frame.",
+    "13. Frame Rate Control: Use `pygame.time.Clock.tick()` to maintain a consistent frame rate (e.g., 60 FPS).",
+    "14. Restart Logic: If `game_over` is True, pause the game, display a 'Press R to Restart' message. On 'R' key press, reset all game state variables to their initial values and continue the game loop."
+  ],
+  "dependencies": [
+    "pygame"
+  ]
+}

@@ -1,0 +1,36 @@
+index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motivation Quest</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <h1>Motivation Quest: Food & Fitness</h1>
+        <p id="scenario-text">Welcome to Motivation Quest! Make choices to keep your motivation high.</p>
+        <div id="choices">
+            <!-- Choice buttons will be injected here by JavaScript -->
+        </div>
+        <p id="motivation-score">Motivation: 50</p>
+        <button id="restart-btn">Restart Game</button>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
+
+style.css
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    padding: 20px;
+    box-sizing: border-box;
+}
