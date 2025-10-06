@@ -1,0 +1,24 @@
+{
+  "description": "A simple 2D Pygame arcade game where the player controls a central character, avoiding randomly moving abstract entities. The objective is to survive as long as possible by preventing any entity from entering the character's immediate personal space, earning points based on time survived.",
+  "features": [
+    "Player character controlled by keyboard (WASD or arrow keys).",
+    "Stream of randomly generated and moving abstract entities.",
+    "Collision detection: game ends if an entity touches the player's defined 'personal space'.",
+    "Score tracking: displays the time (in seconds) the player has survived.",
+    "Game Over screen with an option to restart the game.",
+    "Basic graphical representation of player, entities, and score."
+  ],
+  "steps": [
+    "**1. Pygame Initialization and Setup:** Initialize Pygame, define screen dimensions (e.g., 800x600), set up the display window, and create a game clock for frame rate control.",
+    "**2. Player Object Implementation:** Create a `Player` class or dictionary to manage player state (position, size, color, speed). Implement keyboard input handling (WASD or arrow keys) to move the player within screen boundaries. Define a 'personal space' rectangle/circle slightly larger than the player's visual representation for collision detection.",
+    "**3. Entity Management:** Create a `Entity` class or dictionary for entities (position, size, color, speed). Implement logic to periodically spawn new entities from random points on one side of the screen (e.g., top, right) with random speeds and directions (e.g., moving towards the bottom-left). Store active entities in a list and remove them once they move off-screen.",
+    "**4. Game Loop Structure:** Implement the main game loop, handling Pygame events (QUIT, keyboard presses).",
+    "**5. Game State Update:** Inside the game loop, update the player's position based on input. Update the position of all active entities. Increment the survival time (score) using `pygame.time.get_ticks()` or the clock.",
+    "**6. Collision Detection:** For each active entity, check for collision between its bounding box and the player's 'personal space' bounding box. If a collision occurs, set a `game_over` flag to true.",
+    "**7. Drawing and Rendering:** Clear the screen. Draw the player character and all active entities. Render and display the current score on the screen. If `game_over` is true, display a 'Game Over!' message and instructions to restart (e.g., 'Press R to Restart').",
+    "**8. Game Over and Restart Logic:** When `game_over` is true, pause entity spawning/movement. If the 'restart' key is pressed, reset player position, clear all entities, reset the score, and set `game_over` to false to begin a new game."
+  ],
+  "dependencies": [
+    "pygame"
+  ]
+}

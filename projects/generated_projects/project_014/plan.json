@@ -1,0 +1,18 @@
+{
+  "description": "A static web page featuring a button that, when clicked, displays a randomly selected, universally positive 'You're a 10/10!' affirmation to boost self-esteem.",
+  "features": [
+    "Static HTML page structure.",
+    "A prominent clickable button.",
+    "A dedicated area to display affirmations.",
+    "Random selection of affirmations from a predefined list.",
+    "Affirmations are universally positive and themed 'You're a 10/10!'."
+  ],
+  "steps": [
+    "**1. Create `index.html`:**\n   - Set up basic HTML5 structure with `<head>` and `<body>`.\n   - Link to `style.css` in the `<head>`.\n   - Inside `<body>`, create a main `div` container.\n   - Inside the container, add an `<h1>` for the page title (e.g., 'Your Daily Boost!').\n   - Add a `<p>` element with an `id=\"affirmationDisplay\"` to show the affirmations (initially empty or a default message).\n   - Add a `<button>` element with an `id=\"generateAffirmationBtn\"` and text like 'Get Your 10/10 Boost!'.\n   - Link to `script.js` at the end of the `<body>` tag, just before `</body>`.",
+    "**2. Create `style.css`:**\n   - Apply basic styling to `body` for centering content (e.g., `display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; font-family: sans-serif; text-align: center; margin: 0; background-color: #f0f8ff;`).\n   - Style the main container (e.g., `padding: 20px; border-radius: 10px; background-color: #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.1);`).\n   - Style `h1` (e.g., `color: #4682b4;`).\n   - Style the `#affirmationDisplay` paragraph (e.g., `font-size: 1.8em; margin: 20px 0; min-height: 1.5em; color: #32cd32; font-weight: bold;`).\n   - Style the `#generateAffirmationBtn` (e.g., `padding: 12px 25px; font-size: 1.1em; background-color: #ff6347; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;`).\n   - Add a hover effect for the button (e.g., `button:hover { background-color: #ff4500; }`).",
+    "**3. Create `script.js`:**\n   - Define an array named `affirmations` containing several positive 'You're a 10/10!' statements (e.g., `\"You're a 10/10! Absolutely radiant!\"`, `\"You're a 10/10! Your potential is limitless!\"`, `\"You're a 10/10! Keep shining your unique light!\"`).\n   - Get a reference to the button element using `document.getElementById('generateAffirmationBtn')`.\n   - Get a reference to the affirmation display paragraph using `document.getElementById('affirmationDisplay')`.\n   - Add an event listener to the button for the 'click' event.\n   - Inside the event listener function:\n     - Generate a random index within the bounds of the `affirmations` array length (e.g., `Math.floor(Math.random() * affirmations.length)`).\n     - Select an affirmation from the array using the random index.\n     - Update the `innerText` property of the `affirmationDisplay` element with the selected affirmation."
+  ],
+  "dependencies": [
+    "None (standard browser functionality for HTML, CSS, JavaScript)"
+  ]
+}

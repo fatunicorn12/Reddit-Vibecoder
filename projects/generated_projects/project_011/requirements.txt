@@ -1,0 +1,1 @@
+None (uses standard web technologies: HTML, CSS, JavaScript)

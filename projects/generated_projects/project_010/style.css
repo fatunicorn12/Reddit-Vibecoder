@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: #333;
+}
+
+header, footer {
+  background: #6c5ce7;
+  color: #fff;
+  text-align: center;
+  padding: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  margin: 0;
+  font-weight: 600;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.container, #app {
+  background: #fafafa;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+}
+
+button, .btn {
+  cursor: pointer;
+  padding: 12px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  background: #6c5ce7;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+button:hover, .btn:hover {
+  background: #5a4dd4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Gemini Generated */
+index.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scam Detector</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Scam Story Analyzer</h1>
+    <textarea id="storyInput" placeholder="Paste your story here..."></textarea>
+    <button id="analyzeButton">Analyze Story</button>
+    <div id="redFlagsOutput"></div>
+    <div id="scoreOutput"></div>
+    <script src="script.js"></script>
+</body>
+</html>
+
+style.css
+body { font-family: sans-serif; max-width: 800px; margin: 20px auto; padding: 0 15px; }
+
+h1 { text-align: center; color: #333; }
+
+textarea { width: 100%; height: 200px; margin-bottom: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; resize: vertical; }
+
+button { display: block; width: 200px; margin: 0 auto 20px auto; padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+
+button:hover { background-color: #0056b3; }
+
+#redFlagsOutput, #scoreOutput { background-color: #f8f9fa; border: 1px solid #e9ecef; padding: 15px; margin-top: 10px; border-radius: 4px; }
+
+#redFlagsOutput strong, #scoreOutput strong { color: #dc3545; }
+
+
+script.js
+document.addEventListener('DOMContentLoaded', initApp);
+
+function initApp() {
+    const scamKeywords = {
+      'urgent transfer': 10,
+      'inheritance': 7,
+      'lottery winner': 8,
+      'prince': 5,
+      'bank account': 6,
+      'send money': 10,
+      'western union': 9,
+      'tax customs fee': 8,
+      'stranded': 7,
+      'secret deal': 6,
+      'investment opportunity': 5,
+      'wire transfer': 9
+    }
+;
+
+    const storyInput = document.getElementById('storyInput');
+    const analyzeButton = document.getElementById('analyzeButton');
+    const redFlagsOutput = document.getElementById('redFlagsOutput');
+    const scoreOutput = document.getElementById('scoreOutput');
+
+    analyzeButton.addEventListener('click', analyzeStory);
+
+    function analyzeStory() {
+      const story = storyInput.value.toLowerCase();
+      let scamScore = 0;
+      const detectedFlags = [];
+
+      for (const keyword in scamKeywords) {
+        if (story.includes(keyword)) {
+          scamScore += scamKeywords[keyword];
+          detectedFlags.push(keyword);
+        }
+
+      }
+
+      let flagsHtml = '<strong>Detected Red Flags:</strong> ';
+      if (detectedFlags.length > 0) {
+        flagsHtml += detectedFlags.map(flag => `<span style="color: red;">${flag}
+</span>`).join(', ') + '.';
+      } else {
+        flagsHtml += 'None detected.';
+      }
+
+      redFlagsOutput.innerHTML = flagsHtml;
+
+      const maxPossibleScore = Object.values(scamKeywords).reduce((a, b) => a + b, 0);
+      scoreOutput.innerHTML = `<strong>Scam Likelihood Score:</strong> ${scamScore}
+ / ${maxPossibleScore}

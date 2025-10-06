@@ -1,0 +1,1 @@
+None (standard browser functionality for HTML, CSS, JavaScript)

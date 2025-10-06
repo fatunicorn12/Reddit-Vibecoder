@@ -1,7 +1,39 @@
-document.getElementById('scenario-text');
+const scenarioText = document.getElementById('scenario-text');
 const choicesDiv = document.getElementById('choices');
 const motivationScoreDisplay = document.getElementById('motivation-score');
 const restartBtn = document.getElementById('restart-btn');
+
+
+// --- Game Data ---
+const MIN_MOTIVATION = 0;
+const MAX_MOTIVATION = 100;
+let motivation = 50;
+let currentScenarioIndex = 0;
+
+const scenarios = [
+    {
+        text: "You wake up feeling tired. Do you:",
+        options: [
+            { text: "Go for a run to wake up", impact: +10 },
+            { text: "Stay in bed scrolling your phone", impact: -10 }
+        ]
+    },
+    {
+        text: "It’s lunchtime! What do you eat?",
+        options: [
+            { text: "A balanced meal with protein and veggies", impact: +15 },
+            { text: "Fast food burger and fries", impact: -15 }
+        ]
+    },
+    {
+        text: "You’re deciding what to do tonight. Do you:",
+        options: [
+            { text: "Go to the gym for a quick workout", impact: +20 },
+            { text: "Binge-watch a show until midnight", impact: -20 }
+        ]
+    }
+];
+
 
 // --- 4. Functions ---
 

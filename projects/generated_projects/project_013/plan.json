@@ -1,0 +1,31 @@
+{
+  "description": "A static web application designed to boost user self-esteem. Users input their name or a phrase, click a button, and receive an unconditional '10/10' rating accompanied by a randomized positive affirmation.",
+  "features": [
+    "User input field for name/descriptive phrase.",
+    "Clickable button to generate the rating and affirmation.",
+    "Displays an unconditional '10/10' rating.",
+    "Presents a randomly selected positive affirmation.",
+    "Optional personalization of the affirmation message using user input."
+  ],
+  "steps": [
+    "1. Create a project directory named 'SelfEsteemBooster'.",
+    "2. Inside 'SelfEsteemBooster', create three files: 'index.html', 'style.css', and 'script.js'.",
+    "3. **index.html:** Set up a basic HTML5 document. Include a `<h1>` title, an `<input type=\"text\" id=\"userInput\" placeholder=\"Enter your name or a phrase...\">`, a `<button id=\"rateButton\">Get Your 10/10 Rating!</button>`, and an empty `<div>` with `id=\"result\"` to display the output. Link 'style.css' in the `<head>` section and 'script.js' at the end of the `<body>` before the closing tag.",
+    "4. **style.css:** Add basic styling to center content, improve readability, and give a pleasant appearance. Use CSS to style the body, input field, button, and the result display area (e.g., font-family, text-align, padding, margin, font-size).",
+    "5. **script.js:**",
+    "   a. Define an array of strings called `affirmations`, containing at least 5-10 positive, self-esteem-boosting phrases (e.g., 'You are truly amazing!', 'You're doing great, keep shining!', 'Your presence makes the world brighter.').",
+    "   b. Get references to the HTML elements: `userInput` (the input field), `rateButton` (the button), and `result` (the div for output) using `document.getElementById()`.",
+    "   c. Add an event listener to the `rateButton` that triggers on a 'click'.",
+    "   d. Inside the click event handler function:",
+    "      i. Retrieve the trimmed value from the `userInput` field. Store it in a variable, e.g., `userName`.",
+    "      ii. Generate a random index to select an affirmation from the `affirmations` array.",
+    "      iii. Construct the message string. Start with 'You are a magnificent 10/10! '.",
+    "      iv. If `userName` is not empty, prepend 'Hey ' + `userName` + ', ' to the selected affirmation. Otherwise, just use the selected affirmation.",
+    "      v. Append the personalized (or standard) affirmation to the initial '10/10' message.",
+    "      vi. Update the `innerHTML` of the `result` div with the final constructed message.",
+    "6. Open 'index.html' in any web browser to run and test the application locally."
+  ],
+  "dependencies": [
+    "None (standard HTML, CSS, and JavaScript are sufficient)."
+  ]
+}

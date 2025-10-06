@@ -1,0 +1,38 @@
+{
+  "description": "A static web application that generates a random, uplifting compliment paired with an 'Always-a-10' affirmation, designed to instantly boost a user's mood and make them smile.",
+  "features": [
+    "Display a prominent button to trigger compliment generation.",
+    "Generate and display a random positive compliment from a predefined list.",
+    "Unwaveringly append 'You're a perfect 10/10!' to every generated compliment.",
+    "Simple and clean user interface using standard HTML, CSS, and JavaScript.",
+    "Runnable locally by simply opening the index.html file in any web browser."
+  ],
+  "steps": [
+    "1. **Project Setup**: Create a new folder named `always-a-10-compliment-generator`.",
+    "2. **`index.html` Creation**: Inside the folder, create `index.html` with the following basic structure:",
+    "   - Include a `DOCTYPE` declaration and `<html>`, `<head>`, `<body>` tags.",
+    "   - In `<head>`, set the document title (e.g., 'Always-a-10 Compliment Generator') and link to `style.css`.",
+    "   - In `<body>`, add a main heading (e.g., 'The Always-a-10 Compliment Generator').",
+    "   - Create a `div` element with an `id` (e.g., `compliment-display`) to show the generated compliment.",
+    "   - Add a `<button>` element with an `id` (e.g., `generate-btn`) and text (e.g., 'Get Your 10/10 Compliment!').",
+    "   - Link `script.js` at the end of the `<body>` section.",
+    "3. **`style.css` Creation**: Inside the folder, create `style.css` to style the app:",
+    "   - Add basic `body` styling (e.g., `font-family`, `display: flex`, `flex-direction: column`, `align-items: center`, `justify-content: center`, `min-height: 100vh`, `margin: 0`, `background-color`).",
+    "   - Style the main heading (e.g., `color`, `margin-bottom`).",
+    "   - Style the compliment display `div` (e.g., `font-size`, `text-align`, `padding`, `margin`, `min-height`, `background-color`, `border-radius`, `box-shadow`).",
+    "   - Style the button (e.g., `padding`, `font-size`, `background-color`, `color`, `border`, `border-radius`, `cursor`, `margin-top`).",
+    "4. **`script.js` Creation**: Inside the folder, create `script.js` to handle the logic:",
+    "   - Define an array of universally positive compliments (e.g., `['Your kindness is contagious!', 'You light up every room you enter.', 'Your creativity knows no bounds!', 'You're an absolute joy to be around.']`).",
+    "   - Get references to the compliment display `div` and the generate button using their `id`s.",
+    "   - Add an event listener to the generate button for the 'click' event.",
+    "   - Inside the event listener function:",
+    "     - Generate a random index within the bounds of the compliments array.",
+    "     - Select a random compliment using this index.",
+    "     - Concatenate the selected compliment with the fixed string ' You're a perfect 10/10!' (or similar wording).",
+    "     - Set the `textContent` of the compliment display `div` to the combined message.",
+    "5. **Local Execution**: Open `index.html` directly in your web browser to run the application."
+  ],
+  "dependencies": [
+    "None (relies solely on standard HTML, CSS, and JavaScript features available in all modern web browsers)"
+  ]
+}

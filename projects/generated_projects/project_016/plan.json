@@ -1,0 +1,23 @@
+{
+  "description": "A static web game where the player attempts to earn points by 'peeking' at virtual neighbors in a hot tub. The player must quickly 'hide' to avoid being caught when the neighbor randomly looks up, or it's game over. The goal is to achieve the highest score.",
+  "features": [
+    "Simple game interface with background, player (hidden/peeking), and neighbor elements.",
+    "Player controls (click/tap) to toggle between peeking and hiding states.",
+    "Score accumulation while the player is in the 'peeking' state.",
+    "Randomized 'neighbor looking up' events that serve as the detection mechanic.",
+    "Game over condition if the player is peeking when the neighbor looks up.",
+    "Display of current score.",
+    "Game over screen with final score and a restart option."
+  ],
+  "steps": [
+    "**1. index.html:** Create the main HTML file. Include a `div` for the game container, a `div` for the player character (e.g., an image or simple graphic), a `div` to represent the neighbor/hot tub area, a `span` or `div` for displaying the current score, and a hidden `div` for the game over screen (including final score and a 'Restart' button). Link `style.css` and `script.js`.",
+    "**2. style.css:** Define basic CSS rules. Style the game container (e.g., fixed size, background image for the neighborhood/house). Style the player element to have two states: 'hidden' (e.g., transparent or off-screen) and 'peeking' (visible). Style the neighbor/hot tub area. Style the score display and the game over screen (initially hidden).",
+    "**3. script.js (Initialization):**\n    a. Get references to all necessary HTML elements (game container, player, score display, game over screen, restart button).\n    b. Define global game state variables: `score = 0`, `isPeeking = false`, `isGameOver = false`, `neighborLookTimer = 0`, `neighborLookInterval = 3000` (initial random interval).\n    c. Create an `initGame()` function: reset `score`, `isPeeking = false`, `isGameOver = false`. Hide the game over screen, show game elements, update score display to 0, and ensure player is in 'hidden' state.\n    d. Call `initGame()` when the page loads.",
+    "**4. script.js (Game Loop & Player Input):**\n    a. Create a `gameLoop()` function (e.g., using `requestAnimationFrame` for smooth updates, or `setInterval` for simplicity) that calls a `gameTick()` function repeatedly.\n    b. Add an event listener to the game container (or a dedicated button) that toggles the `isPeeking` state when clicked. Update the player's CSS class accordingly to visually show/hide the peeker.",
+    "**5. script.js (Game Logic - `gameTick()`):**\n    a. Inside `gameTick()`, if `isGameOver` is false:\n        i. If `isPeeking` is true, increment `score` and update the score display.\n        ii. Update `neighborLookTimer` (e.g., `neighborLookTimer += deltaTime` where `deltaTime` is time since last frame, or simply `neighborLookTimer++` if using `setInterval`).\n        iii. If `neighborLookTimer` exceeds `neighborLookInterval`:\n            1. Reset `neighborLookTimer = 0`.\n            2. Randomize `neighborLookInterval` for the next look (e.g., between 2000ms and 5000ms).\n            3. If `isPeeking` is true at this moment, call `triggerGameOver()`.\n    b. Start the `gameLoop()` after `initGame()`.",
+    "**6. script.js (Game Over & Restart):**\n    a. Create a `triggerGameOver()` function: set `isGameOver = true`, stop the `gameLoop()`, display 'Game Over' message, show the final score, and make the restart button visible.\n    b. Add an event listener to the 'Restart' button that calls `initGame()` again to reset and start a new game."
+  ],
+  "dependencies": [
+    "None (vanilla HTML, CSS, and JavaScript)"
+  ]
+}

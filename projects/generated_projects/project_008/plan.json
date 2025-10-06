@@ -1,0 +1,18 @@
+{
+  "description": "A static web application that helps users redirect impulsive behaviors by providing randomized healthy activity suggestions and tracking successful diversions with a simple counter stored locally.",
+  "features": [
+    "Display a random healthy activity suggestion.",
+    "Button to generate a new suggestion.",
+    "Button to increment a 'successful diversions' counter.",
+    "Display the current value of the diversions counter.",
+    "Persist the diversions counter value in the browser's local storage."
+  ],
+  "steps": [
+    "**index.html (HTML Structure):**\n    - Create a basic HTML5 structure.\n    - Add a `div` or `p` element with an ID (e.g., `suggestion-display`) to show activity suggestions.\n    - Add a `button` element with an ID (e.g., `new-suggestion-btn`) to get a new suggestion.\n    - Add a `div` or `p` element with an ID (e.g., `counter-display`) to show the current diversion count.\n    - Add a `button` element with an ID (e.g., `increment-counter-btn`) to increment the counter.\n    - Link `style.css` in the `<head>`.\n    - Link `script.js` just before the closing `</body>` tag.",
+    "**style.css (Basic Styling):**\n    - Add basic CSS rules for `body`, `font-family`, `text-align`.\n    - Style the display elements and buttons for better readability and user experience.",
+    "**script.js (JavaScript Logic):**\n    - Define an array of healthy activity suggestions (e.g., ['Take 5 deep breaths.', 'Go for a 10-minute walk.', 'Drink a glass of water.', 'Stretch for 5 minutes.', 'Write down 3 things you're grateful for.']).\n    - Get references to the HTML elements (suggestion display, counter display, buttons) using their IDs.\n    - Implement a `loadCounter()` function: retrieve 'diversionCounter' from `localStorage`, parse it as an integer, default to 0 if not found, and update the `counter-display`.\n    - Implement a `saveCounter(count)` function: store the given count in `localStorage` under 'diversionCounter' and update the `counter-display`.\n    - Implement a `getRandomSuggestion()` function: return a random item from the suggestions array.\n    - Implement a `displaySuggestion()` function: update the `suggestion-display` element with a random suggestion.\n    - Add an event listener to `new-suggestion-btn` to call `displaySuggestion()` when clicked.\n    - Add an event listener to `increment-counter-btn`:\n        - Get the current counter value.\n        - Increment it by 1.\n        - Call `saveCounter()` with the new value.\n    - On page load (DOMContentLoaded event or simply at the end of the script):\n        - Call `loadCounter()` to initialize and display the counter.\n        - Call `displaySuggestion()` to show an initial suggestion."
+  ],
+  "dependencies": [
+    "None (uses standard HTML, CSS, and browser's built-in JavaScript APIs like `localStorage` and `document` manipulation)."
+  ]
+}

@@ -1,0 +1,1 @@
+None (uses standard HTML, CSS, and browser's built-in JavaScript APIs like `localStorage` and `document` manipulation).

@@ -1,0 +1,572 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: #333;
+}
+
+header, footer {
+  background: #6c5ce7;
+  color: #fff;
+  text-align: center;
+  padding: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  margin: 0;
+  font-weight: 600;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.container, #app {
+  background: #fafafa;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+}
+
+button, .btn {
+  cursor: pointer;
+  padding: 12px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  background: #6c5ce7;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+button:hover, .btn:hover {
+  background: #5a4dd4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Gemini Generated */
+`index.html` (Content for `<div id="app">`)
+
+<div id="app-container">
+    <h1>My Coping Toolkit</h1>
+
+    <section class="section-container">
+        <h2>Breathing Exercise</h2>
+        <div id="breathing-instruction">Press Start to begin</div>
+        <div id="breathing-visual"></div>
+        <div class="controls">
+            <button id="start-breathing-btn">Start Breathing</button>
+            <button id="stop-breathing-btn">Stop Breathing</button>
+        </div>
+    </section>
+
+    <section class="section-container">
+        <h2>Venting Space</h2>
+        <textarea id="venting-textarea" placeholder="Write down your thoughts... This will not be saved."></textarea>
+        <div class="controls">
+            <button id="clear-vent-btn">Clear Thoughts</button>
+        </div>
+    </section>
+
+    <section class="section-container">
+        <h2>Daily Mood Log</h2>
+        <div id="mood-selection">
+            <input type="radio" id="mood-happy" name="mood" value="Happy">
+            <label for="mood-happy">Happy</label>
+            <input type="radio" id="mood-neutral" name="mood" value="Neutral" checked>
+            <label for="mood-neutral">Neutral</label>
+            <input type="radio" id="mood-sad" name="mood" value="Sad">
+            <label for="mood-sad">Sad</label>
+            <input type="radio" id="mood-anxious" name="mood" value="Anxious">
+            <label for="mood-anxious">Anxious</label>
+            <input type="radio" id="mood-stressed" name="mood" value="Stressed">
+            <label for="mood-stressed">Stressed</label>
+        </div>
+        <textarea id="mood-note-textarea" placeholder="Add an optional note about your mood..."></textarea>
+        <div class="controls">
+            <button id="save-mood-btn">Save Mood</button>
+        </div>
+        <h3>Past Moods</h3>
+        <div id="mood-logs-display">
+            <!-- Mood entries will be displayed here -->
+        </div>
+    </section>
+</div>
+
+`style.css`
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f0f2f5;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+
+#app-container {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    width: 100%;
+    display: grid;
+    gap: 30px;
+}
+
+
+h1 {
+    text-align: center;
+    color: #4CAF50;
+    margin-bottom: 40px;
+    font-size: 2.5em;
+    border-bottom: 2px solid #e0e0e0;
+    padding-bottom: 15px;
+}
+
+
+h2 {
+    color: #2e7d32;
+    margin-top: 0;
+    font-size: 1.8em;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+h3 {
+    color: #555;
+    margin-top: 30px;
+    font-size: 1.4em;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+
+.section-container {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+
+.controls {
+    text-align: center;
+    margin-top: 20px;
+}
+
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    margin: 5px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+
+button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+}
+
+
+button:active {
+    transform: translateY(0);
+}
+
+
+textarea {
+    width: calc(100% - 20px);
+    min-height: 80px;
+    padding: 10px;
+    margin-top: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 1em;
+    resize: vertical;
+    box-sizing: border-box;
+}
+
+
+#breathing-instruction {
+    text-align: center;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #333;
+    min-height: 1.5em; /* Ensure consistent height */
+}
+
+
+#breathing-visual {
+    width: 150px;
+    height: 150px;
+    background-color: #66bb6a;
+    border-radius: 50%;
+    margin: 30px auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+
+.breathing-animation {
+    transition: transform 4s ease-in-out; /* Match breathing phase duration */
+}
+
+
+.scale-up {
+    transform: scale(1.2);
+    background-color: #81c784;
+}
+
+
+.scale-down {
+    transform: scale(0.8);
+    background-color: #4CAF50;
+}
+
+
+#mood-selection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+
+#mood-selection input[type="radio"] {
+    display: none;
+}
+
+
+#mood-selection label {
+    background-color: #e0e0e0;
+    padding: 10px 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    font-size: 0.95em;
+    color: #555;
+    white-space: nowrap;
+}
+
+
+#mood-selection input[type="radio"]:checked + label {
+    background-color: #4CAF50;
+    color: white;
+    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.4);
+}
+
+
+#mood-selection label:hover {
+    background-color: #d0d0d0;
+}
+
+
+#mood-logs-display {
+    margin-top: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 10px;
+    background-color: #fff;
+}
+
+
+.mood-entry {
+    background-color: #f0fcf0;
+    border: 1px solid #c8e6c9;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+
+.mood-entry p {
+    margin: 0;
+    font-size: 0.9em;
+    color: #333;
+}
+
+
+.mood-entry .mood-date {
+    font-weight: bold;
+    color: #2e7d32;
+    font-size: 0.95em;
+}
+
+
+.mood-entry .mood-text {
+    font-style: italic;
+    color: #555;
+}
+
+
+`script.js`
+
+function initApp() {
+    // --------------------------------------------------------------------
+    // 4. JavaScript - Breathing Exercise
+    // --------------------------------------------------------------------
+    const breathingInstruction = document.getElementById('breathing-instruction');
+    const breathingVisual = document.getElementById('breathing-visual');
+    const startBreathingBtn = document.getElementById('start-breathing-btn');
+    const stopBreathingBtn = document.getElementById('stop-breathing-btn');
+
+    let breathingIntervalId = null;
+    let breathingTimeoutId = null;
+    let breathingPhaseIndex = 0;
+
+    const breathingPhases = [
+        { instruction: 'Breathe In', duration: 4000, visualClass: 'scale-up' }
+,
+        { instruction: 'Hold', duration: 2000, visualClass: '' }
+,
+        { instruction: 'Breathe Out', duration: 6000, visualClass: 'scale-down' }
+,
+        { instruction: 'Hold', duration: 2000, visualClass: '' }
+
+    ];
+    const totalCycleDuration = breathingPhases.reduce((acc, phase) => acc + phase.duration, 0);
+
+    const cycleBreathing = () => {
+        const currentPhase = breathingPhases[breathingPhaseIndex];
+        breathingInstruction.textContent = currentPhase.instruction;
+
+        // Remove all previous scale classes
+        breathingVisual.classList.remove('scale-up', 'scale-down');
+        // Add the animation class if not already there, and then the specific phase class
+        breathingVisual.classList.add('breathing-animation');
+        if (currentPhase.visualClass) {
+            breathingVisual.classList.add(currentPhase.visualClass);
+        }
+
+
+        breathingTimeoutId = setTimeout(() => {
+            breathingPhaseIndex = (breathingPhaseIndex + 1) % breathingPhases.length;
+            // The interval will call cycleBreathing again after totalCycleDuration
+            // For smoother continuous animation, cycleBreathing itself handles the next step.
+            // But we need to ensure the animation completes before resetting for the next phase,
+            // which setInterval handles by re-triggering the whole cycle logic.
+            // We just need to manage the CSS classes correctly.
+            // The `totalCycleDuration` in setInterval ensures the entire sequence repeats.
+        }
+, currentPhase.duration); // Set timeout for the current phase's duration
+    };
+
+    const startBreathing = () => {
+        if (breathingIntervalId) {
+            clearInterval(breathingIntervalId);
+            clearTimeout(breathingTimeoutId);
+        }
+
+        breathingPhaseIndex = 0; // Reset to start
+        breathingVisual.classList.add('breathing-animation');
+        
+        // Call immediately for the first phase, then set interval for subsequent full cycles
+        cycleBreathing();
+        breathingIntervalId = setInterval(() => {
+            // This interval will re-trigger the entire sequence after the total cycle duration.
+            // However, the internal timeouts in `cycleBreathing` manage individual phase transitions.
+            // We need to ensure that `cycleBreathing` transitions correctly.
+            // Let's refine the logic for the interval to correctly restart the sequence.
+            // Instead of cycling within `cycleBreathing` then letting `setInterval` call it,
+            // `setInterval` should just trigger the *next* phase, which naturally cycles.
+            // So, cycleBreathing should not be recursive with setTimeout, but just perform one step.
+
+            // Resetting for a cleaner continuous cycle
+            clearTimeout(breathingTimeoutId);
+            cycleBreathing();
+        }
+, totalCycleDuration); // The interval should trigger the start of a new *full cycle* after the duration of one full cycle.
+
+        // Corrected logic for continuous breathing:
+        // The `setInterval` should not call `cycleBreathing` directly with `totalCycleDuration`.
+        // Instead, `cycleBreathing` should manage its own sequence of phases using `setTimeout`.
+        // And `setInterval` is just to initially kick it off, or it's not needed if `setTimeout` links phases.
+
+        // A better approach for continuous cycle:
+        // `cycleBreathing` is called, it sets an instruction and class, then schedules itself again after `currentPhase.duration`.
+        const startBreathingLoop = () => {
+            if (breathingTimeoutId) clearTimeout(breathingTimeoutId);
+            const currentPhase = breathingPhases[breathingPhaseIndex];
+            breathingInstruction.textContent = currentPhase.instruction;
+
+            breathingVisual.classList.remove('scale-up', 'scale-down');
+            breathingVisual.classList.add('breathing-animation'); // Ensure transition is active
+            if (currentPhase.visualClass) {
+                breathingVisual.classList.add(currentPhase.visualClass);
+            }
+ else {
+                // If no specific class, ensure it returns to base size after scale-down
+                // or remains at base size after hold.
+                breathingVisual.style.transform = 'scale(1)';
+            }
+
+
+
+            breathingTimeoutId = setTimeout(() => {
+                breathingPhaseIndex = (breathingPhaseIndex + 1) % breathingPhases.length;
+                startBreathingLoop(); // Call itself for the next phase
+            }
+, currentPhase.duration);
+        };
+
+        breathingPhaseIndex = 0;
+        breathingVisual.classList.add('breathing-animation');
+        startBreathingLoop();
+    };
+
+    const stopBreathing = () => {
+        if (breathingIntervalId) { // This variable is not used in the corrected loop, clearing it has no effect.
+            clearInterval(breathingIntervalId);
+        }
+
+        if (breathingTimeoutId) {
+            clearTimeout(breathingTimeoutId);
+        }
+
+        breathingInstruction.textContent = 'Press Start to begin';
+        breathingVisual.classList.remove('scale-up', 'scale-down', 'breathing-animation');
+        breathingVisual.style.transform = 'scale(1)'; // Ensure it resets to original size
+        breathingPhaseIndex = 0; // Reset for next start
+    };
+
+    startBreathingBtn.addEventListener('click', startBreathing);
+    stopBreathingBtn.addEventListener('click', stopBreathing);
+
+    // --------------------------------------------------------------------
+    // 5. JavaScript - Venting Space
+    // --------------------------------------------------------------------
+    const ventingTextarea = document.getElementById('venting-textarea');
+    const clearVentBtn = document.getElementById('clear-vent-btn');
+
+    clearVentBtn.addEventListener('click', () => {
+        ventingTextarea.value = '';
+    }
+);
+
+    // --------------------------------------------------------------------
+    // 6. JavaScript - Mood Logging
+    // --------------------------------------------------------------------
+    const moodRadios = document.querySelectorAll('#mood-selection input[name="mood"]');
+    const moodNoteTextarea = document.getElementById('mood-note-textarea');
+    const saveMoodBtn = document.getElementById('save-mood-btn');
+    const moodLogsDisplay = document.getElementById('mood-logs-display');
+
+    const saveMood = () => {
+        let selectedMood = '';
+        for (const radio of moodRadios) {
+            if (radio.checked) {
+                selectedMood = radio.value;
+                break;
+            }
+
+        }
+
+        const moodNote = moodNoteTextarea.value.trim();
+        const currentDate = new Date().toLocaleString();
+
+        if (!selectedMood) {
+            alert('Please select a mood!');
+            return;
+        }
+
+
+        let moodLogs = JSON.parse(localStorage.getItem('moodLogs') || '[]');
+        const newMoodEntry = {
+            date: currentDate,
+            mood: selectedMood,
+            note: moodNote
+        }
+;
+        moodLogs.push(newMoodEntry);
+        localStorage.setItem('moodLogs', JSON.stringify(moodLogs));
+
+        // Reset inputs
+        for (const radio of moodRadios) {
+            if (radio.value === 'Neutral') { // Set Neutral as default after saving
+                radio.checked = true;
+            }
+ else {
+                radio.checked = false;
+            }
+
+        }
+        moodNoteTextarea.value = '';
+
+        displayMoodLogs();
+    };
+
+    const displayMoodLogs = () => {
+        moodLogsDisplay.innerHTML = ''; // Clear current content
+        const moodLogs = JSON.parse(localStorage.getItem('moodLogs') || '[]');
+
+        if (moodLogs.length === 0) {
+            const noLogsMessage = document.createElement('p');
+            noLogsMessage.textContent = 'No mood logs yet. Save your first mood!';
+            noLogsMessage.style.textAlign = 'center';
+            noLogsMessage.style.color = '#777';
+            moodLogsDisplay.appendChild(noLogsMessage);
+            return;
+        }
+
+
+        // Display logs, newest first
+        [...moodLogs].reverse().forEach(entry => {
+            const entryDiv = document.createElement('div');
+            entryDiv.classList.add('mood-entry');
+
+            const dateP = document.createElement('p');
+            dateP.classList.add('mood-date');
+            dateP.textContent = `Date: ${entry.date}
+`;
+
+            const moodP = document.createElement('p');
+            moodP.textContent = `Mood: ${entry.mood}
+`;
+
+            entryDiv.appendChild(dateP);
+            entryDiv.appendChild(moodP);
+
+            if (entry.note) {
+                const noteP = document.createElement('p');
+                noteP.classList.add('mood-text');
+                noteP.textContent = `Note: ${entry.note}

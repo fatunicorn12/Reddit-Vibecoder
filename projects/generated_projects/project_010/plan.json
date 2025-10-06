@@ -1,0 +1,82 @@
+{
+  "description": "A static web application that allows users to submit a story, analyzes the text for common scam-related keywords and phrases (red flags), and calculates a 'Scam Likelihood Score' based on the detected indicators. The results are displayed directly in the browser.",
+  "features": [
+    "User interface with a text area for story submission.",
+    "Button to initiate the scam analysis.",
+    "Detection and display of identified scam red flag keywords/phrases.",
+    "Calculation and display of a numerical 'Scam Likelihood Score' based on the presence and weight of red flags."
+  ],
+  "steps": [
+    {
+      "step_name": "1. Set up HTML Structure (index.html)",
+      "description": "Create the main HTML file to host the application. It will include a title, a text area for user input, an 'Analyze' button, and dedicated sections to display the detected red flags and the final scam likelihood score.",
+      "code_elements": [
+        "<DOCTYPE html>",
+        "<html lang=\"en\">",
+        "<head><title>Scam Detector</title><link rel=\"stylesheet\" href=\"style.css\"></head>",
+        "<body>",
+        "<h1>Scam Story Analyzer</h1>",
+        "<textarea id=\"storyInput\" placeholder=\"Paste your story here...\"></textarea>",
+        "<button id=\"analyzeButton\">Analyze Story</button>",
+        "<div id=\"redFlagsOutput\"></div>",
+        "<div id=\"scoreOutput\"></div>",
+        "<script src=\"script.js\"></script>",
+        "</body></html>"
+      ]
+    },
+    {
+      "step_name": "2. Add Basic CSS Styling (style.css)",
+      "description": "Create a CSS file to provide basic styling for the layout, input fields, and output areas, ensuring a readable and user-friendly interface.",
+      "code_elements": [
+        "body { font-family: sans-serif; max-width: 800px; margin: 20px auto; padding: 0 15px; }",
+        "h1 { text-align: center; color: #333; }",
+        "textarea { width: 100%; height: 200px; margin-bottom: 10px; padding: 10px; border: 1px solid #ccc; border-radius: 4px; resize: vertical; }",
+        "button { display: block; width: 200px; margin: 0 auto 20px auto; padding: 10px 15px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }",
+        "button:hover { background-color: #0056b3; }",
+        "#redFlagsOutput, #scoreOutput { background-color: #f8f9fa; border: 1px solid #e9ecef; padding: 15px; margin-top: 10px; border-radius: 4px; }",
+        "#redFlagsOutput strong, #scoreOutput strong { color: #dc3545; }"
+      ]
+    },
+    {
+      "step_name": "3. Implement JavaScript Logic (script.js)",
+      "description": "Write the JavaScript code to handle user interaction, perform text analysis, and display results. This will involve defining scam keywords/phrases with associated risk scores, processing the input text, calculating a total score, and updating the HTML content.",
+      "code_elements": [
+        "const scamKeywords = {",
+        "  'urgent transfer': 10,",
+        "  'inheritance': 7,",
+        "  'lottery winner': 8,",
+        "  'prince': 5,",
+        "  'bank account': 6,",
+        "  'send money': 10,",
+        "  'western union': 9,",
+        "  'tax customs fee': 8,",
+        "  'stranded': 7,",
+        "  'secret deal': 6,",
+        "  'investment opportunity': 5,",
+        "  'wire transfer': 9",
+        "};",
+        "document.getElementById('analyzeButton').addEventListener('click', analyzeStory);",
+        "function analyzeStory() {",
+        "  const story = document.getElementById('storyInput').value.toLowerCase();",
+        "  let scamScore = 0;",
+        "  const detectedFlags = [];",
+        "  for (const keyword in scamKeywords) {",
+        "    if (story.includes(keyword)) {",
+        "      scamScore += scamKeywords[keyword];",
+        "      detectedFlags.push(keyword);",
+        "    }",
+        "  }",
+        "  let flagsHtml = '<strong>Detected Red Flags:</strong> ';",
+        "  if (detectedFlags.length > 0) {",
+        "    flagsHtml += detectedFlags.map(flag => `<span style=\"color: red;\">${flag}</span>`).join(', ') + '.';",
+        "  } else {",
+        "    flagsHtml += 'None detected.';",
+        "  }",
+        "  document.getElementById('redFlagsOutput').innerHTML = flagsHtml;",
+        "  document.getElementById('scoreOutput').innerHTML = `<strong>Scam Likelihood Score:</strong> ${scamScore} / ${Object.values(scamKeywords).reduce((a, b) => a + b, 0)} (Higher score indicates higher likelihood).`;",
+        "}"
+      ]
+    }
+  ],
+  "dependencies": []
+}

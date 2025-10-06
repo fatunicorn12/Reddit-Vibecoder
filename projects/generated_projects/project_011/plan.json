@@ -1,0 +1,24 @@
+{
+  "description": "A simple static web application that helps users interrupt impulsive decisions by presenting a random self-reflection question or positive affirmation when a 'Pause & Reflect' button is clicked. Designed to run locally by opening its index.html file.",
+  "features": [
+    "Display a 'Pause & Reflect' button.",
+    "Display a random pre-defined self-reflection question or positive affirmation.",
+    "Text changes upon each button click.",
+    "Pre-defined list of reflection prompts stored in JavaScript.",
+    "Basic, clean user interface styling."
+  ],
+  "steps": [
+    "**1. Create `index.html`:** Set up the basic HTML structure. Include a title, a `div` element with an ID (e.g., 'display-area') to show the text, and a `button` element with an ID (e.g., 'reflect-button'). Link `style.css` in the `<head>` and `script.js` at the end of the `<body>`.",
+    "**2. Create `style.css`:** Add basic styling for the `body` (e.g., font, text alignment), the `display-area` `div` (e.g., font size, margins, text alignment), and the `reflect-button` (e.g., padding, background color, font, cursor).",
+    "**3. Create `script.js`:**",
+    "   a. Define a JavaScript array (e.g., `prompts`) containing various self-reflection questions and positive affirmations as strings.",
+    "   b. Get references to the 'reflect-button' and 'display-area' elements using their IDs.",
+    "   c. Implement a function (e.g., `getRandomPrompt`) that selects a random string from the `prompts` array.",
+    "   d. Add an event listener to the 'reflect-button' that triggers on a 'click' event.",
+    "   e. Inside the event listener, call `getRandomPrompt()` and update the `textContent` of the 'display-area' `div` with the chosen prompt.",
+    "   f. Optionally, display an initial prompt when the page loads."
+  ],
+  "dependencies": [
+    "None (uses standard web technologies: HTML, CSS, JavaScript)"
+  ]
+}

@@ -1,0 +1,175 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: #333;
+}
+
+header, footer {
+  background: #6c5ce7;
+  color: #fff;
+  text-align: center;
+  padding: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  margin: 0;
+  font-weight: 600;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.container, #app {
+  background: #fafafa;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+}
+
+button, .btn {
+  cursor: pointer;
+  padding: 12px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  background: #6c5ce7;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+button:hover, .btn:hover {
+  background: #5a4dd4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Gemini Generated */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Always-a-10 Compliment Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>The Always-a-10 Compliment Generator</h1>
+    <div id="compliment-display">
+        Click the button to get your 10/10 compliment!
+    </div>
+    <button id="generate-btn">Get Your 10/10 Compliment!</button>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f0f8ff; /* Alice Blue */
+    color: #333;
+}
+
+
+h1 {
+    color: #4682b4; /* Steel Blue */
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+
+#compliment-display {
+    font-size: 1.8em;
+    text-align: center;
+    padding: 30px;
+    margin: 20px;
+    min-height: 80px;
+    width: 80%;
+    max-width: 600px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #2f4f4f; /* Dark Slate Gray */
+    transition: transform 0.2s ease-in-out;
+}
+
+
+#compliment-display:hover {
+    transform: translateY(-3px);
+}
+
+
+#generate-btn {
+    padding: 15px 30px;
+    font-size: 1.2em;
+    background-color: #20b2aa; /* Light Sea Green */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+#generate-btn:hover {
+    background-color: #1a8f8a; /* Darker Light Sea Green */
+    transform: translateY(-2px);
+}
+
+
+#generate-btn:active {
+    background-color: #167a75;
+    transform: translateY(0);
+}
+
+
+const compliments = [
+    'Your kindness is contagious!',
+    'You light up every room you enter.',
+    'Your creativity knows no bounds!',
+    "You're an absolute joy to be around.",
+    'Your positivity is inspiring.',
+    'You make a difference in the lives of others.',
+    'Your smile brightens my day.',
+    'You are incredibly thoughtful and caring.',
+    'Your strength is truly admirable.',
+    'You have impeccable taste!',
+    'Your laugh is music to my ears.'
+];
+
+const complimentDisplay = document.getElementById('compliment-display');
+const generateBtn = document.getElementById('generate-btn');
+
+generateBtn.addEventListener('click', () => {
+    const randomIndex = Math.floor(Math.random() * compliments.length);
+    const selectedCompliment = compliments[randomIndex];
+    const fullMessage = selectedCompliment + " You're a perfect 10/10!";
+    complimentDisplay.textContent = fullMessage;
+}

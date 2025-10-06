@@ -1,0 +1,257 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: #333;
+}
+
+header, footer {
+  background: #6c5ce7;
+  color: #fff;
+  text-align: center;
+  padding: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  margin: 0;
+  font-weight: 600;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.container, #app {
+  background: #fafafa;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+}
+
+button, .btn {
+  cursor: pointer;
+  padding: 12px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  background: #6c5ce7;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+button:hover, .btn:hover {
+  background: #5a4dd4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Gemini Generated */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impulse Diverter</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <h1>Impulse Diverter</h1>
+        <p>Redirect impulsive behaviors with healthy activities.</p>
+
+        <div class="card">
+            <h2>Your Healthy Suggestion:</h2>
+            <p id="suggestion-display" class="display-text">Loading suggestion...</p>
+            <button id="new-suggestion-btn">New Suggestion</button>
+        </div>
+
+        <div class="card">
+            <h2>Successful Diversions:</h2>
+            <p id="counter-display" class="display-text">0</p>
+            <button id="increment-counter-btn">I Diverted!</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    color: #333;
+}
+
+
+#app {
+    background-color: #ffffff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    text-align: center;
+    max-width: 600px;
+    width: 100%;
+    margin-top: 50px;
+}
+
+
+h1 {
+    color: #2c3e50;
+    margin-bottom: 10px;
+    font-size: 2.2em;
+}
+
+
+h2 {
+    color: #34495e;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    font-size: 1.5em;
+}
+
+
+p {
+    font-size: 1.1em;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+
+.card {
+    background-color: #fcfcfc;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+
+.display-text {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #2980b9;
+    margin-top: 10px;
+    margin-bottom: 25px;
+    padding: 10px;
+    background-color: #eaf6fd;
+    border-radius: 5px;
+    min-height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin: 5px;
+    min-width: 180px;
+}
+
+
+button:hover {
+    background-color: #2980b9;
+    transform: translateY(-2px);
+}
+
+
+button:active {
+    background-color: #21618c;
+    transform: translateY(0);
+}
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    // 1. Define an array of healthy activity suggestions
+    const suggestions = [
+        'Take 5 deep breaths.',
+        'Go for a 10-minute walk.',
+        'Drink a glass of water.',
+        'Stretch for 5 minutes.',
+        'Write down 3 things you\'re grateful for.',
+        'Listen to your favorite calming song.',
+        'Read a few pages of a book.',
+        'Clean a small area of your space.',
+        'Do a quick meditation for 2 minutes.',
+        'Call a friend or family member.',
+        'Engage in a quick creative activity (doodle, write).',
+        'Spend 5 minutes in nature, if possible.',
+        'Do 10 jumping jacks or simple exercises.'
+    ];
+
+    // 2. Get references to the HTML elements
+    const suggestionDisplay = document.getElementById('suggestion-display');
+    const newSuggestionBtn = document.getElementById('new-suggestion-btn');
+    const counterDisplay = document.getElementById('counter-display');
+    const incrementCounterBtn = document.getElementById('increment-counter-btn');
+
+    let diversionCounter = 0; // Initialize counter in script
+
+    // 3. Implement loadCounter() function
+    function loadCounter() {
+        const storedCounter = localStorage.getItem('diversionCounter');
+        diversionCounter = storedCounter ? parseInt(storedCounter, 10) : 0;
+        counterDisplay.textContent = diversionCounter;
+    }
+
+
+    // 4. Implement saveCounter(count) function
+    function saveCounter(count) {
+        diversionCounter = count;
+        localStorage.setItem('diversionCounter', count.toString());
+        counterDisplay.textContent = diversionCounter;
+    }
+
+
+    // 5. Implement getRandomSuggestion() function
+    function getRandomSuggestion() {
+        const randomIndex = Math.floor(Math.random() * suggestions.length);
+        return suggestions[randomIndex];
+    }
+
+
+    // 6. Implement displaySuggestion() function
+    function displaySuggestion() {
+        suggestionDisplay.textContent = getRandomSuggestion();
+    }
+
+
+    // 7. Add an event listener to new-suggestion-btn
+    newSuggestionBtn.addEventListener('click', displaySuggestion);
+
+    // 8. Add an event listener to increment-counter-btn
+    incrementCounterBtn.addEventListener('click', () => {
+        // Get the current counter value
+        // Increment it by 1
+        // Call saveCounter() with the new value
+        saveCounter(diversionCounter + 1);
+    }

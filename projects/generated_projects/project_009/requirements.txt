@@ -1,0 +1,1 @@
+None (relies solely on standard HTML, CSS, and JavaScript features available in all modern web browsers)
