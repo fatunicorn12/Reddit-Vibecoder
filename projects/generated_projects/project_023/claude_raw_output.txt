@@ -1,0 +1,262 @@
+---index.html---
+<div id="app">
+  <div id="start-screen">
+    <h1>Social Media Categorizer</h1>
+    <p>Categorize posts as 'Entertainment' or 'Snooze Political' as quickly as possible!</p>
+    <button id="btn-start-game">Start Game</button>
+  </div>
+  
+  <div id="game-container" class="hidden">
+    <div id="game-header">
+      <div>Score: <span id="score">0</span></div>
+      <div>Time: <span id="timer">60</span>s</div>
+    </div>
+    
+    <div id="post-display">
+      <div id="post-content"></div>
+    </div>
+    
+    <div id="button-container">
+      <button id="btn-entertainment">Entertainment</button>
+      <button id="btn-political">Snooze Political</button>
+    </div>
+  </div>
+  
+  <div id="game-over-screen" class="hidden">
+    <h2>Game Over!</h2>
+    <p>Final Score: <span id="final-score">0</span></p>
+    <button id="btn-restart">Play Again</button>
+  </div>
+</div>
+
+---style.css---
+#app {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+#start-screen h1 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+#start-screen p {
+  color: #666;
+  margin-bottom: 30px;
+}
+
+#game-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#post-display {
+  background: #f5f5f5;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  padding: 30px;
+  margin-bottom: 30px;
+  min-height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#post-content {
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+}
+
+#button-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+
+button {
+  padding: 15px 30px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#btn-start-game, #btn-restart {
+  background: #007bff;
+  color: white;
+}
+
+#btn-start-game:hover, #btn-restart:hover {
+  background: #0056b3;
+}
+
+#btn-entertainment {
+  background: #28a745;
+  color: white;
+}
+
+#btn-entertainment:hover {
+  background: #1e7e34;
+}
+
+#btn-political {
+  background: #dc3545;
+  color: white;
+}
+
+#btn-political:hover {
+  background: #bd2130;
+}
+
+.correct-flash {
+  background: #d4edda !important;
+  border-color: #28a745 !important;
+}
+
+.incorrect-flash {
+  background: #f8d7da !important;
+  border-color: #dc3545 !important;
+}
+
+#game-over-screen {
+  padding: 40px;
+}
+
+#game-over-screen h2 {
+  color: #333;
+  margin-bottom: 20px;
+}
+
+#game-over-screen p {
+  font-size: 18px;
+  margin-bottom: 30px;
+}
+
+---script.js---
+function initApp() {
+  const postData = [
+    { text: "Just watched the new Marvel movie! The special effects were incredible! 🎬✨", category: "Entertainment" },
+    { text: "Breaking: New tax legislation passed in Congress today affecting middle-class families", category: "Political" },
+    { text: "This celebrity couple just announced their engagement! So happy for them! 💕", category: "Entertainment" },
+    { text: "Local mayor announces new infrastructure spending plan for downtown renovation", category: "Political" },
+    { text: "OMG this new Netflix series has me binge-watching all weekend! Anyone else obsessed?", category: "Entertainment" },
+    { text: "Senate committee hearing on healthcare reform scheduled for next week", category: "Political" },
+    { text: "Concert last night was AMAZING! The lead singer's voice gave me chills 🎵", category: "Entertainment" },
+    { text: "Governor signs new environmental protection bill into law", category: "Political" },
+    { text: "Can't stop listening to this new album! Track 3 is my favorite so far", category: "Entertainment" },
+    { text: "City council debates proposed changes to local zoning regulations", category: "Political" }
+  ];
+
+  let score = 0;
+  let timeLeft = 60;
+  let currentPostIndex = 0;
+  let gameInterval = null;
+  let shuffledPosts = [];
+
+  const startScreen = document.getElementById('start-screen');
+  const gameContainer = document.getElementById('game-container');
+  const gameOverScreen = document.getElementById('game-over-screen');
+  const postContent = document.getElementById('post-content');
+  const postDisplay = document.getElementById('post-display');
+  const scoreDisplay = document.getElementById('score');
+  const timerDisplay = document.getElementById('timer');
+  const finalScoreDisplay = document.getElementById('final-score');
+  const btnStartGame = document.getElementById('btn-start-game');
+  const btnEntertainment = document.getElementById('btn-entertainment');
+  const btnPolitical = document.getElementById('btn-political');
+  const btnRestart = document.getElementById('btn-restart');
+
+  function shuffleArray(array) {
+    const shuffled = [...array];
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  }
+
+  function displayPost() {
+    postContent.textContent = shuffledPosts[currentPostIndex].text;
+  }
+
+  function handleChoice(chosenCategory) {
+    const correctCategory = shuffledPosts[currentPostIndex].category;
+    const isCorrect = chosenCategory === correctCategory;
+
+    if (isCorrect) {
+      score++;
+      postDisplay.classList.add('correct-flash');
+    } else {
+      timeLeft = Math.max(0, timeLeft - 2);
+      postDisplay.classList.add('incorrect-flash');
+    }
+
+    scoreDisplay.textContent = score;
+    timerDisplay.textContent = timeLeft;
+
+    setTimeout(() => {
+      postDisplay.classList.remove('correct-flash', 'incorrect-flash');
+      currentPostIndex++;
+      
+      if (currentPostIndex >= shuffledPosts.length) {
+        shuffledPosts = shuffleArray(postData);
+        currentPostIndex = 0;
+      }
+      
+      if (timeLeft > 0) {
+        displayPost();
+      }
+    }, 300);
+  }
+
+  function updateTimer() {
+    timeLeft--;
+    timerDisplay.textContent = timeLeft;
+    
+    if (timeLeft <= 0) {
+      endGame();
+    }
+  }
+
+  function startGame() {
+    startScreen.classList.add('hidden');
+    gameOverScreen.classList.add('hidden');
+    gameContainer.classList.remove('hidden');
+    
+    score = 0;
+    timeLeft = 60;
+    currentPostIndex = 0;
+    
+    scoreDisplay.textContent = score;
+    timerDisplay.textContent = timeLeft;
+    
+    shuffledPosts = shuffleArray(postData);
+    displayPost();
+    
+    gameInterval = setInterval(updateTimer, 1000);
+  }
+
+  function endGame() {
+    clearInterval(gameInterval);
+    gameContainer.classList.add('hidden');
+    finalScoreDisplay.textContent = score;
+    gameOverScreen.classList.remove('hidden');
+  }
+
+  btnStartGame.addEventListener('click', startGame);
+  btnEntertainment.addEventListener('click', () => handleChoice('Entertainment'));
+  btnPolitical.addEventListener('click', () => handleChoice('Political'));
+  btnRestart.addEventListener('click', startGame);
+}

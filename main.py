@@ -1,7 +1,8 @@
 from reddit_fetcher import fetch_subreddit_posts
 from reddit_post_to_idea import generate_project_idea
 from idea_to_plan import generate_project_plan
-from plan_to_code import generate_code_from_plan, save_code 
+from plan_to_code import generate_code_from_plan, save_code, detect_project_type 
+from controls_detector import detect_controls_inputs
 import os
 import json
 
@@ -61,6 +62,8 @@ def main():
 
     # Save code (handles Python vs Web app automatically)
     save_code(project_dir, code, plan)
+    project_type = detect_project_type(code, plan)
+    controls_text = detect_controls_inputs(project_dir, project_type)
 
     # Save requirements (only if dependencies exist)
     if "dependencies" in plan and plan["dependencies"]:
@@ -82,7 +85,7 @@ def main():
             f.write("- Run with: `python main.py`\n\n")
 
         f.write("## Controls / Inputs\n")
-        f.write("(This project may require keyboard/mouse input. Placeholder until auto-detected.)\n")
+        f.write(controls_text + "\n")
 
     print(f"\n✅ Project files saved to {project_dir}")
 

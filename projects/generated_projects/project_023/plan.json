@@ -1,0 +1,29 @@
+{
+  "description": "A static web app game where players categorize mock social media posts as 'Entertainment' or 'Snooze Political' within a time limit, aiming for a high score by making correct and quick selections.",
+  "features": [
+    "Display of mock social media posts (text only).",
+    "Two interactive buttons: 'Entertainment' and 'Snooze Political'.",
+    "Real-time score display for correct categorizations.",
+    "Countdown timer for the game session.",
+    "Visual feedback for correct (e.g., green flash) or incorrect (e.g., red flash) categorization.",
+    "Game Over state upon time expiration, showing final score.",
+    "Ability to restart the game."
+  ],
+  "steps": [
+    "Create `index.html` with basic structure: a header, a main game container (`div`), a 'post' display area (`p` or `div` with id 'post-content'), two categorization buttons (ids 'btn-entertainment', 'btn-political'), a score display (`span` with id 'score'), a timer display (`span` with id 'timer'), and a hidden 'Game Over' screen (`div` with id 'game-over-screen') containing a final score display and a 'Restart' button (id 'btn-restart'). Also, include an initial 'Start Game' button (id 'btn-start-game') and hide the main game elements initially.",
+    "Create `style.css` to provide basic styling for the game layout, buttons, score/timer displays, and visual feedback (e.g., `.correct-flash`, `.incorrect-flash` classes that briefly change background color). Ensure initial hidden states for game and game-over screens.",
+    "Create `script.js` to manage game logic.",
+    "Inside `script.js`, define an array of JavaScript objects, each representing a mock social media post. Each object will have a `text` property (the post content string) and a `category` property ('Entertainment' or 'Political' string). Include at least 5-10 diverse posts.",
+    "Initialize global game state variables: `score = 0`, `timeLeft = 60` (seconds), `currentPostIndex = 0`, `gameInterval = null`, `postData` (the array of posts), and `shuffledPosts` (to hold the randomized order for the current game).",
+    "Implement `shuffleArray(array)` function (e.g., Fisher-Yates shuffle) to randomize the order of elements in an array. This will be used for `postData`.",
+    "Implement `displayPost()` function: updates the 'post-content' HTML element with the text from `shuffledPosts[currentPostIndex].text`.",
+    "Implement `handleChoice(chosenCategory)` function: checks if `chosenCategory` matches `shuffledPosts[currentPostIndex].category`. If correct, increment `score` and apply a 'correct-flash' class to the post display. If incorrect, deduct `2` seconds from `timeLeft` and apply an 'incorrect-flash' class. Update the score display. After a short `setTimeout` (e.g., 300ms) to allow feedback to be seen, remove the flash class, increment `currentPostIndex`. If `currentPostIndex` is out of bounds, `shuffledPosts` should be re-shuffled using `shuffleArray()` and `currentPostIndex` reset to `0`. Finally, call `displayPost()` for the next post.",
+    "Implement `updateTimer()` function: decrement `timeLeft`, update timer display. If `timeLeft <= 0`, call `endGame()`.",
+    "Implement `startGame()` function: hide the 'Start Game' button and 'Game Over' screen, show the main game container. Reset `score = 0`, `timeLeft = 60`, `currentPostIndex = 0`. Update score and timer displays. Call `shuffledPosts = shuffleArray(postData)`. Call `displayPost()`. Set `gameInterval = setInterval(updateTimer, 1000)`.",
+    "Implement `endGame()` function: `clearInterval(gameInterval)`. Hide the main game container. Update the final score display on the 'Game Over' screen and make it visible.",
+    "Attach event listeners: 'btn-start-game' click to `startGame()`. 'btn-entertainment' click to `handleChoice('Entertainment')`. 'btn-political' click to `handleChoice('Political')`. 'btn-restart' click to `startGame()`."
+  ],
+  "dependencies": [
+    "None (Vanilla HTML, CSS, JavaScript)"
+  ]
+}
