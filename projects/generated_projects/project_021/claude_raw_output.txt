@@ -1,0 +1,178 @@
+---index.html---
+<div id="app">
+  <div class="story-app">
+    <h1>Choose Your Adventure</h1>
+    <div id="story-container" class="story-text">
+      Loading...
+    </div>
+    <div id="choices-container" class="choices">
+    </div>
+    <button id="reset-button" class="reset-btn">Reset Story</button>
+  </div>
+</div>
+
+---style.css---
+.story-app {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Georgia', serif;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.story-app h1 {
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.story-text {
+  background: #f9f9f9;
+  padding: 25px;
+  margin: 20px 0;
+  border-radius: 8px;
+  border-left: 4px solid #4a90e2;
+  font-size: 18px;
+  text-align: left;
+  min-height: 100px;
+}
+
+.choices {
+  margin: 30px 0;
+}
+
+.choice-btn {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 15px 20px;
+  font-size: 16px;
+  background: #4a90e2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.choice-btn:hover {
+  background: #357abd;
+}
+
+.reset-btn {
+  padding: 12px 25px;
+  font-size: 14px;
+  background: #666;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.reset-btn:hover {
+  background: #555;
+}
+
+---script.js---
+function initApp() {
+  const story = {
+    start: {
+      text: "You find yourself at the entrance of a mysterious forest. The path splits in two directions. To your left, you see a well-worn trail that seems safe but ordinary. To your right, a darker path winds deeper into the unknown, with strange sounds echoing from within.",
+      choices: [
+        { text: "Take the safe, well-worn path", nextId: "safePath" },
+        { text: "Venture into the mysterious dark path", nextId: "darkPath" }
+      ]
+    },
+    safePath: {
+      text: "You walk along the familiar trail and soon encounter a friendly merchant who offers you a choice of gifts. He presents a shining sword and a leather pouch filled with gold coins.",
+      choices: [
+        { text: "Accept the sword", nextId: "swordEnding" },
+        { text: "Take the gold coins", nextId: "goldEnding" }
+      ]
+    },
+    darkPath: {
+      text: "The dark path leads you to an ancient stone door covered in glowing runes. As you approach, the runes pulse with energy. You notice two keyholes - one shaped like a star, the other like a crescent moon.",
+      choices: [
+        { text: "Touch the star-shaped keyhole", nextId: "starPath" },
+        { text: "Touch the crescent moon keyhole", nextId: "moonPath" }
+      ]
+    },
+    swordEnding: {
+      text: "With the sword in hand, you become a renowned hero, protecting villages and defeating monsters. Your legend grows throughout the land, and songs are sung of your brave deeds. You have found your true calling as a champion of justice.",
+      isEnding: true
+    },
+    goldEnding: {
+      text: "The gold coins allow you to start a prosperous trading business. You travel between towns, building wealth and connections. Eventually, you become the most successful merchant in the kingdom, living a life of comfort and respect.",
+      isEnding: true
+    },
+    starPath: {
+      text: "The star keyhole glows brightly and transports you to a celestial realm. Here, you meet the Star Guardian who offers to grant you one wish - either the power to heal any wound, or the ability to see into the future.",
+      choices: [
+        { text: "Choose the power to heal", nextId: "healerEnding" },
+        { text: "Choose the ability to see the future", nextId: "oracleEnding" }
+      ]
+    },
+    moonPath: {
+      text: "The moon keyhole opens a portal to a shadowy dimension. A mysterious figure emerges and challenges you to a game of riddles. If you win, you gain great power. If you lose, you must serve them for a year.",
+      choices: [
+        { text: "Accept the challenge", nextId: "riddleEnding" },
+        { text: "Decline and try to escape", nextId: "escapeEnding" }
+      ]
+    },
+    healerEnding: {
+      text: "You return to the world as a powerful healer. People travel from far and wide seeking your miraculous touch. You spend your days bringing hope and health to those in need, becoming beloved by all who know you.",
+      isEnding: true
+    },
+    oracleEnding: {
+      text: "With the gift of foresight, you become a wise oracle. Kings and queens seek your counsel, and you help prevent wars and disasters. Though the burden of knowing the future is heavy, you use your gift to make the world a better place.",
+      isEnding: true
+    },
+    riddleEnding: {
+      text: "You successfully solve the mysterious figure's riddles and are granted the power to control shadows. You become a guardian of the balance between light and dark, protecting the world from threats that lurk in both realms.",
+      isEnding: true
+    },
+    escapeEnding: {
+      text: "You manage to escape back to the forest, but not unchanged. The experience has given you wisdom about the dangers and wonders that exist beyond the ordinary world. You return home with fascinating stories to tell.",
+      isEnding: true
+    }
+  };
+
+  let currentStoryNodeId = 'start';
+
+  const storyContainer = document.getElementById('story-container');
+  const choicesContainer = document.getElementById('choices-container');
+  const resetButton = document.getElementById('reset-button');
+
+  function renderStory() {
+    const currentNode = story[currentStoryNodeId];
+    
+    storyContainer.textContent = currentNode.text;
+    
+    choicesContainer.innerHTML = '';
+    
+    if (!currentNode.isEnding) {
+      currentNode.choices.forEach(choice => {
+        const button = document.createElement('button');
+        button.textContent = choice.text;
+        button.className = 'choice-btn';
+        button.addEventListener('click', () => makeChoice(choice.nextId));
+        choicesContainer.appendChild(button);
+      });
+    }
+  }
+
+  function makeChoice(nextId) {
+    currentStoryNodeId = nextId;
+    renderStory();
+  }
+
+  function resetGame() {
+    currentStoryNodeId = 'start';
+    renderStory();
+  }
+
+  resetButton.addEventListener('click', resetGame);
+  
+  renderStory();
+}

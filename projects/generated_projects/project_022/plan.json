@@ -1,0 +1,27 @@
+{
+  "description": "Develop a simple, replayable text-based choice game where the player manages 'Cash' and 'Guilt' meters. The objective is to reach a target cash amount ($600) before guilt becomes unmanageable or a 'Suspicious Uncle-in-Law' event occurs, leading to a loss.",
+  "features": [
+    "Initialize game state (Cash, Guilt, Target Cash, Max Guilt)",
+    "Display current player stats (Cash, Guilt)",
+    "Present a menu of actions with associated cash/guilt changes",
+    "Process player choices and update Cash and Guilt meters",
+    "Implement win condition: reach $600 Cash",
+    "Implement loss condition 1: Guilt exceeds Max Guilt",
+    "Implement loss condition 2: Random 'Suspicious Uncle-in-Law' event occurs",
+    "Restart game functionality after win/loss"
+  ],
+  "steps": [
+    "**1. Initialize Game State:** Define global variables or a class to hold `cash`, `guilt`, `target_cash = 600`, `max_guilt = 100`. Set initial `cash = 0`, `guilt = 0`.",
+    "**2. Define Game Actions:** Create a dictionary or list of action objects. Each action should include its `name`, `cash_effect` (int), and `guilt_effect` (int). Example actions:\n    - 'Steal Tablet': cash +150, guilt +40\n    - 'Do Honest Work': cash +50, guilt +0\n    - 'Beg for Money': cash +30, guilt +10",
+    "**3. Implement Game Loop:** Create a `while True` loop that continues until a win or loss condition is met.",
+    "**4. Display Stats and Actions:** Inside the loop, print the current `cash` and `guilt` values. Then, iterate through the defined actions, numbering them, and print their names for the player to choose from.",
+    "**5. Get Player Input:** Prompt the player to enter the number corresponding to their desired action. Validate input to ensure it's a valid action choice.",
+    "**6. Apply Action Effects:** Based on the player's choice, update the `cash` and `guilt` meters by adding the respective `cash_effect` and `guilt_effect` of the chosen action.",
+    "**7. Check for 'Suspicious Uncle-in-Law' Event:** After applying action effects, generate a random number (e.g., between 1 and 100). If it falls within a certain range (e.g., < 15 for a 15% chance), trigger the 'Suspicious Uncle-in-Law' event, print a loss message, and end the game loop.",
+    "**8. Check Win/Loss Conditions:**\n    - If `cash >= target_cash`: Print a win message and break the game loop.\n    - If `guilt >= max_guilt`: Print a 'Guilt unmanageable' loss message and break the game loop.",
+    "**9. Implement Restart:** After the game loop ends (win or loss), ask the player if they want to play again. If yes, reset `cash` and `guilt` to their initial values and restart the game loop. Otherwise, exit the program."
+  ],
+  "dependencies": [
+    "None (Python standard library only, specifically `random` for events and `sys` or `os` for potential screen clearing, though not strictly required for MVP)"
+  ]
+}

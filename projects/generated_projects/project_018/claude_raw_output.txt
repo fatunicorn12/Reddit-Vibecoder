@@ -1,0 +1,242 @@
+---index.html---
+<div id="game-container">
+  <div class="game-header">
+    <div id="score">Score: 0</div>
+    <div id="lives">Lives: 3</div>
+    <button id="start-button">Start Game</button>
+  </div>
+  <div id="club-scene"></div>
+  <div id="game-message"></div>
+</div>
+
+---style.css---
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #1a1a2e;
+}
+
+#game-container {
+  text-align: center;
+  border: 2px solid #16213e;
+  border-radius: 10px;
+  background-color: #0f0f23;
+  padding: 20px;
+  color: white;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 20px;
+}
+
+#score, #lives {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#start-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #e94560;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#start-button:hover {
+  background-color: #d63447;
+}
+
+#club-scene {
+  width: 600px;
+  height: 400px;
+  background: linear-gradient(45deg, #16213e, #0f3460);
+  border: 2px solid #533483;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.trouble-event {
+  width: 20px;
+  height: 20px;
+  background-color: #ff6b6b;
+  border: 2px solid #ff5252;
+  border-radius: 50%;
+  position: absolute;
+  cursor: pointer;
+  animation: pulse 0.5s infinite alternate;
+  z-index: 10;
+}
+
+.trouble-event:hover {
+  background-color: #ff5252;
+  transform: scale(1.2);
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+#game-message {
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #e94560;
+  min-height: 25px;
+}
+
+---script.js---
+function initApp() {
+  const clubScene = document.getElementById('club-scene');
+  const scoreDisplay = document.getElementById('score');
+  const livesDisplay = document.getElementById('lives');
+  const startButton = document.getElementById('start-button');
+  const gameMessage = document.getElementById('game-message');
+
+  let score = 0;
+  let lives = 3;
+  let gameRunning = false;
+  let troubleEvents = [];
+  let spawnIntervalId = null;
+  let eventIdCounter = 0;
+
+  function updateUI() {
+    scoreDisplay.textContent = `Score: ${score}`;
+    livesDisplay.textContent = `Lives: ${lives}`;
+  }
+
+  function spawnTroubleEvent() {
+    if (!gameRunning) return;
+
+    const eventId = ++eventIdCounter;
+    const maxX = clubScene.clientWidth - 24;
+    const maxY = clubScene.clientHeight - 24;
+    const randomX = Math.floor(Math.random() * maxX);
+    const randomY = Math.floor(Math.random() * maxY);
+
+    const eventDiv = document.createElement('div');
+    eventDiv.className = 'trouble-event';
+    eventDiv.style.left = `${randomX}px`;
+    eventDiv.style.top = `${randomY}px`;
+    eventDiv.dataset.eventId = eventId;
+
+    eventDiv.onclick = function(e) {
+      handleEventClick(e, eventId);
+    };
+
+    clubScene.appendChild(eventDiv);
+
+    const timeoutId = setTimeout(() => {
+      handleEventEscalation(eventId);
+    }, 2500);
+
+    troubleEvents.push({ id: eventId, timeoutId: timeoutId, element: eventDiv });
+  }
+
+  function handleEventClick(event, eventId) {
+    event.preventDefault();
+    
+    const eventIndex = troubleEvents.findIndex(e => e.id === eventId);
+    if (eventIndex === -1) return;
+
+    const troubleEvent = troubleEvents[eventIndex];
+    clearTimeout(troubleEvent.timeoutId);
+    clubScene.removeChild(troubleEvent.element);
+    troubleEvents.splice(eventIndex, 1);
+
+    score += 10;
+    updateUI();
+    gameMessage.textContent = 'Trouble Averted! +10 points';
+    setTimeout(() => {
+      if (gameRunning) gameMessage.textContent = '';
+    }, 1000);
+  }
+
+  function handleEventEscalation(eventId) {
+    const eventIndex = troubleEvents.findIndex(e => e.id === eventId);
+    if (eventIndex === -1) return;
+
+    const troubleEvent = troubleEvents[eventIndex];
+    if (troubleEvent.element.parentNode) {
+      clubScene.removeChild(troubleEvent.element);
+    }
+    troubleEvents.splice(eventIndex, 1);
+
+    lives--;
+    updateUI();
+    gameMessage.textContent = 'Trouble Escalated! -1 Life';
+
+    if (lives <= 0) {
+      endGame();
+    } else {
+      setTimeout(() => {
+        if (gameRunning) gameMessage.textContent = '';
+      }, 1000);
+    }
+  }
+
+  function startGame() {
+    score = 0;
+    lives = 3;
+    gameRunning = true;
+    troubleEvents = [];
+    
+    // Clear any existing events
+    const existingEvents = clubScene.querySelectorAll('.trouble-event');
+    existingEvents.forEach(event => clubScene.removeChild(event));
+
+    updateUI();
+    gameMessage.textContent = 'Game Started! Click on trouble events!';
+    startButton.textContent = 'Restart';
+
+    spawnIntervalId = setInterval(spawnTroubleEvent, 1800);
+    
+    setTimeout(() => {
+      if (gameRunning) gameMessage.textContent = '';
+    }, 2000);
+  }
+
+  function endGame() {
+    gameRunning = false;
+    
+    // Clear spawn interval
+    if (spawnIntervalId) {
+      clearInterval(spawnIntervalId);
+      spawnIntervalId = null;
+    }
+
+    // Clear all active events
+    troubleEvents.forEach(event => {
+      clearTimeout(event.timeoutId);
+      if (event.element.parentNode) {
+        clubScene.removeChild(event.element);
+      }
+    });
+    troubleEvents = [];
+
+    gameMessage.textContent = `Game Over! Final Score: ${score}`;
+    startButton.textContent = 'Play Again';
+  }
+
+  startButton.addEventListener('click', startGame);
+  
+  updateUI();
+}

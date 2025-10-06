@@ -1,0 +1,36 @@
+{
+  "description": "A simple Pygame simulation where players exploit a simulated 1980s ATM 'deposit with cash back' loophole across multiple banks to maximize illicit earnings before getting blacklisted. The game is text-based with a graphical interface, focusing on quick replayability and strategic risk-taking.",
+  "features": [
+    "Display current cash on hand, total illicit earnings, remaining days, and current suspicion level.",
+    "Interactive choice of 3-4 different banks, each with a distinct risk profile (chance of increasing suspicion significantly).",
+    "Player performs a 'deposit with cash back' action at a chosen bank, receiving a fixed amount of cash.",
+    "Each transaction increases suspicion and consumes one day.",
+    "Game ends when suspicion reaches a critical threshold (blacklisted) or all days have passed.",
+    "Final score (total illicit earnings) is displayed upon game over.",
+    "Option to restart the game."
+  ],
+  "steps": [
+    "**1. Pygame Initialization:** Import `pygame` and `random`. Initialize Pygame, set up screen dimensions (e.g., 800x600), create the display surface, and set the window title. Load a default font (e.g., `pygame.font.Font(None, 36)`). Define basic colors like `WHITE`, `BLACK`, `RED`, `BLUE`.",
+    "**2. Game State Variables:** Define global variables for `cash_on_hand` (start at $0), `illicit_earnings` (start at $0), `days_left` (e.g., 7), `suspicion_level` (start at 0), `max_suspicion` (e.g., 100), `game_over` (boolean, false). Define `CASH_BACK_AMOUNT` (e.g., $100) per transaction for simplicity.",
+    "**3. Bank Data:** Create a list of dictionaries, `banks`, where each dictionary represents a bank with keys like `name` (string), `risk` (integer, e.g., 10-30, representing how much suspicion increases per transaction), and optionally `color` for visual distinction. Store `rect` (pygame.Rect) for click detection, initialized to `None`.",
+    "**4. Reset Game Function:** Create a function `reset_game()` that reinitializes all game state variables (`cash_on_hand`, `illicit_earnings`, `days_left`, `suspicion_level`, `game_over`) to their starting values. This will be called at the beginning and when the player chooses to restart.",
+    "**5. Draw Text Helper:** Create a helper function `draw_text(text, font, color, x, y, screen)` to easily render text on the screen. This function can also return the `pygame.Rect` of the rendered text for clickable elements (e.g., buttons, bank choices).",
+    "**6. Main Game Loop:**",
+    "   a. **Event Handling:** In the `while running:` loop, iterate through `pygame.event.get()`. Handle `pygame.QUIT` to close the window. Handle `MOUSEBUTTONDOWN` events to detect player clicks.",
+    "   b. **Game Over Screen:** If `game_over` is `True`, fill the screen with a background, use `draw_text` to display 'GAME OVER', the final `illicit_earnings`, and a 'RESTART' button (a `pygame.Rect` drawn with text). If the 'RESTART' button is clicked, call `reset_game()` and set `game_over` to `False`.",
+    "   c. **Active Game State:** If `game_over` is `False`:",
+    "      i. **Clear Screen:** Fill the screen with a background color (e.g., `BLACK`).",
+    "      ii. **Display Stats:** Use `draw_text` to show `cash_on_hand`, `illicit_earnings`, `days_left`, and `suspicion_level` prominently at the top of the screen. Color `suspicion_level` differently (e.g., `RED`) if it's high.",
+    "      iii. **Display Banks:** Iterate through the `banks` list. For each bank, draw its name and risk level as a clickable area (e.g., a rectangle with text). Store the `pygame.Rect` object of this clickable area back into the bank's dictionary (e.g., `bank['rect']`).",
+    "      iv. **Handle Bank Click:** If a `MOUSEBUTTONDOWN` event occurs within a bank's `rect`:",
+    "          *   Add `CASH_BACK_AMOUNT` to `cash_on_hand` and `illicit_earnings`.",
+    "          *   Increase `suspicion_level` by `bank['risk']` plus a small random amount (e.g., `random.randint(1, 10)`) to add variability.",
+    "          *   Decrement `days_left` by 1.",
+    "          *   Check for Game Over: If `suspicion_level >= max_suspicion` or `days_left <= 0`, set `game_over = True`.",
+    "   d. **Update Display:** Call `pygame.display.flip()` (or `pygame.display.update()`) to refresh the entire screen.",
+    "   e. **Frame Rate:** Use `pygame.time.Clock().tick(30)` to cap the frame rate at 30 FPS for smooth execution."
+  ],
+  "dependencies": [
+    "pygame"
+  ]
+}

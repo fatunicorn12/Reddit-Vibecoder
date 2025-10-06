@@ -1,0 +1,25 @@
+{
+  "description": "A simple console-based program designed to help users quickly prepare for competitive exams. It presents rapid-fire, multiple-choice questions, provides immediate feedback on answers, and displays a final score.",
+  "features": [
+    "Loads a predefined set of multiple-choice questions.",
+    "Presents questions one by one with numbered options.",
+    "Accepts user input for their answer choice.",
+    "Provides immediate feedback (correct/incorrect) after each answer.",
+    "Tracks the user's score throughout the quiz.",
+    "Displays the final score at the end of the quiz session."
+  ],
+  "steps": [
+    "Define a list of dictionaries to store quiz questions. Each dictionary should contain keys for 'question' (string), 'options' (list of strings), and 'correct_answer' (the 0-based index of the correct option within the 'options' list).",
+    "Initialize a `score` variable to 0 and a `total_questions` variable based on the length of the questions list.",
+    "Start a main loop that iterates through each question in the defined quiz data.",
+    "Inside the loop, display the current question text clearly.",
+    "Iterate through the 'options' list for the current question and print each option prefixed with a number (e.g., '1. Option A').",
+    "Prompt the user to enter the number corresponding to their chosen answer.",
+    "Implement input validation to ensure the user's input is a valid integer within the range of available options. Re-prompt if the input is invalid.",
+    "Convert the user's 1-based input to a 0-based index.",
+    "Compare the user's chosen index with the 'correct_answer' index for the current question.",
+    "Provide immediate feedback: If correct, print 'Correct!' and increment the `score`. If incorrect, print 'Incorrect. The correct answer was [correct option text].'",
+    "After the loop finishes (all questions answered), print the final `score` along with the `total_questions` (e.g., 'You scored X out of Y questions.')."
+  ],
+  "dependencies": []
+}

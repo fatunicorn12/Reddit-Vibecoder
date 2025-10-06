@@ -1,0 +1,17 @@
+{
+  "description": "A static web application that displays a personalized birthday message and triggers a confetti animation on demand, offering a simple interactive self-celebration.",
+  "features": [
+    "Displays a personalized 'Happy Birthday, [Your Name]!' message.",
+    "Prompts the user for their name upon loading.",
+    "Triggers a celebratory confetti animation when a button is clicked.",
+    "Accessible locally by opening index.html in a browser."
+  ],
+  "steps": [
+    "1. Create `index.html`: Set up basic HTML5 structure. Include a heading for the birthday message (e.g., `<h1 id=\"birthdayMessage\"></h1>`). Add a button (e.g., `<button id=\"celebrateButton\">Celebrate!</button>`). Link to `style.css` and `script.js`. Include the `canvas-confetti` library via CDN in the `<head>` or before `script.js`.",
+    "2. Create `style.css`: Add basic styling for the body (font-family, text-align: center, margin/padding). Style the message heading and the button to make them visually appealing.",
+    "3. Create `script.js`: \n   a. Get references to the `birthdayMessage` heading and `celebrateButton`.\n   b. On page load, prompt the user for their name using `prompt('What's your name?')`. Store the result.\n   c. Update the `birthdayMessage`'s `textContent` to `Happy Birthday, ${userName}!` (handling empty name input gracefully, e.g., 'Friend').\n   d. Add an event listener to `celebrateButton`. When clicked, call the `confetti()` function provided by the `canvas-confetti` library. Configure `confetti()` with some basic options for a good burst (e.g., `spread`, `particleCount`)."
+  ],
+  "dependencies": [
+    "canvas-confetti (JavaScript library, to be included via CDN)"
+  ]
+}

@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: #333;
+}
+
+header, footer {
+  background: #6c5ce7;
+  color: #fff;
+  text-align: center;
+  padding: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  margin: 0;
+  font-weight: 600;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.container, #app {
+  background: #fafafa;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+}
+
+button, .btn {
+  cursor: pointer;
+  padding: 12px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  background: #6c5ce7;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+button:hover, .btn:hover {
+  background: #5a4dd4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Claude Generated */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #1a1a2e;
+}
+
+#game-container {
+  text-align: center;
+  border: 2px solid #16213e;
+  border-radius: 10px;
+  background-color: #0f0f23;
+  padding: 20px;
+  color: white;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 0 20px;
+}
+
+#score, #lives {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#start-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #e94560;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#start-button:hover {
+  background-color: #d63447;
+}
+
+#club-scene {
+  width: 600px;
+  height: 400px;
+  background: linear-gradient(45deg, #16213e, #0f3460);
+  border: 2px solid #533483;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+  margin: 0 auto;
+}
+
+.trouble-event {
+  width: 20px;
+  height: 20px;
+  background-color: #ff6b6b;
+  border: 2px solid #ff5252;
+  border-radius: 50%;
+  position: absolute;
+  cursor: pointer;
+  animation: pulse 0.5s infinite alternate;
+  z-index: 10;
+}
+
+.trouble-event:hover {
+  background-color: #ff5252;
+  transform: scale(1.2);
+}
+
+@keyframes pulse {
+  from {
+    opacity: 0.7;
+    transform: scale(1);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+}
+
+#game-message {
+  margin-top: 15px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #e94560;
+  min-height: 25px;
+}

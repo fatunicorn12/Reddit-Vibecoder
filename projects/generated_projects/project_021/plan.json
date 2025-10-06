@@ -1,0 +1,51 @@
+{
+  "description": "A minimalist web application where users navigate a branching narrative by making binary choices. Each choice immediately updates a text paragraph describing the path taken and its consequences, with a reset option to explore alternative outcomes.",
+  "features": [
+    "Display initial scenario text and two choice buttons.",
+    "Update scenario text and display new choices based on user selection.",
+    "Support a simple branching narrative structure (story tree).",
+    "Provide a 'Reset' button to restart the narrative from the beginning.",
+    "Basic, clean user interface."
+  ],
+  "steps": [
+    "**1. index.html (HTML Structure):**",
+    "   - Create a basic HTML5 document.",
+    "   - Include a `div` element with an ID (e.g., `story-container`) to display the current scenario text.",
+    "   - Include another `div` element with an ID (e.g., `choices-container`) to hold the choice buttons.",
+    "   - Add a `button` element with an ID (e.g., `reset-button`) for resetting the game.",
+    "   - Link `style.css` in the `<head>` section.",
+    "   - Link `script.js` at the end of the `<body>` section.",
+    "**2. style.css (Minimalist Styling):**",
+    "   - Apply basic CSS for readability: font-family, text alignment, margin/padding.",
+    "   - Style the main container for the story and choices.",
+    "   - Style buttons for a clean, clickable appearance.",
+    "**3. script.js (JavaScript Logic):**",
+    "   - **Define Narrative Data:** Create a JavaScript object (e.g., `story`) where keys are unique node IDs (e.g., 'start', 'pathA1', 'pathB1', 'endA', 'endB', etc.). Each node object should contain:",
+    "     - `text`: The scenario description for that node.",
+    "     - `choices`: An array of two objects, each with `text` (for the button) and `nextId` (the ID of the next node).",
+    "     - (Optional) `isEnding`: A boolean flag if it's a terminal node.",
+    "   - **Initialize State:** Define a variable `currentStoryNodeId` initialized to the 'start' node ID.",
+    "   - **Get DOM Elements:** Get references to the `story-container`, `choices-container`, and `reset-button` using their IDs.",
+    "   - **`renderStory()` Function:**",
+    "     - Based on `currentStoryNodeId`, retrieve the corresponding node object from the `story` data.",
+    "     - Update `story-container.textContent` with the node's `text`.",
+    "     - Clear existing buttons in `choices-container`.",
+    "     - If the node is not an ending:",
+    "       - Loop through `choices` array and create two new `<button>` elements.",
+    "       - Set button text and add a `click` event listener to each button that calls `makeChoice(choice.nextId)`.",
+    "       - Append buttons to `choices-container`.",
+    "     - If the node *is* an ending, hide or disable the choice buttons (e.g., by not appending them).",
+    "   - **`makeChoice(nextId)` Function:**",
+    "     - Update `currentStoryNodeId` to `nextId`.",
+    "     - Call `renderStory()` to update the UI.",
+    "   - **`resetGame()` Function:**",
+    "     - Set `currentStoryNodeId` back to the 'start' node ID.",
+    "     - Call `renderStory()`.",
+    "   - **Event Listeners:**",
+    "     - Add a `click` event listener to `reset-button` that calls `resetGame()`.",
+    "     - On initial page load (or using `DOMContentLoaded`), call `renderStory()` to display the first scenario."
+  ],
+  "dependencies": [
+    "None (uses native browser capabilities for HTML, CSS, and JavaScript)."
+  ]
+}

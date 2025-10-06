@@ -3,34 +3,32 @@ import subprocess
 import tempfile
 import re
 import shutil
+import textwrap
 from typing import Tuple
 from google import genai
+from anthropic import Anthropic, APIError, RateLimitError
 from dotenv import load_dotenv
 
+# --- Load keys ---
 load_dotenv()
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+claude = Anthropic(api_key=os.getenv("CLAUDE_API_KEY"))
 
 BASE_TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), "base")
 
 # --- Helpers ---
 def clean_code_output(raw: str) -> str:
-    """Strips Markdown fences and explanation text from Gemini output."""
+    """Normalize Claude/Gemini output by removing markdown fences and trimming."""
     code = raw.strip()
-    if "```" in code:
-        parts = code.split("```")
-        for part in parts:
-            if part.strip().startswith("python"):
-                return part.strip()[len("python"):].strip()
-            elif not part.strip().startswith("json"):
-                return part.strip()
-    return code
+    code = re.sub(r"^```[a-zA-Z0-9]*", "", code)
+    code = re.sub(r"```$", "", code)
+    return code.strip()
 
 def compile_check(code: str) -> Tuple[bool, str]:
     """Check if code compiles (Python only)."""
     with tempfile.NamedTemporaryFile(suffix=".py", delete=False, mode="w", encoding="utf-8") as tmp:
         tmp.write(code)
         tmp_path = tmp.name
-
     try:
         subprocess.check_output(["python", "-m", "py_compile", tmp_path], stderr=subprocess.STDOUT)
         return True, ""
@@ -45,7 +43,6 @@ def runtime_check(code: str, timeout: int = 5) -> Tuple[bool, str]:
     with tempfile.NamedTemporaryFile(suffix=".py", delete=False, mode="w", encoding="utf-8") as tmp:
         tmp.write(code)
         tmp_path = tmp.name
-
     try:
         subprocess.check_output(["python", tmp_path], stderr=subprocess.STDOUT, timeout=timeout)
         return True, ""
@@ -58,8 +55,9 @@ def runtime_check(code: str, timeout: int = 5) -> Tuple[bool, str]:
         except: pass
 
 def detect_project_type(code: str, plan: dict) -> str:
-    """Guess project type from code/plan."""
-    if "<html" in code.lower() or "javascript" in code.lower() or any("html" in d.lower() for d in plan.get("dependencies", [])):
+    """Guess project type from code/plan content."""
+    code_lower = code.lower()
+    if any(k in code_lower for k in ["---index.html---", "<html", "javascript", "document.getelementbyid"]):
         return "web"
     return "python"
 
@@ -81,55 +79,78 @@ def generate_code_from_plan(plan: dict, max_retries: int = 2) -> str:
         attempt += 1
 
         prompt = f"""
-        Based on this structured JSON plan:
+You are an expert software engineer generating complete, working code from a structured JSON plan.
+The plan describes what to build. Implement it fully so the result runs locally without modification.
 
-        {plan}
+Plan:
+{plan}
 
-        Write a complete MVP implementation.
+Follow these rules for all project types:
 
-        Rules:
-        - If it's a GAME (Pygame or Tkinter):
-        * Must be playable with clear objectives and game-over conditions.
-        * Must include scoring and display the current score.
-        * Must track and display a high score (stored in memory across runs).
-        * Must gradually increase difficulty over time (e.g., faster enemies, smaller gaps, faster speed).
-        * Must be restartable/replayable without closing the program.
-        * Must include basic controls instructions (printed in console or shown on screen).
-        - If it's a PROGRAM:
-        * Must perform its task correctly, with visible output.
-        - If it's a WEB APP:
-        * Output all three files in this format:
-            ---index.html---
-            [HTML injected inside <div id="app"> only]
-            ---style.css---
-            [new CSS rules appended to base]
-            ---script.js---
-            [JavaScript inside initApp()]
-        * Use the existing template files; do not recreate <html>, <head>, <body>, or <script>.
-        * Keep code self-contained, under ~200 lines total.
-        * Ensure zero console errors when opened locally.
+GAME (Pygame or Tkinter):
+- Must be playable with clear objectives and game-over conditions.
+- Include scoring and a displayed current score.
+- Track a high score in memory.
+- Gradually increase difficulty over time.
+- Be restartable without closing the program.
+- Include basic control instructions on screen or in the console.
 
-        Now write the full, runnable code output in the specified format only.
-        Do not include explanations or markdown outside the file delimiters.
-        """
+PROGRAM (CLI or script):
+- Must perform its task correctly with visible output.
+- Keep it self-contained and under ~200 lines.
+
+WEB APP (HTML/CSS/JS):
+- Output exactly three files in this format:
+  ---index.html---
+  [HTML injected inside <div id="app"> only]
+  ---style.css---
+  [new CSS rules appended to base]
+  ---script.js---
+  [JavaScript placed inside initApp()]
+- The base project already includes index.html, style.css, and script.js.
+- Do NOT recreate <html>, <head>, <body>, or <script> tags.
+- All JS must stay inside initApp(), with defined variables (const/let), no globals, and no HTML/CSS embedded.
+- Query each DOM element once and ensure zero console errors.
+- No external libraries or APIs.
+- The final page must be interactive, functional, and under ~200 lines total.
+
+If you encounter an error or missing detail, assume sensible defaults and continue.
+Now output ONLY the code in the specified format, with no commentary or markdown outside the file delimiters.
+"""
+        prompt = textwrap.dedent(prompt).strip()
 
         if error_message:
-            prompt += f"\nAlso, fix this error:\n{error_message}\n"
+            prompt += f"\nAlso, fix this error and regenerate cleanly:\n{error_message}\n"
 
-        # --- Call Gemini ---
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt
-        )
+        # --- Call Claude API ---
+        try:
+            response = claude.messages.create(
+                model="claude-sonnet-4-20250514",
+                max_tokens=4000,
+                temperature=0.7,
+                messages=[{"role": "user", "content": prompt}]
+            )
+            raw_code = ""
+            if response and hasattr(response, "content"):
+                for part in response.content:
+                    if part.type == "text":
+                        raw_code += part.text
+            if not raw_code.strip():
+                raise ValueError("Claude returned an empty response")
 
-        raw_code = getattr(response, "text", None)
-        if not raw_code and hasattr(response, "candidates"):
-            raw_code = response.candidates[0].content.parts[0].text
-        if not raw_code:
-            return None
+        except (APIError, RateLimitError, Exception) as e:
+            print(f"❌ Claude API call failed (attempt {attempt}): {e}")
+            error_message = str(e)
+            continue
 
+        # --- Clean and detect ---
         code = clean_code_output(raw_code)
         project_type = detect_project_type(code, plan)
+
+        if not code.strip():
+            print(f"⚠️ Empty or invalid code output (attempt {attempt}). Retrying...")
+            error_message = "Empty output or format mismatch."
+            continue
 
         # --- Python projects ---
         if project_type == "python":
@@ -138,86 +159,86 @@ def generate_code_from_plan(plan: dict, max_retries: int = 2) -> str:
                 print(f"❌ Compile failed (attempt {attempt}): {err}")
                 error_message = err
                 continue
-
             success, err = runtime_check(code)
             if not success:
                 print(f"❌ Runtime failed (attempt {attempt}): {err}")
                 error_message = err
                 continue
-
+            print("✅ Python project generated successfully.")
             return code
 
         # --- Web apps ---
         elif project_type == "web":
-            # Basic validator: ensure no HTML/CSS leaked into script.js
+            if "---index.html---" not in code or "---script.js---" not in code:
+                print(f"⚠️ Missing required file delimiters (attempt {attempt}). Retrying...")
+                error_message = "Missing file delimiters in web app output."
+                continue
+
             if "<html" in code.lower() or "<body" in code.lower() or "<style" in code.lower():
-                with open(os.path.join("warnings.log"), "a", encoding="utf-8") as f:
-                    f.write("⚠️ Gemini output for script.js contained HTML/CSS fragments.\n")
+                with open("warnings.log", "a", encoding="utf-8") as f:
+                    f.write("⚠️ Claude output for script.js contained HTML/CSS fragments.\n")
+            print("✅ Web app project generated successfully.")
             return code
 
+    print("❌ Failed to generate valid code after retries.")
     return None
 
 def save_code(project_dir: str, code: str, plan: dict):
     """
     Save generated code based on project type.
     Uses base template for web apps and injects cleanly.
+    Supports Claude output format with ---index.html---, ---style.css---, and ---script.js--- sections.
     """
     project_type = detect_project_type(code, plan)
 
+    # Always log raw output for debugging
+    with open(os.path.join(project_dir, "claude_raw_output.txt"), "w", encoding="utf-8") as f:
+        f.write(code)
+
     if project_type == "web":
-        # Copy base template first
         copy_base_template(project_dir)
+        sections = re.split(r"---(index\.html|style\.css|script\.js)---", code)
+        html_content = css_content = js_content = ""
 
-        html_content, css_content, js_content = "", "", ""
+        for i in range(1, len(sections), 2):
+            filename = sections[i].strip().lower()
+            content = sections[i + 1].strip()
+            if filename == "index.html":
+                html_content = content
+            elif filename == "style.css":
+                css_content = content
+            elif filename == "script.js":
+                js_content = content
 
-        # Extract HTML <body> content
-        html_match = re.search(r"<body.*?>(.*?)</body>", code, re.DOTALL | re.IGNORECASE)
-        if html_match:
-            html_content = html_match.group(1).strip()
-
-        # Extract CSS
-        css_blocks = re.findall(r"<style.*?>(.*?)</style>", code, re.DOTALL | re.IGNORECASE)
-        css_content = "\n".join(css_blocks).strip()
-
-        # Extract JS
-        js_blocks = re.findall(r"<script.*?>(.*?)</script>", code, re.DOTALL | re.IGNORECASE)
-        js_content = "\n".join(js_blocks).strip()
-
-        # --- Inject HTML ---
         if html_content:
             index_path = os.path.join(project_dir, "index.html")
             with open(index_path, "r+", encoding="utf-8") as f:
-                html = f.read()
-                html = html.replace(
+                html = f.read().replace(
                     "<!-- Gemini will inject here -->",
                     html_content + "\n<!-- Gemini will inject here -->"
                 )
                 f.seek(0); f.write(html); f.truncate()
 
-        # --- Append CSS ---
         if css_content:
             with open(os.path.join(project_dir, "style.css"), "a", encoding="utf-8") as f:
-                f.write("\n/* Gemini Generated */\n")
-                f.write(css_content)
+                f.write("\n/* Claude Generated */\n" + css_content)
 
-        # --- Append JS ---
         if js_content:
             with open(os.path.join(project_dir, "script.js"), "a", encoding="utf-8") as f:
-                f.write("\n// Gemini Generated\n")
-                f.write(js_content)
+                f.write("\n// Claude Generated\n" + js_content)
 
-        # --- Validation: log warnings if leakage ---
         warnings = []
         if "<html" in js_content.lower() or "<body" in js_content.lower():
             warnings.append("⚠️ HTML leaked into script.js")
         if "<style" in js_content.lower():
             warnings.append("⚠️ CSS leaked into script.js")
+        if not any([html_content, css_content, js_content]):
+            warnings.append("⚠️ No valid content parsed from Claude output")
 
         if warnings:
             with open(os.path.join(project_dir, "warnings.txt"), "w", encoding="utf-8") as f:
                 f.write("\n".join(warnings))
 
     else:
-        # Python project
         with open(os.path.join(project_dir, "main.py"), "w", encoding="utf-8") as f:
             f.write(code)

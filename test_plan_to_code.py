@@ -1,23 +1,14 @@
-import json
-from plan_to_code import generate_code_from_plan
+from anthropic import Anthropic
+import os
+from dotenv import load_dotenv
 
-# Load the sample plan you saved
-with open("sample_plan.json", "r", encoding="utf-8") as f:
-    plan = json.load(f)
+load_dotenv()
+client = Anthropic(api_key=os.getenv("CLAUDE_API_KEY"))
 
-print("📋 Loaded Plan:")
-print(json.dumps(plan, indent=2))
+response = client.messages.create(
+    model="claude-3-5-sonnet-20240620",
+    max_tokens=100,
+    messages=[{"role": "user", "content": "Say 'Hello from Claude!'"}]
+)
 
-print("\n⏳ Generating code from plan...")
-code = generate_code_from_plan(plan)
-
-if code:
-    print("\n✅ Code generated (first 500 chars):\n")
-    print(code[:500])  # show first part so terminal doesn't blow up
-
-    # Save it for testing
-    with open("generated_main.py", "w", encoding="utf-8") as f:
-        f.write(code)
-    print("\n💾 Saved code to generated_main.py")
-else:
-    print("❌ No code generated.")
+print(response.content[0].text)

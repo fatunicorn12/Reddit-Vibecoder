@@ -1,0 +1,1 @@
+None (Python standard library only, specifically `random` for events and `sys` or `os` for potential screen clearing, though not strictly required for MVP)

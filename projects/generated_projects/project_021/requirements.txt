@@ -1,0 +1,1 @@
+None (uses native browser capabilities for HTML, CSS, and JavaScript).
