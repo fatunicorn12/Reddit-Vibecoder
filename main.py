@@ -5,6 +5,7 @@ from plan_to_code import generate_code_from_plan, save_code, detect_project_type
 from controls_detector import detect_controls_inputs
 import os
 import json
+from auto_screenshot import auto_screenshot_project
 
 # --- Helper: get next available project path ---
 def get_next_project_path(base_dir="projects/generated_projects"):
@@ -24,7 +25,7 @@ def get_next_project_path(base_dir="projects/generated_projects"):
 
 def main():
     # Step 1: Fetch Reddit post
-    title, body = fetch_subreddit_posts("Confession")
+    title, body, post_url = fetch_subreddit_posts("Confession")
 
     if not title:
         print("❌ Could not fetch a Reddit post. Exiting.")
@@ -74,6 +75,10 @@ def main():
     with open(os.path.join(project_dir, "README.md"), "w", encoding="utf-8") as f:
         f.write(f"# {idea}\n\n{plan['description']}\n\n")
 
+        # --- Reddit Source Attribution ---
+        f.write("## Source Reddit Post\n")
+        f.write(f"[View original post]({post_url})\n\n")
+
         f.write("## Features\n")
         f.write("\n".join(f"- {feat}" for feat in plan["features"]))
         f.write("\n\n")
@@ -87,7 +92,15 @@ def main():
         f.write("## Controls / Inputs\n")
         f.write(controls_text + "\n")
 
-    print(f"\n✅ Project files saved to {project_dir}")
+        print(f"\n✅ Project files saved to {project_dir}")
+
+    # Step 6: Automatically run and capture screenshot
+    try:
+        auto_screenshot_project(project_dir)
+        print("📸 Screenshot captured and added to README.")
+    except Exception as e:
+        print(f"⚠️ Auto-screenshot failed for {project_dir}: {e}")
+
 
 if __name__ == "__main__":
     main()

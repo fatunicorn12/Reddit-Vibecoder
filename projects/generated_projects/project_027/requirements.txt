@@ -1,0 +1,1 @@
+None (uses standard HTML, CSS, and vanilla JavaScript for client-side functionality)

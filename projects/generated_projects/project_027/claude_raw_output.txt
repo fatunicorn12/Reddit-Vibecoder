@@ -1,0 +1,189 @@
+---index.html---
+<div id="app">
+  <h1>Debt Clarity Dashboard</h1>
+  
+  <div class="input-section">
+    <div class="input-group">
+      <label for="owedByMe">Total You Owe:</label>
+      <input type="number" id="owedByMe" placeholder="Enter amount you owe" min="0" step="0.01">
+    </div>
+    
+    <div class="input-group">
+      <label for="owedToMe">Total Owed To You:</label>
+      <input type="number" id="owedToMe" placeholder="Enter amount owed to you" min="0" step="0.01">
+    </div>
+  </div>
+  
+  <div class="results-section">
+    <div class="result-item">
+      <h3>Total Outbound Debt</h3>
+      <p id="outboundDebt" class="amount">$0.00</p>
+    </div>
+    
+    <div class="result-item">
+      <h3>Total Inbound Debt</h3>
+      <p id="inboundDebt" class="amount">$0.00</p>
+    </div>
+    
+    <div class="result-item net-position-container">
+      <h3>Net Financial Position</h3>
+      <p id="netPosition" class="amount net-neutral">$0.00</p>
+    </div>
+  </div>
+</div>
+
+---style.css---
+#app {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+  font-size: 2.5em;
+}
+
+.input-section {
+  margin-bottom: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group:last-child {
+  margin-bottom: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+input[type="number"] {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+  transition: border-color 0.3s ease;
+}
+
+input[type="number"]:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+.results-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.net-position-container {
+  grid-column: 1 / -1;
+}
+
+.result-item {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.result-item h3 {
+  margin: 0 0 10px 0;
+  color: #333;
+  font-size: 1.2em;
+}
+
+.amount {
+  font-size: 2em;
+  font-weight: bold;
+  margin: 0;
+}
+
+.net-positive {
+  color: #4CAF50;
+}
+
+.net-negative {
+  color: #f44336;
+}
+
+.net-neutral {
+  color: #666;
+}
+
+@media (max-width: 600px) {
+  .results-section {
+    grid-template-columns: 1fr;
+  }
+  
+  #app {
+    margin: 10px;
+    padding: 15px;
+  }
+  
+  h1 {
+    font-size: 2em;
+  }
+}
+
+---script.js---
+function initApp() {
+  const owedByMeInput = document.getElementById('owedByMe');
+  const owedToMeInput = document.getElementById('owedToMe');
+  const outboundDebtDisplay = document.getElementById('outboundDebt');
+  const inboundDebtDisplay = document.getElementById('inboundDebt');
+  const netPositionDisplay = document.getElementById('netPosition');
+
+  if (!owedByMeInput || !owedToMeInput || !outboundDebtDisplay || !inboundDebtDisplay || !netPositionDisplay) {
+    console.error('Required elements not found');
+    return;
+  }
+
+  function formatCurrency(amount) {
+    return '$' + amount.toFixed(2);
+  }
+
+  function updateDashboard() {
+    const totalOwedByMe = parseFloat(owedByMeInput.value) || 0;
+    const totalOwedToMe = parseFloat(owedToMeInput.value) || 0;
+    const netPosition = totalOwedToMe - totalOwedByMe;
+
+    outboundDebtDisplay.textContent = formatCurrency(totalOwedByMe);
+    inboundDebtDisplay.textContent = formatCurrency(totalOwedToMe);
+    netPositionDisplay.textContent = formatCurrency(netPosition);
+
+    netPositionDisplay.className = 'amount';
+    if (netPosition > 0) {
+      netPositionDisplay.classList.add('net-positive');
+    } else if (netPosition < 0) {
+      netPositionDisplay.classList.add('net-negative');
+    } else {
+      netPositionDisplay.classList.add('net-neutral');
+    }
+  }
+
+  owedByMeInput.addEventListener('input', updateDashboard);
+  owedToMeInput.addEventListener('input', updateDashboard);
+
+  updateDashboard();
+}

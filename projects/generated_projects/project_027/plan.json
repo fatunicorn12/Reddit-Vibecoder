@@ -1,0 +1,40 @@
+{
+  "description": "A simple client-side web application where users input their total outstanding loans (outbound debt) and the total money owed to them by others (inbound debt). It instantly calculates and displays their net financial position and a clear summary of inbound versus outbound debt.",
+  "features": [
+    "Input field for total money owed by the user (outstanding loans).",
+    "Input field for total money owed to the user by others.",
+    "Real-time calculation of net financial position.",
+    "Display of total outbound debt (money user owes).",
+    "Display of total inbound debt (money owed to user).",
+    "Clear visual representation of results, including positive/negative net position."
+  ],
+  "steps": [
+    "**index.html (HTML Structure):**",
+    "1. Create a basic HTML5 document with a `head` and `body`.",
+    "2. Link `style.css` in the `head` section.",
+    "3. Add a main heading (e.g., 'Debt Clarity Dashboard').",
+    "4. Create two number input fields (e.g., `<input type=\"number\" id=\"owedByMe\" placeholder=\"Total You Owe\">`) for 'Total Owed By You' and 'Total Owed To You' (e.g., `<input type=\"number\" id=\"owedToMe\" placeholder=\"Total Owed To You\">`).",
+    "5. Add display elements (e.g., `<p id=\"netPosition\">`) for 'Net Financial Position', 'Total Outbound Debt', and 'Total Inbound Debt'.",
+    "6. Link `script.js` just before the closing `</body>` tag.",
+    "**style.css (Styling):**",
+    "1. Apply basic body styles (font, margin, text alignment).",
+    "2. Style input fields for better usability (padding, border, width).",
+    "3. Style the display areas for results, making them clear and readable.",
+    "4. Add conditional styling for the 'Net Financial Position' (e.g., green for positive, red for negative).",
+    "**script.js (Logic):**",
+    "1. Get references to the two input fields (e.g., `document.getElementById('owedByMe')`).",
+    "2. Get references to the result display elements (e.g., `document.getElementById('netPosition')`).",
+    "3. Create a function `updateDashboard()`:",
+    "   a. Read the values from the 'owedByMe' and 'owedToMe' input fields. Use `parseFloat()` and default to `0` if empty or invalid (`isNaN`).",
+    "   b. Calculate `netPosition = totalOwedToMe - totalOwedByMe`.",
+    "   c. Update the `textContent` of the 'Total Outbound Debt' display with `totalOwedByMe`.",
+    "   d. Update the `textContent` of the 'Total Inbound Debt' display with `totalOwedToMe`.",
+    "   e. Update the `textContent` of the 'Net Financial Position' display with `netPosition`.",
+    "   f. Add/remove a CSS class to the 'Net Financial Position' display based on whether `netPosition` is positive, negative, or zero (e.g., `net-positive`, `net-negative`).",
+    "4. Attach the `updateDashboard()` function to the `input` event listener for both input fields, ensuring real-time updates.",
+    "5. Call `updateDashboard()` once when the script loads to initialize the display."
+  ],
+  "dependencies": [
+    "None (uses standard HTML, CSS, and vanilla JavaScript for client-side functionality)"
+  ]
+}

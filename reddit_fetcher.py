@@ -27,11 +27,12 @@ def fetch_subreddit_posts(subreddit_name='Confession'):
         
         title = random_post.title
         body = random_post.selftext if random_post.selftext else "[No Text in Body]"
+        post_url = f"https://reddit.com{random_post.permalink}"
 
         print(f"Title: {title}")
         print(f"Body: {body}")
 
-        return title, body
+        return title, body, post_url
 
     except ResponseException as e:
         print(f"Failed to fetch subreddit posts: {e}")

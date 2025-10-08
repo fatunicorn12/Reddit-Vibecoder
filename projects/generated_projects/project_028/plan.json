@@ -1,0 +1,31 @@
+{
+  "description": "A static web application that calculates and visualizes a user's debt repayment progress from an initial amount to their current remaining balance, displaying months passed, remaining balance, and a progress bar to illustrate the journey to being debt-free.",
+  "features": [
+    "Input fields for initial total debt, current remaining debt, and monthly payment.",
+    "Calculation of months passed and total estimated months to debt-free.",
+    "Display of current remaining balance and calculated months passed.",
+    "A visual progress bar indicating the percentage of initial debt paid off.",
+    "Basic input validation for positive numbers and logical debt progression."
+  ],
+  "steps": [
+    "**1. `index.html` structure:** Create a basic HTML5 document. Include an `h1` title. Set up a form with `label` and `input type='number'` elements for 'Initial Total Debt', 'Current Remaining Debt', and 'Monthly Payment'. Add a 'Calculate Progress' button. Create `div` elements to display results: 'Months Passed:', 'Remaining Balance:', 'Estimated Months to Debt-Free:'. Include a `div` for the progress bar container and an inner `div` for the progress fill. Link to `style.css` and `script.js` (defer or at the end of body).",
+    "**2. `style.css` for basic styling:** Apply basic `body` styling (font, layout). Style the input fields, button, and result display areas for readability. Define styles for the progress bar container (e.g., `background`, `border`, fixed `width`, `height`). Define styles for the progress bar fill (e.g., distinct `background-color`, `height: 100%`, `width: 0%` initially).",
+    "**3. `script.js` implementation:**",
+    "   a. Get references to all necessary HTML elements (input fields, button, result display `span`/`p` elements, progress bar fill `div`).",
+    "   b. Add an `eventListener` to the 'Calculate Progress' button for a 'click' event.",
+    "   c. Inside the event listener function:",
+    "      i. Retrieve the numeric values from the 'Initial Total Debt', 'Current Remaining Debt', and 'Monthly Payment' input fields.",
+    "      ii. **Input Validation:** Check if all values are positive numbers. Ensure 'Current Remaining Debt' is less than or equal to 'Initial Total Debt'. Ensure 'Monthly Payment' is greater than 0 (to avoid division by zero). If validation fails, display an `alert()` message and `return`.",
+    "      iii. **Calculations:**",
+    "          - `debtPaidOff = initialTotalDebt - currentRemainingDebt`.",
+    "          - `monthsPassed = debtPaidOff / monthlyPayment`.",
+    "          - `totalMonthsToClear = initialTotalDebt / monthlyPayment`.",
+    "          - `progressPercentage = (debtPaidOff / initialTotalDebt) * 100` (Handle the edge case where `initialTotalDebt` is 0 by setting `progressPercentage` to 100 if `debtPaidOff` is also 0, or 0 otherwise).",
+    "      iv. **Update UI:**",
+    "          - Update the `textContent` of the 'Months Passed:' display with `monthsPassed.toFixed(1)`.",
+    "          - Update the `textContent` of the 'Remaining Balance:' display with `currentRemainingDebt.toFixed(2)` (currency format).",
+    "          - Update the `textContent` of the 'Estimated Months to Debt-Free:' display with `totalMonthsToClear.toFixed(1)`.",
+    "          - Set the `width` style of the progress bar fill element to `progressPercentage.toFixed(1) + '%'`."
+  ],
+  "dependencies": []
+}

@@ -191,12 +191,23 @@ def main():
     print(f"\n✅ Done! {success} succeeded, {fail} failed.")
 
 
-if __name__ == "__main__":
-    test_single = True       
-    single_project = "project_026" 
+def auto_screenshot_project(project_path: str):
+    """Run auto-screenshot on a single generated project folder."""
+    code = get_project_code_snippet(project_path)
+    project_type = detect_project_type(code)
 
-    if test_single:
-        project_path = os.path.join("projects", "generated_projects", single_project)
-        capture_project(project_path)
+    if project_type == "web":
+        screenshot = capture_html_app(project_path)
     else:
-        main()
+        screenshot = capture_python_app(project_path)
+
+    update_readme(project_path, screenshot)
+    return screenshot
+
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) < 2:
+        print("Usage: python auto_screenshot.py <project_path>")
+    else:
+        auto_screenshot_project(sys.argv[1])

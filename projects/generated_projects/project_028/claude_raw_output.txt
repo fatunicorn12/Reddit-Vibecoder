@@ -1,0 +1,237 @@
+---index.html---
+<div id="app">
+  <h1>Debt Repayment Progress Calculator</h1>
+  
+  <form id="debt-form">
+    <div class="input-group">
+      <label for="initial-debt">Initial Total Debt ($):</label>
+      <input type="number" id="initial-debt" min="0" step="0.01" placeholder="Enter initial debt amount">
+    </div>
+    
+    <div class="input-group">
+      <label for="current-debt">Current Remaining Debt ($):</label>
+      <input type="number" id="current-debt" min="0" step="0.01" placeholder="Enter current remaining debt">
+    </div>
+    
+    <div class="input-group">
+      <label for="monthly-payment">Monthly Payment ($):</label>
+      <input type="number" id="monthly-payment" min="0.01" step="0.01" placeholder="Enter monthly payment amount">
+    </div>
+    
+    <button type="button" id="calculate-btn">Calculate Progress</button>
+  </form>
+  
+  <div id="results" class="results-container">
+    <div class="result-item">
+      <span class="result-label">Months Passed:</span>
+      <span id="months-passed" class="result-value">-</span>
+    </div>
+    
+    <div class="result-item">
+      <span class="result-label">Remaining Balance:</span>
+      <span id="remaining-balance" class="result-value">-</span>
+    </div>
+    
+    <div class="result-item">
+      <span class="result-label">Estimated Months to Debt-Free:</span>
+      <span id="estimated-months" class="result-value">-</span>
+    </div>
+    
+    <div class="progress-container">
+      <div class="progress-label">Progress to Debt-Free:</div>
+      <div class="progress-bar">
+        <div id="progress-fill" class="progress-fill"></div>
+      </div>
+      <div id="progress-percentage" class="progress-text">0%</div>
+    </div>
+  </div>
+</div>
+
+---style.css---
+body {
+  font-family: Arial, sans-serif;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f5f5f5;
+}
+
+#app {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+input[type="number"] {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+input[type="number"]:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+#calculate-btn {
+  width: 100%;
+  padding: 15px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#calculate-btn:hover {
+  background-color: #45a049;
+}
+
+.results-container {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 5px;
+  border: 1px solid #eee;
+}
+
+.result-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: white;
+  border-radius: 5px;
+}
+
+.result-label {
+  font-weight: bold;
+  color: #555;
+}
+
+.result-value {
+  font-size: 18px;
+  color: #333;
+  font-weight: bold;
+}
+
+.progress-container {
+  margin-top: 25px;
+  text-align: center;
+}
+
+.progress-label {
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 30px;
+  background-color: #e0e0e0;
+  border-radius: 15px;
+  overflow: hidden;
+  margin-bottom: 10px;
+  border: 2px solid #ccc;
+}
+
+.progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #4CAF50, #45a049);
+  transition: width 0.5s ease-in-out;
+  border-radius: 13px;
+}
+
+.progress-text {
+  font-size: 16px;
+  font-weight: bold;
+  color: #4CAF50;
+}
+
+---script.js---
+function initApp() {
+  const initialDebtInput = document.getElementById('initial-debt');
+  const currentDebtInput = document.getElementById('current-debt');
+  const monthlyPaymentInput = document.getElementById('monthly-payment');
+  const calculateBtn = document.getElementById('calculate-btn');
+  const monthsPassedSpan = document.getElementById('months-passed');
+  const remainingBalanceSpan = document.getElementById('remaining-balance');
+  const estimatedMonthsSpan = document.getElementById('estimated-months');
+  const progressFillDiv = document.getElementById('progress-fill');
+  const progressPercentageSpan = document.getElementById('progress-percentage');
+
+  if (!initialDebtInput || !currentDebtInput || !monthlyPaymentInput || !calculateBtn || 
+      !monthsPassedSpan || !remainingBalanceSpan || !estimatedMonthsSpan || 
+      !progressFillDiv || !progressPercentageSpan) {
+    console.error('Required elements not found');
+    return;
+  }
+
+  calculateBtn.addEventListener('click', function() {
+    const initialTotalDebt = parseFloat(initialDebtInput.value);
+    const currentRemainingDebt = parseFloat(currentDebtInput.value);
+    const monthlyPayment = parseFloat(monthlyPaymentInput.value);
+
+    // Input validation
+    if (isNaN(initialTotalDebt) || isNaN(currentRemainingDebt) || isNaN(monthlyPayment)) {
+      alert('Please enter valid numbers for all fields.');
+      return;
+    }
+
+    if (initialTotalDebt < 0 || currentRemainingDebt < 0 || monthlyPayment <= 0) {
+      alert('Please enter positive numbers. Monthly payment must be greater than 0.');
+      return;
+    }
+
+    if (currentRemainingDebt > initialTotalDebt) {
+      alert('Current remaining debt cannot be greater than initial total debt.');
+      return;
+    }
+
+    // Calculations
+    const debtPaidOff = initialTotalDebt - currentRemainingDebt;
+    const monthsPassed = monthlyPayment > 0 ? debtPaidOff / monthlyPayment : 0;
+    const totalMonthsToClear = monthlyPayment > 0 ? initialTotalDebt / monthlyPayment : 0;
+    
+    let progressPercentage;
+    if (initialTotalDebt === 0) {
+      progressPercentage = debtPaidOff === 0 ? 100 : 0;
+    } else {
+      progressPercentage = (debtPaidOff / initialTotalDebt) * 100;
+    }
+
+    // Update UI
+    monthsPassedSpan.textContent = monthsPassed.toFixed(1);
+    remainingBalanceSpan.textContent = '$' + currentRemainingDebt.toFixed(2);
+    estimatedMonthsSpan.textContent = totalMonthsToClear.toFixed(1);
+    progressFillDiv.style.width = progressPercentage.toFixed(1) + '%';
+    progressPercentageSpan.textContent = progressPercentage.toFixed(1) + '%';
+  });
+}
