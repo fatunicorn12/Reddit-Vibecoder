@@ -84,13 +84,14 @@ def main():
         f.write("\n\n")
 
         f.write("## How to Run\n")
-        if any("html" in dep.lower() for dep in plan.get("dependencies", [])):
-            f.write("- Open `index.html` in your browser\n\n")
-        else:
-            f.write("- Run with: `python main.py`\n\n")
+        project_type = detect_project_type(code, plan)
 
-        f.write("## Controls / Inputs\n")
-        f.write(controls_text + "\n")
+        if project_type == "web":
+            f.write("- Open `index.html` in your browser\n\n")
+        elif project_type == "python":
+            f.write("- Run with: `python main.py`\n\n")
+        else:
+            f.write("- (Unknown project type — check generated files)\n\n")
 
         print(f"\n✅ Project files saved to {project_dir}")
 

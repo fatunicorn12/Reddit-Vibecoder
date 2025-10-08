@@ -1,0 +1,322 @@
+---index.html---
+<div id="app">
+  <h1>Loan Repayment Visualizer</h1>
+  
+  <div class="input-section">
+    <div class="input-group">
+      <label for="loanAmount">Loan Amount ($)</label>
+      <input type="number" id="loanAmount" placeholder="e.g., 250000" min="0" step="0.01">
+    </div>
+    
+    <div class="input-group">
+      <label for="interestRate">Annual Interest Rate (%)</label>
+      <input type="number" id="interestRate" placeholder="e.g., 4.5" min="0" step="0.01">
+    </div>
+    
+    <div class="input-group">
+      <label for="monthlyPayment">Monthly Payment ($)</label>
+      <input type="number" id="monthlyPayment" placeholder="e.g., 1500" min="0" step="0.01">
+    </div>
+    
+    <button id="calculateBtn">Calculate Repayment</button>
+  </div>
+  
+  <div id="errorMessage" class="error-message"></div>
+  
+  <div id="results" class="results-section">
+    <div class="result-item">
+      <h3>Loan-Free Date</h3>
+      <p id="loanFreeDate">-</p>
+    </div>
+    
+    <div class="result-item">
+      <h3>Total Interest Paid</h3>
+      <p id="totalInterest">-</p>
+    </div>
+    
+    <div class="result-item">
+      <h3>Months to Pay Off</h3>
+      <p id="monthsToPayOff">-</p>
+    </div>
+    
+    <div class="progress-section">
+      <h3>Repayment Progress</h3>
+      <div class="progress-bar">
+        <div id="progressFill" class="progress-fill"></div>
+      </div>
+      <p id="progressText">0% Complete</p>
+    </div>
+  </div>
+</div>
+
+---style.css---
+#app {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.input-section {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+}
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #555;
+}
+
+input[type="number"] {
+  width: 100%;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+input[type="number"]:focus {
+  border-color: #4CAF50;
+  outline: none;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.error-message {
+  color: #d32f2f;
+  background-color: #ffebee;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  display: none;
+}
+
+.results-section {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+}
+
+.result-item {
+  margin-bottom: 20px;
+  padding: 10px;
+  background-color: #f5f5f5;
+  border-radius: 5px;
+}
+
+.result-item h3 {
+  margin: 0 0 5px 0;
+  color: #333;
+  font-size: 14px;
+}
+
+.result-item p {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #4CAF50;
+}
+
+.progress-section {
+  margin-top: 20px;
+}
+
+.progress-section h3 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 30px;
+  background-color: #e0e0e0;
+  border-radius: 15px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #4CAF50, #66BB6A);
+  width: 0%;
+  transition: width 0.5s ease-in-out;
+  border-radius: 15px;
+}
+
+#progressText {
+  text-align: center;
+  font-weight: bold;
+  color: #555;
+}
+
+---script.js---
+function initApp() {
+  const loanAmountInput = document.getElementById('loanAmount');
+  const interestRateInput = document.getElementById('interestRate');
+  const monthlyPaymentInput = document.getElementById('monthlyPayment');
+  const calculateBtn = document.getElementById('calculateBtn');
+  const errorMessage = document.getElementById('errorMessage');
+  const loanFreeDate = document.getElementById('loanFreeDate');
+  const totalInterest = document.getElementById('totalInterest');
+  const monthsToPayOff = document.getElementById('monthsToPayOff');
+  const progressFill = document.getElementById('progressFill');
+  const progressText = document.getElementById('progressText');
+
+  if (!loanAmountInput || !interestRateInput || !monthlyPaymentInput || !calculateBtn) {
+    console.error('Required input elements not found');
+    return;
+  }
+
+  function showError(message) {
+    errorMessage.textContent = message;
+    errorMessage.style.display = 'block';
+  }
+
+  function hideError() {
+    errorMessage.style.display = 'none';
+  }
+
+  function formatCurrency(amount) {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(amount);
+  }
+
+  function formatDate(date) {
+    return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+  }
+
+  function calculateRepayment() {
+    hideError();
+
+    const loanAmount = parseFloat(loanAmountInput.value);
+    const annualInterestRate = parseFloat(interestRateInput.value);
+    const monthlyPayment = parseFloat(monthlyPaymentInput.value);
+
+    // Input validation
+    if (!loanAmount || !annualInterestRate || !monthlyPayment) {
+      showError('Please fill in all fields with valid numbers.');
+      return;
+    }
+
+    if (loanAmount <= 0) {
+      showError('Loan amount must be greater than 0.');
+      return;
+    }
+
+    if (annualInterestRate < 0) {
+      showError('Interest rate cannot be negative.');
+      return;
+    }
+
+    if (monthlyPayment <= 0) {
+      showError('Monthly payment must be greater than 0.');
+      return;
+    }
+
+    const monthlyInterestRate = annualInterestRate / 100 / 12;
+    const initialMonthlyInterest = loanAmount * monthlyInterestRate;
+
+    if (monthlyPayment <= initialMonthlyInterest) {
+      showError('Monthly payment must be greater than the initial monthly interest payment of ' + formatCurrency(initialMonthlyInterest));
+      return;
+    }
+
+    // Initialize calculation variables
+    let currentBalance = loanAmount;
+    let totalInterestPaid = 0;
+    let monthsTaken = 0;
+    const initialLoanAmount = loanAmount;
+
+    // Calculate repayment
+    while (currentBalance > 0.01 && monthsTaken < 10000) {
+      const interestPayment = currentBalance * monthlyInterestRate;
+      const principalPayment = monthlyPayment - interestPayment;
+      
+      if (principalPayment > currentBalance) {
+        totalInterestPaid += currentBalance * monthlyInterestRate;
+        currentBalance = 0;
+      } else {
+        currentBalance -= principalPayment;
+        totalInterestPaid += interestPayment;
+      }
+      
+      monthsTaken++;
+    }
+
+    if (monthsTaken >= 10000) {
+      showError('Loan cannot be paid off with these parameters within a reasonable timeframe.');
+      return;
+    }
+
+    // Calculate results
+    const today = new Date();
+    const estimatedLoanFreeDate = new Date(today.getFullYear(), today.getMonth() + monthsTaken, today.getDate());
+    const percentagePaid = Math.min(100, ((initialLoanAmount - currentBalance) / initialLoanAmount) * 100);
+
+    // Update display
+    if (loanFreeDate) loanFreeDate.textContent = formatDate(estimatedLoanFreeDate);
+    if (totalInterest) totalInterest.textContent = formatCurrency(totalInterestPaid);
+    if (monthsToPayOff) monthsToPayOff.textContent = monthsTaken + ' months (' + Math.round(monthsTaken / 12 * 10) / 10 + ' years)';
+    
+    if (progressFill) {
+      progressFill.style.width = percentagePaid + '%';
+    }
+    
+    if (progressText) {
+      progressText.textContent = Math.round(percentagePaid) + '% Complete';
+    }
+  }
+
+  calculateBtn.addEventListener('click', calculateRepayment);
+
+  // Allow Enter key to trigger calculation
+  [loanAmountInput, interestRateInput, monthlyPaymentInput].forEach(input => {
+    if (input) {
+      input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          calculateRepayment();
+        }
+      });
+    }
+  });
+}

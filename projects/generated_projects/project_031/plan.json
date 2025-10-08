@@ -1,0 +1,21 @@
+{
+  "description": "A static web application simulating an early 2000s premium cable TV channel menu. Users can 'watch' various 'Skinemax' style movies, which dynamically adds charges to a visible monthly bill. An option to 'cancel' the bill is also provided.",
+  "features": [
+    "Static HTML structure for a retro TV menu interface.",
+    "Display of several 'Skinemax' style movie titles with 'Watch' buttons.",
+    "Dynamic 'Monthly Bill' display, initially $0.00.",
+    "Clicking a 'Watch' button adds a predefined cost to the 'Monthly Bill'.",
+    "The bill accumulates with each movie 'watched'.",
+    "A 'Cancel Bill' button to reset the monthly bill to $0.00.",
+    "Basic styling to evoke an early 2000s cable TV aesthetic."
+  ],
+  "steps": [
+    "**1. `index.html` Setup:** Create `index.html`. Structure it with a main container, a header for the channel name (e.g., 'CINEMAX 2000'), a section to list movie titles and 'Watch' buttons, and a separate section for the 'Monthly Bill' display (including a `<span>` for the amount) and a 'Cancel Bill' button. Link `style.css` and `script.js`.",
+    "**2. `style.css` Styling:** Create `style.css`. Apply basic styling to mimic an early 2000s TV menu: use a retro `font-family` (e.g., 'Courier New'), a dark background, blocky borders, and prominent text for titles and the bill display.",
+    "**3. `script.js` Core Logic:** Create `script.js`. Declare a `let currentBill = 0;`. Define an array of movie objects, each with a `title` and a `price` (e.g., `[{ title: 'Erotic Adventures', price: 5.99 }, { title: 'Lust in Space', price: 6.99 }]`).",
+    "**4. Populate Movies (JS):** Get a reference to the movie listing container. Loop through the movie array, dynamically creating `div` elements for each movie title and an associated 'Watch' button. Append these to the movie listing container in `index.html`.",
+    "**5. 'Watch' Button Functionality (JS):** For each 'Watch' button created, attach an `onclick` event listener. This listener will: a) Add the movie's `price` to `currentBill`. b) Update the text content of the bill display `<span>` on the page, formatted as currency (e.g., `$XX.XX`).",
+    "**6. 'Cancel Bill' Functionality (JS):** Get a reference to the 'Cancel Bill' button. Attach an `onclick` event listener. This listener will: a) Reset `currentBill` to `0`. b) Update the bill display `<span>` to `$0.00`."
+  ],
+  "dependencies": []
+}

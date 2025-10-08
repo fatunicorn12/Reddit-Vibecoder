@@ -7,5 +7,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function initApp() {
   const app = document.getElementById("app");
-  app.innerHTML = "<p>This is the base template. Gemini will add features here.</p>";
+  app.innerHTML = "<p>This is the base template</p>";
 }

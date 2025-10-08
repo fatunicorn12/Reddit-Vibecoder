@@ -1,0 +1,33 @@
+{
+  "description": "A static web application for visualizing loan repayment progress. Users input loan amount, annual interest rate, and monthly payment to see a dynamic progress bar of debt reduction and an estimated 'loan-free' date, along with total interest paid.",
+  "features": [
+    "User input fields for loan amount, annual interest rate, and monthly payment.",
+    "Calculates and displays the estimated 'loan-free' date.",
+    "Calculates and displays the total interest paid over the life of the loan.",
+    "Visualizes debt repayment progress with a dynamic bar (e.g., representing percentage of loan paid off).",
+    "Basic input validation to ensure positive numbers and a sufficient monthly payment."
+  ],
+  "steps": [
+    "Create `index.html`: Set up basic HTML structure with input fields (loan amount, interest rate, monthly payment), a button to trigger calculation, and designated `div` elements for displaying the 'loan-free' date, total interest, and the debt progress bar.",
+    "Create `style.css`: Add basic styling for layout, input fields, and the progress bar (a container `div` and an inner 'fill' `div` whose width will be dynamically adjusted by JavaScript).",
+    "Create `script.js`: Implement the core logic.",
+    "In `script.js`: Get references to all necessary HTML elements (inputs, button, output displays, progress bar elements).",
+    "In `script.js`: Create a function `calculateRepayment()` that will be called when the button is clicked.",
+    "Inside `calculateRepayment()`: Retrieve values from input fields, parsing them as numbers.",
+    "Inside `calculateRepayment()`: Perform input validation (e.g., ensure values are positive, and monthly payment is greater than the initial monthly interest). Display error messages if validation fails.",
+    "Inside `calculateRepayment()`: Initialize variables for `currentBalance` (starting with the loan amount), `totalInterestPaid`, `monthsTaken`.",
+    "Inside `calculateRepayment()`: Calculate the `monthlyInterestRate` from the annual interest rate.",
+    "Inside `calculateRepayment()`: Implement a `while` loop that continues as long as `currentBalance > 0`. In each iteration:",
+    "  a. Calculate `interestPayment = currentBalance * monthlyInterestRate`.",
+    "  b. Calculate `principalPayment = monthlyPayment - interestPayment`.",
+    "  c. Update `currentBalance -= principalPayment`.",
+    "  d. Update `totalInterestPaid += interestPayment`.",
+    "  e. Increment `monthsTaken`.",
+    "  f. Include a safety break (e.g., if `monthsTaken` exceeds a very large number like 10,000) to prevent infinite loops for impossible scenarios.",
+    "After the loop: Calculate the `estimatedLoanFreeDate` by adding `monthsTaken` to the current date.",
+    "After the loop: Calculate the `percentagePaid` as `(initialLoanAmount - currentBalance) / initialLoanAmount * 100` (capped at 100% if `currentBalance` goes slightly negative).",
+    "After the loop: Update the HTML elements: display `totalInterestPaid`, `monthsTaken`, `estimatedLoanFreeDate`, and set the `width` style of the progress bar's 'fill' `div` to `percentagePaid + '%'`. Make sure to format currency and dates appropriately.",
+    "Attach an event listener to the calculation button to call the `calculateRepayment()` function."
+  ],
+  "dependencies": []
+}

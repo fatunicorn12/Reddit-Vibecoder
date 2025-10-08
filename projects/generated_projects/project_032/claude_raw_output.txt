@@ -1,0 +1,130 @@
+---index.html---
+<div id="app">
+  <h1>Conversation Spark</h1>
+  <div id="prompt-display">Click the button to get a conversation starter!</div>
+  <button id="generate-btn">Generate New Prompt</button>
+</div>
+
+---style.css---
+#app {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 40px 20px;
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#app h1 {
+  color: white;
+  font-size: 2.5em;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+#prompt-display {
+  background: white;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  margin-bottom: 30px;
+  font-size: 1.2em;
+  line-height: 1.6;
+  color: #333;
+  min-height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+#generate-btn {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.1em;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  font-weight: bold;
+}
+
+#generate-btn:hover {
+  background: #ff5252;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+
+#generate-btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 600px) {
+  #app {
+    padding: 20px 15px;
+  }
+  
+  #app h1 {
+    font-size: 2em;
+  }
+  
+  #prompt-display {
+    padding: 20px;
+    font-size: 1.1em;
+  }
+}
+
+---script.js---
+function initApp() {
+  const prompts = [
+    "If you could have dinner with any fictional character, who would it be and what would you ask them?",
+    "What's the most unusual skill you wish you could master overnight?",
+    "If you had to live in a world from any book or movie, which would you choose and why?",
+    "What would you do if you discovered you could communicate with one species of animal?",
+    "If you could eliminate one everyday inconvenience from your life forever, what would it be?",
+    "What's something everyone seems to love that you just don't understand?",
+    "If you could witness any event in history, what would it be?",
+    "What's the weirdest compliment you've ever received or would like to receive?",
+    "If you had to teach a class on something you're passionate about, what would the subject be?",
+    "What's a conspiracy theory you've made up about something totally mundane?",
+    "If you could add one rule that everyone in the world had to follow, what would it be?",
+    "What's the most interesting thing you've learned recently that most people don't know?",
+    "If you could have any superpower, but it only worked on Tuesdays, what would you choose?",
+    "What would your ideal theme park be like?",
+    "If you had to create a new holiday, what would it celebrate and how would people observe it?"
+  ];
+
+  const promptDisplay = document.getElementById('prompt-display');
+  const generateBtn = document.getElementById('generate-btn');
+
+  if (!promptDisplay || !generateBtn) {
+    console.error('Required elements not found');
+    return;
+  }
+
+  function generatePrompt() {
+    const randomIndex = Math.floor(Math.random() * prompts.length);
+    return prompts[randomIndex];
+  }
+
+  function displayPrompt() {
+    const newPrompt = generatePrompt();
+    promptDisplay.style.opacity = '0.5';
+    
+    setTimeout(() => {
+      promptDisplay.textContent = newPrompt;
+      promptDisplay.style.opacity = '1';
+    }, 150);
+  }
+
+  generateBtn.addEventListener('click', displayPrompt);
+
+  displayPrompt();
+}

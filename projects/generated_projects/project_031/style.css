@@ -1,0 +1,192 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: #333;
+}
+
+header, footer {
+  background: #6c5ce7;
+  color: #fff;
+  text-align: center;
+  padding: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  margin: 0;
+  font-weight: 600;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.container, #app {
+  background: #fafafa;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+}
+
+button, .btn {
+  cursor: pointer;
+  padding: 12px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  background: #6c5ce7;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+button:hover, .btn:hover {
+  background: #5a4dd4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Claude Generated */
+.main-container {
+  font-family: 'Courier New', monospace;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  color: #00ff00;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.channel-header {
+  text-align: center;
+  border: 3px solid #ff6b35;
+  background: #000;
+  padding: 20px;
+  margin-bottom: 30px;
+  box-shadow: 0 0 20px rgba(255, 107, 53, 0.5);
+}
+
+.channel-header h1 {
+  font-size: 2.5em;
+  color: #ff6b35;
+  text-shadow: 2px 2px 4px #000;
+  margin: 0;
+  letter-spacing: 3px;
+}
+
+.tagline {
+  color: #00ff00;
+  font-size: 1.2em;
+  margin-top: 10px;
+}
+
+.content-wrapper {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap;
+}
+
+.movies-section {
+  flex: 2;
+  min-width: 300px;
+}
+
+.movies-section h2 {
+  color: #ff6b35;
+  border-bottom: 2px solid #ff6b35;
+  padding-bottom: 10px;
+}
+
+.movie-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.movie-item {
+  background: #0f0f23;
+  border: 2px solid #00ff00;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.movie-title {
+  font-size: 1.1em;
+  font-weight: bold;
+}
+
+.watch-btn {
+  background: #ff6b35;
+  color: #000;
+  border: none;
+  padding: 10px 20px;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  cursor: pointer;
+  border: 2px solid #000;
+  transition: all 0.3s;
+}
+
+.watch-btn:hover {
+  background: #00ff00;
+  transform: scale(1.05);
+}
+
+.bill-section {
+  flex: 1;
+  min-width: 250px;
+}
+
+.bill-section h2 {
+  color: #ff6b35;
+  border-bottom: 2px solid #ff6b35;
+  padding-bottom: 10px;
+}
+
+.bill-display {
+  background: #000;
+  border: 3px solid #00ff00;
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 20px;
+  box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+}
+
+#bill-amount {
+  font-size: 2em;
+  font-weight: bold;
+  color: #00ff00;
+  text-shadow: 1px 1px 2px #000;
+}
+
+.cancel-btn {
+  width: 100%;
+  background: #8b0000;
+  color: #fff;
+  border: 2px solid #ff0000;
+  padding: 15px;
+  font-family: 'Courier New', monospace;
+  font-size: 1.1em;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.cancel-btn:hover {
+  background: #ff0000;
+  transform: scale(1.02);
+}

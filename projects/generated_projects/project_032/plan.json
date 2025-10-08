@@ -1,0 +1,18 @@
+{
+  "description": "A static web application that generates unique, thought-provoking conversation starters or 'out-of-the-box' challenges with the click of a button, displayed directly in the browser.",
+  "features": [
+    "Displays a random quirky conversation starter/challenge.",
+    "A button to generate and display a new prompt.",
+    "Clean and responsive user interface."
+  ],
+  "steps": [
+    "Create `index.html` with a basic structure: a title, a `div` element to display the generated text, and a `button` element to trigger generation.",
+    "Create `style.css` to visually style `index.html`: center content, style the text display area, and style the button for better user experience.",
+    "Create `script.js`: Define an array of at least 10-15 quirky conversation starters/challenges.",
+    "In `script.js`: Implement a function `generatePrompt()` that randomly selects an item from the array.",
+    "In `script.js`: Implement a function `displayPrompt()` that updates the text content of the `div` in `index.html` with the selected prompt.",
+    "In `script.js`: Add an event listener to the button element so that clicking it calls `displayPrompt()` (which in turn calls `generatePrompt()`).",
+    "In `script.js`: Call `displayPrompt()` once when the page loads to show an initial prompt."
+  ],
+  "dependencies": []
+}
