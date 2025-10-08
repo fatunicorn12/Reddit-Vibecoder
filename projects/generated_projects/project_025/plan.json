@@ -1,0 +1,31 @@
+{
+  "description": "A static web application simulating the act of being busy by allowing users to 'wipe' away a virtual layer of grime on an HTML canvas, revealing a clean surface underneath.",
+  "features": [
+    "HTML Canvas for interactive drawing.",
+    "A hidden 'clean' background image or color.",
+    "An initial 'grime' layer obscuring the background.",
+    "Mouse drag interaction to 'wipe' away the grime, making it transparent.",
+    "Real-time visual feedback of the wiping action."
+  ],
+  "steps": [
+    "Create `index.html` with a `<canvas>` element and link to `style.css` and `script.js`.",
+    "Create `style.css` to center the canvas and provide basic styling.",
+    "In `script.js`, get a reference to the canvas and its 2D rendering context.",
+    "Define constants for canvas dimensions and brush size.",
+    "Load a background image (the 'clean' surface) into an `Image` object. Alternatively, use a solid background color if no image is desired.",
+    "Once the background image is loaded (or immediately if using a color), draw it onto the canvas.",
+    "Immediately after drawing the background, draw a semi-transparent rectangle over the entire canvas to represent the 'grime' layer. Use a color like `rgba(0, 0, 0, 0.7)` or a grime-like image.",
+    "Implement mouse event listeners: `mousedown`, `mousemove`, and `mouseup`.",
+    "On `mousedown`, set a flag `isWiping` to true and store the initial mouse position.",
+    "On `mousemove` (only if `isWiping` is true):",
+    "   Set `context.globalCompositeOperation = 'destination-out'` to make subsequent draws act as an eraser.",
+    "   Draw a circle at the current mouse position using `context.arc()` and `context.fill()`. This will 'erase' the grime layer.",
+    "   Set `context.globalCompositeOperation = 'source-over'` to revert to default drawing mode for any future operations (though not needed for this MVP).",
+    "On `mouseup`, set `isWiping` to false."
+  ],
+  "dependencies": [
+    "HTML5",
+    "CSS3",
+    "JavaScript (Standard Browser APIs)"
+  ]
+}

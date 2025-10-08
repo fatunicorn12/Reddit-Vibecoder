@@ -18,3 +18,8 @@ A static web app game where the player acts as a security guard, clicking on sub
 
 ## Controls / Inputs
 (This project may require keyboard/mouse input. Placeholder until auto-detected.)
+
+
+
+## Preview
+![Screenshot](../../../screenshots/project_018.png)

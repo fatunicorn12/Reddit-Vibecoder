@@ -1,0 +1,33 @@
+{
+  "description": "A local web app where users can anonymously submit their 'shitty actions'. Upon submission, the action is displayed on the page, followed by a few randomized, pre-written 'call-out' comments, simulating public self-criticism.",
+  "features": [
+    "Text input field for users to type their actions.",
+    "Submission button to process the input.",
+    "Display submitted actions anonymously on the page.",
+    "Randomly select and display multiple 'call-out' comments for each submitted action.",
+    "Maintain a running list of submitted actions and comments during the current session."
+  ],
+  "steps": [
+    "Create `index.html` with basic HTML structure.",
+    "Inside `index.html`, add a `<textarea>` element for user input, a `<button>` for submission, and a `<div>` element to serve as the container for displaying submitted actions and comments.",
+    "Link `style.css` for basic visual styling and `script.js` (with `defer` attribute) for functionality within `index.html`.",
+    "Create `style.css` and add basic CSS rules to style the body, textarea, button, and the display container for readability.",
+    "Create `script.js`.",
+    "In `script.js`, define a JavaScript array containing several pre-written 'call-out' comments (e.g., 'Truly appalling.', 'How could you?', 'Shame!', 'Seek redemption.', 'Unacceptable.').",
+    "In `script.js`, get references to the textarea, button, and display container using `document.getElementById` or `document.querySelector`.",
+    "Add an event listener to the submit button that triggers on 'click'.",
+    "Inside the button's event listener function:",
+    "  Get the text value from the textarea.",
+    "  If the textarea value is not empty:",
+    "    Create a new `div` element to hold the submitted action and its call-outs.",
+    "    Create a `<p>` element for the action text and set its `textContent` to the submitted action.",
+    "    Append the action `<p>` to the new `div`.",
+    "    Loop 2-3 times:",
+    "      Randomly select a comment from the pre-defined array.",
+    "      Create a new `<p>` element for the comment and set its `textContent` to the selected comment.",
+    "      Append the comment `<p>` to the new `div`.",
+    "    Prepend the new `div` (containing action and comments) to the main display container to show the newest submissions at the top.",
+    "    Clear the textarea's value."
+  ],
+  "dependencies": []
+}

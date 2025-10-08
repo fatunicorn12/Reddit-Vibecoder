@@ -17,3 +17,7 @@ Develop a simple, replayable text-based choice game where the player manages 'Ca
 
 ## Controls / Inputs
 (This project may require keyboard/mouse input. Placeholder until auto-detected.)
+
+
+## Preview
+![Screenshot](../../../screenshots/project_022.png)

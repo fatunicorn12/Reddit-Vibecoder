@@ -36,23 +36,34 @@ def generate_project_plan(idea: str):
       "dependencies": ["list of required libraries"]
     }}
 
-    Rules:
-    - If it's a GAME:
-      * Must be simple, replayable, and fun (like Flappy Bird, Snake, Pong).
-      * Must have clear objectives (e.g. score points, reach a goal).
-      * Must have loss conditions (e.g. game over).
-      * Should be endless or restartable.
-      * Prefer Pygame.
-    - If it's a PROGRAM:
-      * Must perform a clear, useful task (e.g. bracket generator, password tool).
-      * Must run to completion with correct, visible output.
-      * Prefer Python stdlib or Tkinter if GUI is needed.
-    - If it's a WEB APP:
-      * Must output static files (index.html, style.css, script.js).
-      * Must be runnable locally by opening index.html in a browser.
-    - Do NOT create vague demos or incomplete apps.
-    - Keep the plan achievable in under ~200 lines of code.
-    - Do not include anything outside the JSON.
+  Rules:
+  - If it's a GAME:
+    * The game must be procedural and endlessly replayable (not story-driven or choice-based).
+    * The game must have clear objectives, visible scoring, and a loss condition.
+    * The game must increase difficulty as time or score progresses (e.g., speed, spawn rate, or challenge scaling).
+    * The game must track and display both current score and a persistent high score within the same session.
+    * The game must restart cleanly after a game-over.
+    * Prefer Pygame for most games, or Tkinter if GUI-based.
+    * Only use a Web-based implementation (HTML/JS) if the game concept *naturally fits* the browser (e.g., clicker, idle, or simple arcade games).
+    * Avoid narrative text adventures, quizzes, or branching-choice games—focus on mechanical gameplay.
+    * Keep the scope small, fun, and under ~200 lines of code.
+
+  - If it's a PROGRAM:
+    * Must perform a clear, useful, or interesting task (e.g., generator, calculator, analyzer, data visualizer).
+    * Must execute fully and show visible, correct output.
+    * Prefer Python standard library; use Tkinter only if a graphical interface improves clarity.
+
+  - If it's a WEB APP:
+    * Must output static files: index.html, style.css, script.js.
+    * Must be runnable locally by opening index.html in a browser (no servers or frameworks).
+    * Reserve this format for non-game interactive tools or when the concept explicitly requires a browser interface (e.g., dashboards, visualizers, simulators).
+
+  - Always choose the *most natural medium* for the concept (Python vs. web).
+  - Do NOT create vague demos or incomplete apps.
+  - Keep all plans achievable in under ~200 lines of code.
+  - Output structured JSON only—no explanations or commentary.
+
+
     """
 
 

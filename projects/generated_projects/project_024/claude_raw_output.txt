@@ -1,0 +1,169 @@
+---index.html---
+<div id="app">
+  <h1>Anonymous Confessions</h1>
+  <div class="input-section">
+    <textarea id="actionInput" placeholder="Confess your shitty action here..." rows="4"></textarea>
+    <button id="submitBtn">Submit Confession</button>
+  </div>
+  <div id="displayContainer"></div>
+</div>
+
+---style.css---
+#app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.input-section {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+#actionInput {
+  width: 100%;
+  max-width: 600px;
+  padding: 15px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  resize: vertical;
+  margin-bottom: 15px;
+  font-family: Arial, sans-serif;
+}
+
+#submitBtn {
+  background-color: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#submitBtn:hover {
+  background-color: #ff5252;
+}
+
+#displayContainer {
+  margin-top: 30px;
+}
+
+.confession-item {
+  background-color: #f8f8f8;
+  border-left: 4px solid #ff6b6b;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.action-text {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+  line-height: 1.4;
+}
+
+.comment-text {
+  font-style: italic;
+  color: #666;
+  margin: 8px 0;
+  padding-left: 20px;
+  border-left: 2px solid #ccc;
+  font-size: 14px;
+}
+
+---script.js---
+function initApp() {
+  const calloutComments = [
+    'Truly appalling.',
+    'How could you?',
+    'Shame!',
+    'Seek redemption.',
+    'Unacceptable.',
+    'What were you thinking?',
+    'Disappointing behavior.',
+    'You should know better.',
+    'That was selfish.',
+    'Time to make amends.',
+    'Reflect on your actions.',
+    'Do better next time.',
+    'Not your finest moment.',
+    'This is concerning.',
+    'You owe someone an apology.'
+  ];
+
+  const actionInput = document.getElementById('actionInput');
+  const submitBtn = document.getElementById('submitBtn');
+  const displayContainer = document.getElementById('displayContainer');
+
+  if (!actionInput || !submitBtn || !displayContainer) {
+    console.error('Required elements not found');
+    return;
+  }
+
+  function getRandomComment() {
+    const randomIndex = Math.floor(Math.random() * calloutComments.length);
+    return calloutComments[randomIndex];
+  }
+
+  function getRandomCommentCount() {
+    return Math.floor(Math.random() * 2) + 2; // Returns 2 or 3
+  }
+
+  function createConfessionElement(actionText) {
+    const confessionDiv = document.createElement('div');
+    confessionDiv.className = 'confession-item';
+
+    const actionP = document.createElement('p');
+    actionP.className = 'action-text';
+    actionP.textContent = actionText;
+    confessionDiv.appendChild(actionP);
+
+    const commentCount = getRandomCommentCount();
+    const usedComments = new Set();
+
+    for (let i = 0; i < commentCount; i++) {
+      let comment;
+      do {
+        comment = getRandomComment();
+      } while (usedComments.has(comment) && usedComments.size < calloutComments.length);
+      
+      usedComments.add(comment);
+
+      const commentP = document.createElement('p');
+      commentP.className = 'comment-text';
+      commentP.textContent = `"${comment}"`;
+      confessionDiv.appendChild(commentP);
+    }
+
+    return confessionDiv;
+  }
+
+  submitBtn.addEventListener('click', function() {
+    const actionText = actionInput.value.trim();
+    
+    if (actionText !== '') {
+      const confessionElement = createConfessionElement(actionText);
+      displayContainer.insertBefore(confessionElement, displayContainer.firstChild);
+      actionInput.value = '';
+    }
+  });
+
+  actionInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter' && event.ctrlKey) {
+      submitBtn.click();
+    }
+  });
+}

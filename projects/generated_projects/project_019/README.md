@@ -16,3 +16,7 @@ A simple Pygame simulation where players exploit a simulated 1980s ATM 'deposit 
 
 ## Controls / Inputs
 (This project may require keyboard/mouse input. Placeholder until auto-detected.)
+
+
+## Preview
+![Screenshot](../../../screenshots/project_019.png)

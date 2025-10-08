@@ -16,3 +16,7 @@ A static web game where the player attempts to earn points by 'peeking' at virtu
 
 ## Controls / Inputs
 (This project may require keyboard/mouse input. Placeholder until auto-detected.)
+
+
+## Preview
+![Screenshot](../../../screenshots/project_016.png)

@@ -88,34 +88,38 @@ Plan:
 Follow these rules for all project types:
 
 GAME (Pygame or Tkinter):
-- Must be playable with clear objectives and game-over conditions.
-- Include scoring and a displayed current score.
-- Track a high score in memory.
-- Gradually increase difficulty over time.
-- Be restartable without closing the program.
-- Include basic control instructions on screen or in the console.
+- The game MUST be procedural and endlessly replayable (no static or choice-based story games).
+- The game MUST include a continuous main loop with clear objectives and win/loss conditions.
+- The game MUST have visible scoring, a persistent high score (stored in memory across runs), and clear on-screen feedback.
+- The game MUST increase difficulty over time (e.g., faster speed, more enemies, smaller gaps, tighter timing).
+- The game MUST be restartable without closing the program.
+- Prefer Pygame (or Tkinter if GUI-based) unless the concept clearly fits a browser-based game (e.g., clicker, idle, or simple arcade web game).
+- Always include control instructions displayed in-game or in the console.
+- Keep it fun, simple, and under ~200 lines of code total.
 
 PROGRAM (CLI or script):
-- Must perform its task correctly with visible output.
+- Must perform its task correctly with visible, correct output.
 - Keep it self-contained and under ~200 lines.
+- Prefer Python standard library or Tkinter if GUI is needed.
 
 WEB APP (HTML/CSS/JS):
 - Output exactly three files in this format:
   ---index.html---
   [HTML injected inside <div id="app"> only]
   ---style.css---
-  [new CSS rules appended to base]
+  [New CSS rules appended to base]
   ---script.js---
   [JavaScript placed inside initApp()]
 - The base project already includes index.html, style.css, and script.js.
 - Do NOT recreate <html>, <head>, <body>, or <script> tags.
-- All JS must stay inside initApp(), with defined variables (const/let), no globals, and no HTML/CSS embedded.
-- Query each DOM element once and ensure zero console errors.
+- All JS must remain inside initApp() with defined variables (const/let), no globals, and no embedded HTML/CSS.
+- Query each DOM element once, verify it exists before use, and ensure zero console errors.
 - No external libraries or APIs.
-- The final page must be interactive, functional, and under ~200 lines total.
+- The final page must be visibly functional, interactive, and under ~200 lines total.
 
-If you encounter an error or missing detail, assume sensible defaults and continue.
+If any ambiguity arises, assume the most playable and self-contained implementation.
 Now output ONLY the code in the specified format, with no commentary or markdown outside the file delimiters.
+
 """
         prompt = textwrap.dedent(prompt).strip()
 

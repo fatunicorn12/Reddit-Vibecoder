@@ -1,0 +1,23 @@
+{
+  "description": "A static web app where users input a description of a past connection. Upon clicking 'Generate Spark', the app displays a randomized 'what if' scenario text accompanied by a simple, abstract visual animation on a canvas, aiming to evoke an 'electric' or 'spark' feeling.",
+  "features": [
+    "User input text area for entering connection details.",
+    "A button to trigger the 'Generate Spark' action.",
+    "Display of a randomly selected 'what if' scenario.",
+    "A simple, abstract visual animation on a canvas representing an 'electric spark' feeling."
+  ],
+  "steps": [
+    "Create `index.html`: Set up a basic HTML structure including a `textarea` for user input, a `<button id=\"generateButton\">Generate Spark</button>`, a `<div id=\"scenarioOutput\"></div>` to display the text, and a `<canvas id=\"sparkCanvas\"></canvas>` for the animation. Link `style.css` and `script.js`.",
+    "Create `style.css`: Add basic styling for the body, textarea, button, output div, and canvas to ensure a clean layout and visual appeal. Center key elements.",
+    "Create `script.js`:",
+    "  Get references to `generateButton`, `scenarioOutput`, and `sparkCanvas` elements. Initialize the canvas rendering context.",
+    "  Define an array of diverse, generic 'what if' scenario strings (e.g., \"What if you had said yes?\", \"What if that message had been sent?\", \"What if paths crossed again?\").",
+    "  Add an event listener to `generateButton` for 'click' events.",
+    "  Inside the click handler:",
+    "    Randomly select one scenario from the array and update `scenarioOutput.textContent`.",
+    "    Implement a function to draw an abstract 'spark' animation on `sparkCanvas`. This animation should clear the canvas, then draw a brief, dynamic visual (e.g., a burst of small, colored circles or lines radiating from a point and quickly fading out) using `requestAnimationFrame` for smooth transitions."
+  ],
+  "dependencies": [
+    "None (standard HTML, CSS, JavaScript)"
+  ]
+}

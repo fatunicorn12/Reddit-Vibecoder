@@ -9,3 +9,7 @@ A console-based rhythm game MVP where a miniature virtual guillotine automatical
 - Console output for real-time game events (fruit appearing, chop outcome, score updates).
 - Automatic demo mode that runs for a fixed duration (e.g., 5-10 seconds).
 - Final summary displaying total score, perfect chops, and missed chops.
+
+
+## Preview
+![Screenshot](../../../screenshots/project_001.png)

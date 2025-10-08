@@ -14,3 +14,7 @@ A minimalist web application where users navigate a branching narrative by makin
 
 ## Controls / Inputs
 (This project may require keyboard/mouse input. Placeholder until auto-detected.)
+
+
+## Preview
+![Screenshot](../../../screenshots/project_021.png)
