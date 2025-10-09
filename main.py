@@ -25,7 +25,7 @@ def get_next_project_path(base_dir="projects/generated_projects"):
 
 def main():
     # Step 1: Fetch Reddit post
-    title, body, post_url = fetch_subreddit_posts("Confession")
+    title, body, post_url = fetch_subreddit_posts()
 
     if not title:
         print("❌ Could not fetch a Reddit post. Exiting.")

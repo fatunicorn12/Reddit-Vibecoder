@@ -1,0 +1,57 @@
+{
+  "description": "A simple web-based arcade game where players rapidly click on randomly appearing cartoon fires to extinguish them before a timer runs out, aiming for a high score.",
+  "features": [
+    "Interactive game area where fires appear.",
+    "Fires (visual elements) spawn at random locations.",
+    "Clicking a fire extinguishes it, awarding points.",
+    "Custom water-themed cursor for gameplay.",
+    "Real-time display of current score and a persistent high score.",
+    "Time-based game loss condition.",
+    "Difficulty scaling: fire spawn rate increases as score progresses.",
+    "Game over screen with an option to restart the game."
+  ],
+  "steps": [
+    {
+      "file": "index.html",
+      "description": "Set up the basic HTML structure.",
+      "content": [
+        "Create a standard HTML5 boilerplate.",
+        "Add a title 'Firefighter Frenzy'.",
+        "Include a main `div` with `id='game-container'` for the game area.",
+        "Add `div` elements to display 'Score: <span id=\"current-score\">0</span>' and 'High Score: <span id=\"high-score\">0</span>'.",
+        "Add a `div` for 'Time Left: <span id=\"time-left\">60</span>s'.",
+        "Create a `div` with `id='game-over-screen'` containing a 'Game Over!' message and a 'Restart Game' button, initially hidden.",
+        "Link to `style.css` in the `<head>`.",
+        "Link to `script.js` at the end of `<body>`."
+      ]
+    },
+    {
+      "file": "style.css",
+      "description": "Define the visual styling for the game elements.",
+      "content": [
+        "Style `body` for basic layout and centering the game container.",
+        "Style `#game-container` with a fixed `width`, `height`, `background-color`, `border`, and `position: relative` for absolute positioning of fires.",
+        "Set `cursor: url('water_drop.png'), auto;` on `#game-container` (assuming 'water_drop.png' exists or use a simple CSS cursor).",
+        "Style score, timer, and game over display elements.",
+        "Define a `.fire` class for fire elements: `width`, `height`, `background-color` (e.g., orange/red) or `background-image` (for a cartoon fire), `position: absolute`, `border-radius`."
+      ]
+    },
+    {
+      "file": "script.js",
+      "description": "Implement the core game logic using JavaScript.",
+      "content": [
+        "Declare global variables: `score`, `highScore` (load from `localStorage` on page load, default 0), `timeLeft`, `gameInterval`, `fireSpawnIntervalId`, `activeFires` (an array to store fire elements).",
+        "Get references to DOM elements: `gameContainer`, `currentScoreDisplay`, `highScoreDisplay`, `timeLeftDisplay`, `gameOverScreen`, `restartButton`.",
+        "**`initGame()` function**: Resets `score` to 0, `timeLeft` to a default (e.g., 60s). Clears all `activeFires` from `gameContainer` and the array. Hides `gameOverScreen`. Updates all displays. Starts `gameInterval` (e.g., `setInterval(updateGame, 1000)`). Starts `fireSpawnIntervalId` (e.g., `setInterval(spawnFire, initialDelay)`).",
+        "**`spawnFire()` function**: Creates a new `div` element with class `fire`. Sets random `top` and `left` CSS positions within `gameContainer` bounds. Attaches an `onclick` event listener to the fire that calls `extinguishFire(this)`. Appends the fire to `gameContainer`. Adds the fire element to `activeFires` array. (Optional: Set a `setTimeout` to auto-remove fire after a short duration if not clicked, triggering a 'miss' or game over condition if too many unclicked fires).",
+        "**`extinguishFire(fireElement)` function**: Removes `fireElement` from `gameContainer` and `activeFires` array. Increments `score`. Updates `currentScoreDisplay`.",
+        "**`updateGame()` function (called by `gameInterval`)**: Decrements `timeLeft`. Updates `timeLeftDisplay`. Implements difficulty scaling: if `score` reaches certain thresholds, decrease `fireSpawnInterval` (clear `fireSpawnIntervalId`, set a new one with a shorter delay, up to a minimum delay). Checks if `timeLeft <= 0`. If true, calls `gameOver()`.",
+        "**`gameOver()` function**: Clears `gameInterval` and `fireSpawnIntervalId`. Compares `score` with `highScore`. If `score` is greater, updates `highScore` and saves it to `localStorage`. Updates `highScoreDisplay`. Shows `gameOverScreen`. Attaches an `onclick` listener to `restartButton` that calls `initGame()`.",
+        "Add an initial call to `initGame()` when the script loads (e.g., `window.onload = initGame;` or directly at the end of the script)."
+      ]
+    }
+  ],
+  "dependencies": [
+    "None (standard HTML, CSS, and JavaScript browser APIs)."
+  ]
+}

@@ -1,0 +1,235 @@
+---index.html---
+<div id="game-container">
+  <div id="score-display">
+    Score: <span id="current-score">0</span>
+  </div>
+  <div id="high-score-display">
+    High Score: <span id="high-score">0</span>
+  </div>
+  <div id="timer-display">
+    Time Left: <span id="time-left">60</span>s
+  </div>
+  <div id="game-area"></div>
+  <div id="game-over-screen" style="display: none;">
+    <h2>Game Over!</h2>
+    <p>Final Score: <span id="final-score">0</span></p>
+    <button id="restart-button">Restart Game</button>
+  </div>
+</div>
+
+---style.css---
+body {
+  margin: 0;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #222;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+#game-container {
+  text-align: center;
+  background-color: #333;
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px solid #555;
+}
+
+#score-display, #high-score-display, #timer-display {
+  margin: 10px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#game-area {
+  width: 600px;
+  height: 400px;
+  background-color: #111;
+  border: 3px solid #666;
+  position: relative;
+  margin: 20px auto;
+  cursor: crosshair;
+  overflow: hidden;
+}
+
+.fire {
+  width: 40px;
+  height: 40px;
+  background: radial-gradient(circle, #ff4500, #ff6347, #ff0000);
+  position: absolute;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  cursor: pointer;
+  animation: flicker 0.5s infinite alternate;
+  box-shadow: 0 0 10px #ff4500;
+}
+
+@keyframes flicker {
+  0% { transform: scale(1) rotate(0deg); }
+  100% { transform: scale(1.1) rotate(5deg); }
+}
+
+#game-over-screen {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.9);
+  padding: 30px;
+  border-radius: 10px;
+  border: 2px solid #666;
+  z-index: 1000;
+}
+
+#restart-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #ff4500;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+#restart-button:hover {
+  background-color: #ff6347;
+}
+
+---script.js---
+function initApp() {
+  let score = 0;
+  let highScore = parseInt(localStorage.getItem('firefighter-high-score') || '0');
+  let timeLeft = 60;
+  let gameInterval = null;
+  let fireSpawnIntervalId = null;
+  let activeFires = [];
+  let fireSpawnDelay = 1500;
+  
+  const gameArea = document.getElementById('game-area');
+  const currentScoreDisplay = document.getElementById('current-score');
+  const highScoreDisplay = document.getElementById('high-score');
+  const timeLeftDisplay = document.getElementById('time-left');
+  const gameOverScreen = document.getElementById('game-over-screen');
+  const restartButton = document.getElementById('restart-button');
+  const finalScoreDisplay = document.getElementById('final-score');
+  
+  if (!gameArea || !currentScoreDisplay || !highScoreDisplay || !timeLeftDisplay || !gameOverScreen || !restartButton || !finalScoreDisplay) {
+    console.error('Required DOM elements not found');
+    return;
+  }
+  
+  function initGame() {
+    score = 0;
+    timeLeft = 60;
+    fireSpawnDelay = 1500;
+    
+    // Clear existing fires
+    activeFires.forEach(fire => {
+      if (fire.parentNode) {
+        fire.parentNode.removeChild(fire);
+      }
+    });
+    activeFires = [];
+    
+    // Hide game over screen
+    gameOverScreen.style.display = 'none';
+    
+    // Update displays
+    updateDisplays();
+    
+    // Start game intervals
+    gameInterval = setInterval(updateGame, 1000);
+    fireSpawnIntervalId = setInterval(spawnFire, fireSpawnDelay);
+  }
+  
+  function spawnFire() {
+    const fire = document.createElement('div');
+    fire.className = 'fire';
+    
+    // Random position within game area bounds
+    const maxX = gameArea.offsetWidth - 40;
+    const maxY = gameArea.offsetHeight - 40;
+    const x = Math.random() * maxX;
+    const y = Math.random() * maxY;
+    
+    fire.style.left = x + 'px';
+    fire.style.top = y + 'px';
+    
+    fire.onclick = function() {
+      extinguishFire(fire);
+    };
+    
+    gameArea.appendChild(fire);
+    activeFires.push(fire);
+    
+    // Auto-remove fire after 3 seconds if not clicked
+    setTimeout(() => {
+      if (fire.parentNode) {
+        extinguishFire(fire, false);
+      }
+    }, 3000);
+  }
+  
+  function extinguishFire(fireElement, addScore = true) {
+    if (fireElement.parentNode) {
+      fireElement.parentNode.removeChild(fireElement);
+    }
+    
+    const index = activeFires.indexOf(fireElement);
+    if (index > -1) {
+      activeFires.splice(index, 1);
+    }
+    
+    if (addScore) {
+      score += 10;
+      updateDisplays();
+    }
+  }
+  
+  function updateGame() {
+    timeLeft--;
+    updateDisplays();
+    
+    // Difficulty scaling
+    if (score > 0 && score % 100 === 0 && fireSpawnDelay > 500) {
+      fireSpawnDelay = Math.max(500, fireSpawnDelay - 200);
+      clearInterval(fireSpawnIntervalId);
+      fireSpawnIntervalId = setInterval(spawnFire, fireSpawnDelay);
+    }
+    
+    if (timeLeft <= 0) {
+      gameOver();
+    }
+  }
+  
+  function updateDisplays() {
+    currentScoreDisplay.textContent = score;
+    highScoreDisplay.textContent = highScore;
+    timeLeftDisplay.textContent = timeLeft;
+  }
+  
+  function gameOver() {
+    clearInterval(gameInterval);
+    clearInterval(fireSpawnIntervalId);
+    
+    if (score > highScore) {
+      highScore = score;
+      localStorage.setItem('firefighter-high-score', highScore.toString());
+      updateDisplays();
+    }
+    
+    finalScoreDisplay.textContent = score;
+    gameOverScreen.style.display = 'block';
+  }
+  
+  restartButton.onclick = function() {
+    initGame();
+  };
+  
+  // Initialize high score display and start game
+  updateDisplays();
+  initGame();
+}

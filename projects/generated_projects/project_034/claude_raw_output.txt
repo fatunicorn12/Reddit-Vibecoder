@@ -1,0 +1,146 @@
+---index.html---
+<div id="app">
+  <h1>Skill Explorer</h1>
+  <div id="prompt-display">Loading your first prompt...</div>
+  <button id="generate-btn">Get New Prompt</button>
+  <div id="category-display"></div>
+</div>
+
+---style.css---
+#app {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 30px;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  color: white;
+}
+
+#app h1 {
+  margin-bottom: 30px;
+  font-size: 2.5rem;
+  font-weight: 300;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+#prompt-display {
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  padding: 25px;
+  border-radius: 10px;
+  margin: 30px 0;
+  font-size: 1.2rem;
+  line-height: 1.6;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+#generate-btn {
+  background: #ff6b6b;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.1rem;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+#generate-btn:hover {
+  background: #ff5252;
+  transform: translateY(-2px);
+  box-shadow: 0 7px 20px rgba(0, 0, 0, 0.3);
+}
+
+#generate-btn:active {
+  transform: translateY(0);
+}
+
+#category-display {
+  margin-top: 15px;
+  font-size: 0.9rem;
+  opacity: 0.8;
+  font-style: italic;
+}
+
+---script.js---
+function initApp() {
+  const prompts = {
+    Creative: [
+      "Write a haiku about the last thing you ate",
+      "Draw something using only circles and triangles",
+      "Create a 30-second song using household items as instruments",
+      "Design a logo for a fictional company using just your name initials",
+      "Write a short story that's exactly 55 words long",
+      "Take a photo that tells a story without showing any people",
+      "Invent a new color and describe what it looks like"
+    ],
+    Physical: [
+      "Learn to juggle with 2 tennis balls for 5 minutes",
+      "Try to balance on one foot for 60 seconds",
+      "Do 10 pushups in the slowest way possible",
+      "Practice walking backwards for 2 minutes",
+      "Learn one basic yoga pose and hold it for 30 seconds",
+      "Try to write your name with your non-dominant hand",
+      "Dance to your favorite song like nobody's watching"
+    ],
+    Intellectual: [
+      "Learn 5 words in a language you don't speak",
+      "Research a historical event that happened on your birthday",
+      "Try to solve a math problem using a method you've never used",
+      "Read about a scientific concept you don't understand",
+      "Learn the capitals of 5 countries you've never visited",
+      "Practice memorizing a short poem",
+      "Research how something you use daily actually works"
+    ],
+    Social: [
+      "Call someone you haven't talked to in months",
+      "Give a genuine compliment to a stranger",
+      "Ask someone about their favorite hobby and really listen",
+      "Practice introducing yourself in a confident way",
+      "Write a thank you note to someone who helped you recently",
+      "Start a conversation about something you're passionate about",
+      "Practice active listening in your next conversation"
+    ],
+    Practical: [
+      "Learn to tie a knot you've never tied before",
+      "Organize one small area of your living space",
+      "Learn a keyboard shortcut you don't know",
+      "Practice folding clothes in a new way",
+      "Research a life skill you wish you had",
+      "Try cooking something with ingredients you already have",
+      "Learn how to properly clean something you use often"
+    ]
+  };
+
+  const promptDisplay = document.getElementById('prompt-display');
+  const generateBtn = document.getElementById('generate-btn');
+  const categoryDisplay = document.getElementById('category-display');
+
+  if (!promptDisplay || !generateBtn || !categoryDisplay) {
+    console.error('Required elements not found');
+    return;
+  }
+
+  function generatePrompt() {
+    const categories = Object.keys(prompts);
+    const randomCategory = categories[Math.floor(Math.random() * categories.length)];
+    const categoryPrompts = prompts[randomCategory];
+    const randomPrompt = categoryPrompts[Math.floor(Math.random() * categoryPrompts.length)];
+    
+    promptDisplay.textContent = randomPrompt;
+    categoryDisplay.textContent = `Category: ${randomCategory}`;
+  }
+
+  generateBtn.addEventListener('click', generatePrompt);
+  
+  // Generate initial prompt
+  generatePrompt();
+}

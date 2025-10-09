@@ -1,0 +1,20 @@
+{
+  "description": "A static web application that provides users with random, low-commitment 'skill exploration prompts' from various predefined categories.",
+  "features": [
+    "Displays a random skill exploration prompt on page load.",
+    "Allows users to generate new random prompts by clicking a button.",
+    "Prompts are drawn from multiple predefined categories (e.g., Creative, Physical, Intellectual).",
+    "Simple, intuitive user interface."
+  ],
+  "steps": [
+    "**1. Create `index.html`:** Set up the basic HTML structure. Include a main heading, a paragraph or `div` element to display the generated prompt, and a button element with an ID (e.g., `generateBtn`) to trigger new prompts. Link `style.css` in the `<head>` and `script.js` before the closing `</body>` tag.",
+    "**2. Create `style.css`:** Add basic CSS rules to style the page layout, the prompt display area, and the button. Ensure readability and a clean aesthetic.",
+    "**3. Create `script.js`:**",
+    "   a. Define a JavaScript object or array where keys are category names (e.g., 'Creative', 'Physical') and values are arrays of strings, each string being a skill exploration prompt.",
+    "   b. Implement a function (e.g., `generatePrompt`) that first randomly selects a category, then randomly selects a prompt string from that category's array.",
+    "   c. Get references to the prompt display element and the generate button using `document.getElementById()`.",
+    "   d. Attach an `click` event listener to the generate button. When clicked, this listener should call the `generatePrompt` function and update the `textContent` of the prompt display element with the newly generated prompt.",
+    "   e. Call the `generatePrompt` function once immediately after the script loads (or after DOMContentLoaded) to display an initial prompt when the page first opens."
+  ],
+  "dependencies": []
+}

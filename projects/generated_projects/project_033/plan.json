@@ -1,0 +1,32 @@
+{
+  "description": "A fast-paced reaction game where players are presented with a fast-food item and a restaurant bag, and must quickly identify if the combination is correct or a 'wrong bag' mismatch before a timer runs out.",
+  "features": [
+    "Display a random fast-food item image.",
+    "Display a random restaurant bag image.",
+    "Player input (keyboard) to choose 'Correct Match' or 'Wrong Bag Mismatch'.",
+    "Per-round timer for player reaction speed.",
+    "Real-time current score display.",
+    "Persistent high score display (within the session).",
+    "Difficulty scaling: reaction time decreases with score progression.",
+    "Game-over condition: running out of time or making an incorrect choice.",
+    "Clean game restart functionality after game over."
+  ],
+  "steps": [
+    "Initialize Pygame window, display, and game clock.",
+    "Load images for a small set of fast-food items (e.g., a burger, fries) and corresponding restaurant bags (e.g., McDonald's, Burger King). Ensure each item has a clear 'correct' restaurant affiliation.",
+    "Create a data structure (e.g., dictionary) to map items to their correct restaurant bags.",
+    "Implement game state management (e.g., 'START_SCREEN', 'PLAYING', 'GAME_OVER').",
+    "Define a function to generate a new round: randomly select an item and a bag. Decide if it's a correct match or a mismatch scenario. If mismatch, ensure the item's true restaurant does not match the displayed bag.",
+    "Display the selected item and bag images centered on the screen.",
+    "Implement the round timer (e.g., starting at 3 seconds, decreasing by 0.1s every 5 points).",
+    "Handle player input (e.g., 'C' key for Correct, 'M' key for Mismatch):",
+    "On correct answer: increase current score, reset round timer, generate a new round, and apply difficulty scaling.",
+    "On incorrect answer or time runs out: transition to 'GAME_OVER' state.",
+    "Display current score, high score, and remaining time on screen during 'PLAYING' state.",
+    "In 'GAME_OVER' state: display final score, update and display the session high score, and prompt the player to press a key to restart.",
+    "Implement game reset logic: clear current score, reset timer to initial value, and transition back to 'START_SCREEN' or immediately 'PLAYING'."
+  ],
+  "dependencies": [
+    "pygame"
+  ]
+}
