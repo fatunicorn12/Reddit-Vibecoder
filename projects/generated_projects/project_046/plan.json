@@ -1,0 +1,20 @@
+{
+  "description": "A command-line program where users input the estimated time commitment and potential earnings of a micro-task to calculate its effective hourly rate, helping them quickly determine if a task is financially worthwhile.",
+  "features": [
+    "User input for task earnings (e.g., in USD).",
+    "User input for estimated task duration (in minutes).",
+    "Calculation of the effective hourly rate.",
+    "Display of the calculated hourly rate in a clear, readable format.",
+    "Ability to perform multiple calculations sequentially without restarting the program."
+  ],
+  "steps": [
+    "Create a main loop that allows for continuous calculations.",
+    "Inside the loop, prompt the user to enter the 'Potential Earnings' for the micro-task (e.g., '2.50' for $2.50). Handle potential `ValueError` for non-numeric input.",
+    "Prompt the user to enter the 'Estimated Duration' in minutes (e.g., '15' for 15 minutes). Handle potential `ValueError` for non-numeric input.",
+    "Convert the duration from minutes to hours (duration_in_hours = duration_in_minutes / 60).",
+    "Calculate the effective hourly rate using the formula: `hourly_rate = (potential_earnings / duration_in_hours)`.",
+    "Display the result to the user, formatted clearly (e.g., 'The effective hourly rate for this task is: $XX.XX/hour').",
+    "After displaying the result, ask the user if they want to calculate another task. If 'no', break the loop and exit the program."
+  ],
+  "dependencies": []
+}

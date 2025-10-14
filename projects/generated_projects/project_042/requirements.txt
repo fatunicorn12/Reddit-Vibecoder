@@ -1,0 +1,1 @@
+None (HTML, CSS, and vanilla JavaScript are sufficient).

@@ -1,0 +1,1 @@
+None (standard browser APIs)

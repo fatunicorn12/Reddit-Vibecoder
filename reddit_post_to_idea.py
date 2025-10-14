@@ -20,7 +20,6 @@ def generate_project_idea(title: str, body: str) -> str:
     From this, invent a simple project idea for an MVP.
     
     Constraints:
-    - The idea must be achievable in under ~200 lines of code.
     - It must be either:
       * A simple, replayable GAME (like Snake, Pong, Flappy Bird) with clear objectives and a game-over condition.
       * A functional PROGRAM that performs one clear task well (e.g. tournament bracket generator, password manager).

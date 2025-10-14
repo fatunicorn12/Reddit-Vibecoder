@@ -1,0 +1,156 @@
+---index.html---
+<div id="app">
+  <div class="container">
+    <h1>Comfort & Reframe</h1>
+    <p class="subtitle">Share a challenging word or phrase, and receive a moment of solace</p>
+    
+    <div class="input-section">
+      <input type="text" id="wordInput" placeholder="Enter a word or phrase that's troubling you..." maxlength="100">
+      <button id="receiveBtn">Receive Message</button>
+    </div>
+    
+    <div id="messageDisplay" class="message-display"></div>
+  </div>
+</div>
+
+---style.css---
+.container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 30px;
+  text-align: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  color: white;
+  font-family: 'Arial', sans-serif;
+}
+
+h1 {
+  margin: 0 0 10px 0;
+  font-size: 2.5em;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  margin: 0 0 30px 0;
+  font-size: 1.1em;
+  opacity: 0.9;
+  line-height: 1.4;
+}
+
+.input-section {
+  margin-bottom: 30px;
+}
+
+#wordInput {
+  width: 100%;
+  max-width: 400px;
+  padding: 15px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  margin-bottom: 20px;
+  outline: none;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+#receiveBtn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 12px 30px;
+  font-size: 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+#receiveBtn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.message-display {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 25px;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  line-height: 1.6;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.message-display.show {
+  opacity: 1;
+}
+
+.message-display:empty::before {
+  content: "Your comforting message will appear here...";
+  opacity: 0.6;
+  font-style: italic;
+}
+
+---script.js---
+function initApp() {
+  const comfortingMessages = [
+    "This too shall pass. Every storm eventually gives way to calm skies.",
+    "You are stronger than you know, and this challenge is helping you discover that strength.",
+    "What feels overwhelming now is simply life asking you to grow into who you're meant to become.",
+    "Sometimes the most beautiful flowers grow in the most difficult soil.",
+    "Your feelings are valid, but they don't define your future. You have the power to create change.",
+    "Every setback is a setup for a comeback. Trust in your resilience.",
+    "You've overcome challenges before, and you carry that same strength within you now.",
+    "This moment of difficulty is not your final destination, just a stop along your journey.",
+    "Be gentle with yourself. Healing and growth take time, and that's perfectly okay.",
+    "You are not alone in this struggle. Many have walked similar paths and found their way to peace.",
+    "What you're experiencing now is temporary, but the wisdom you'll gain is permanent.",
+    "Your worth is not determined by your struggles, but by your courage to face them.",
+    "Sometimes we need to feel lost to discover who we truly are.",
+    "This challenge is not punishment, but preparation for something greater ahead.",
+    "You have survived 100% of your difficult days so far. Your track record is perfect.",
+    "Trust the process of your life. Even confusion and pain can lead to clarity and joy.",
+    "Your current chapter is not your whole story. Keep writing.",
+    "You are exactly where you need to be to learn what you need to learn.",
+    "Breathe deeply. Ground yourself. You have everything within you to handle this moment.",
+    "What seems like an ending might actually be a beautiful new beginning in disguise."
+  ];
+
+  const wordInput = document.getElementById('wordInput');
+  const receiveBtn = document.getElementById('receiveBtn');
+  const messageDisplay = document.getElementById('messageDisplay');
+
+  if (!wordInput || !receiveBtn || !messageDisplay) {
+    console.error('Required elements not found');
+    return;
+  }
+
+  function displayRandomMessage() {
+    const randomIndex = Math.floor(Math.random() * comfortingMessages.length);
+    const selectedMessage = comfortingMessages[randomIndex];
+    
+    messageDisplay.classList.remove('show');
+    
+    setTimeout(() => {
+      messageDisplay.textContent = selectedMessage;
+      messageDisplay.classList.add('show');
+    }, 150);
+  }
+
+  receiveBtn.addEventListener('click', displayRandomMessage);
+
+  wordInput.addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      displayRandomMessage();
+    }
+  });
+}

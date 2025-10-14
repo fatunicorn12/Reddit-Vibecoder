@@ -1,0 +1,28 @@
+{
+  "description": "A static web app game challenging users to quickly identify the broad 'General Field' for specific scientific research areas within a time limit, tracking scores and a persistent high score.",
+  "features": [
+    "Display a specific scientific research area (e.g., 'Neuropathology').",
+    "Present multiple choice buttons for broad 'General Fields' (e.g., Biology, Physics, Social Sciences).",
+    "Implement a countdown timer for each question.",
+    "Track and display the current score.",
+    "Track and display a persistent high score (using browser's local storage).",
+    "Increase game difficulty by progressively decreasing the time limit per question.",
+    "Game-over condition upon incorrect selection or timer running out.",
+    "Clean game restart functionality after game-over."
+  ],
+  "steps": [
+    "**index.html:** Create basic HTML structure with a title, a heading for the scientific field, buttons for general categories, score display, high score display, a timer element, and a game-over screen/restart button.",
+    "**style.css:** Style the game elements for a clean and responsive layout, including button styles, score displays, and game state (e.g., hiding/showing game-over screen).",
+    "**script.js (Data Setup):** Define a JavaScript array of objects, where each object contains a 'specificField' string and its corresponding 'generalField' string. Also, define a separate array for all possible 'generalField' options.",
+    "**script.js (Game State & Variables):** Initialize variables for current score, high score (loaded from `localStorage`), current question index, active timer, and base time per question.",
+    "**script.js (Game Initialization):** Create a `startGame()` function that resets the score, clears the game-over state, shuffles the `scientificFields` array, and calls `nextQuestion()`.",
+    "**script.js (Question Presentation):** Implement `nextQuestion()`: increment score if previous answer was correct, randomly select a `specificField` from the data, display it, dynamically create/update general category buttons (including the correct one and several random incorrect ones), start the question timer (decreasing time per question based on current score).",
+    "**script.js (Timer Logic):** Implement `startTimer()` and `updateTimerDisplay()` functions. Decrease the `timePerQuestion` for `startTimer()` after a certain score threshold or with each correct answer to scale difficulty. If timer reaches zero, call `gameOver()`.",
+    "**script.js (User Input Handling):** Attach event listeners to the general category buttons. On click, check if the selected button's text matches the correct `generalField` for the current `specificField`. If correct, call `nextQuestion()`. If incorrect, call `gameOver()`.",
+    "**script.js (Game Over Logic):** Implement `gameOver()`: stop the timer, display the final score, compare with and update the high score in `localStorage`, display the game-over message and a 'Play Again' button.",
+    "**script.js (High Score Persistence):** Use `localStorage.getItem()` to load the high score at game start and `localStorage.setItem()` to save a new high score."
+  ],
+  "dependencies": [
+    "None (uses standard HTML, CSS, and vanilla JavaScript with built-in browser features like `localStorage`)."
+  ]
+}

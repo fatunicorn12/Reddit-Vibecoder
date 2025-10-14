@@ -1,0 +1,183 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: #333;
+}
+
+header, footer {
+  background: #6c5ce7;
+  color: #fff;
+  text-align: center;
+  padding: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  margin: 0;
+  font-weight: 600;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.container, #app {
+  background: #fafafa;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+}
+
+button, .btn {
+  cursor: pointer;
+  padding: 12px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  background: #6c5ce7;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+button:hover, .btn:hover {
+  background: #5a4dd4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Claude Generated */
+.game-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.game-header h1 {
+  color: #2c3e50;
+  margin-bottom: 5px;
+}
+
+.game-header p {
+  color: #7f8c8d;
+  font-size: 16px;
+}
+
+.score-board {
+  display: flex;
+  justify-content: space-around;
+  background: #ecf0f1;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.score-item {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.game-area {
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.question {
+  font-size: 20px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+  color: #2c3e50;
+  max-width: 600px;
+}
+
+.choice-buttons {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.choice-btn {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 15px 25px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  max-width: 300px;
+  word-wrap: break-word;
+}
+
+.choice-btn:hover {
+  background: #2980b9;
+}
+
+.choice-btn:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+.control-buttons {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.control-btn {
+  background: #27ae60;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.control-btn:hover {
+  background: #229954;
+}
+
+.feedback {
+  font-size: 18px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 20px;
+  min-height: 25px;
+}
+
+.feedback.correct {
+  color: #27ae60;
+}
+
+.feedback.incorrect {
+  color: #e74c3c;
+}
+
+.instructions {
+  background: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: center;
+  color: #6c757d;
+  font-size: 14px;
+}

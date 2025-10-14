@@ -1,0 +1,166 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: #333;
+}
+
+header, footer {
+  background: #6c5ce7;
+  color: #fff;
+  text-align: center;
+  padding: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  margin: 0;
+  font-weight: 600;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.container, #app {
+  background: #fafafa;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+}
+
+button, .btn {
+  cursor: pointer;
+  padding: 12px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  background: #6c5ce7;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+button:hover, .btn:hover {
+  background: #5a4dd4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Claude Generated */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Georgia', serif;
+  line-height: 1.6;
+}
+
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 10px;
+  font-size: 2.5em;
+}
+
+.description {
+  text-align: center;
+  color: #7f8c8d;
+  margin-bottom: 30px;
+  font-style: italic;
+}
+
+.input-section {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #34495e;
+}
+
+#input-text {
+  width: 100%;
+  height: 120px;
+  padding: 12px;
+  border: 2px solid #bdc3c7;
+  border-radius: 8px;
+  font-size: 16px;
+  font-family: 'Arial', sans-serif;
+  resize: vertical;
+  box-sizing: border-box;
+}
+
+#input-text:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+#interpret-btn {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  background-color: #e67e22;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 30px;
+  transition: background-color 0.3s;
+}
+
+#interpret-btn:hover {
+  background-color: #d35400;
+}
+
+.output-section {
+  background-color: #f8f9fa;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.output-section h3 {
+  color: #8b4513;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-style: italic;
+}
+
+#output-text {
+  background-color: white;
+  padding: 15px;
+  border-radius: 5px;
+  border-left: 4px solid #8b4513;
+  font-family: 'Times New Roman', serif;
+  min-height: 60px;
+}
+
+.placeholder {
+  color: #95a5a6;
+  font-style: italic;
+  margin: 0;
+}
+
+.interpretation {
+  color: #2c3e50;
+  margin: 0;
+  line-height: 1.8;
+}

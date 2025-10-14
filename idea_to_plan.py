@@ -46,7 +46,6 @@ def generate_project_plan(idea: str):
     * Prefer Pygame for most games, or Tkinter if GUI-based.
     * Only use a Web-based implementation (HTML/JS) if the game concept *naturally fits* the browser (e.g., clicker, idle, or simple arcade games).
     * Avoid narrative text adventures, quizzes, or branching-choice games—focus on mechanical gameplay.
-    * Keep the scope small, fun, and under ~200 lines of code.
 
   - If it's a PROGRAM:
     * Must perform a clear, useful, or interesting task (e.g., generator, calculator, analyzer, data visualizer).
@@ -60,7 +59,6 @@ def generate_project_plan(idea: str):
 
   - Always choose the *most natural medium* for the concept (Python vs. web).
   - Do NOT create vague demos or incomplete apps.
-  - Keep all plans achievable in under ~200 lines of code.
   - Output structured JSON only—no explanations or commentary.
 
 

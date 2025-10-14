@@ -1,0 +1,143 @@
+---index.html---
+<div id="app">
+  <h1>Company Skill Acquisition Game</h1>
+  <div class="stats">
+    <div>Company Time Spent: <span id="companyTime">0</span> minutes</div>
+    <div>Skills Acquired: <span id="skillsAcquired">0</span></div>
+    <div>Fastest Time: <span id="fastestTime">--</span></div>
+  </div>
+  <button id="acquireSkillBtn">Acquire Skill (5 minutes)</button>
+  <div id="jobOfferMessage"></div>
+  <button id="restartBtn" style="display: none;">Restart Game</button>
+</div>
+
+---style.css---
+#app {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+}
+
+h1 {
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.stats {
+  background: #f5f5f5;
+  padding: 20px;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.stats div {
+  margin: 10px 0;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+#acquireSkillBtn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 18px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+#acquireSkillBtn:hover {
+  background: #0056b3;
+}
+
+#acquireSkillBtn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+#jobOfferMessage {
+  background: #d4edda;
+  color: #155724;
+  padding: 15px;
+  border-radius: 5px;
+  margin: 20px 0;
+  font-weight: bold;
+  min-height: 20px;
+}
+
+#restartBtn {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#restartBtn:hover {
+  background: #1e7e34;
+}
+
+---script.js---
+function initApp() {
+  let companyTime = 0;
+  let skillsAcquired = 0;
+  const skillCostPerClick = 5;
+  const offerThresholdSkills = 20;
+  let fastestTime = Infinity;
+
+  const companyTimeElement = document.getElementById('companyTime');
+  const skillsAcquiredElement = document.getElementById('skillsAcquired');
+  const fastestTimeElement = document.getElementById('fastestTime');
+  const acquireSkillBtn = document.getElementById('acquireSkillBtn');
+  const jobOfferMessage = document.getElementById('jobOfferMessage');
+  const restartBtn = document.getElementById('restartBtn');
+
+  if (!companyTimeElement || !skillsAcquiredElement || !fastestTimeElement || 
+      !acquireSkillBtn || !jobOfferMessage || !restartBtn) {
+    console.error('Required DOM elements not found');
+    return;
+  }
+
+  function updateDisplay() {
+    companyTimeElement.textContent = companyTime;
+    skillsAcquiredElement.textContent = skillsAcquired;
+    fastestTimeElement.textContent = fastestTime === Infinity ? '--' : fastestTime + ' minutes';
+  }
+
+  function acquireSkill() {
+    skillsAcquired += 1;
+    companyTime += skillCostPerClick;
+    updateDisplay();
+
+    if (skillsAcquired >= offerThresholdSkills) {
+      acquireSkillBtn.disabled = true;
+      
+      if (companyTime < fastestTime) {
+        fastestTime = companyTime;
+      }
+      
+      jobOfferMessage.textContent = `New Job Offer! Your boss is NOT happy about it. Total time spent: ${companyTime} minutes.`;
+      restartBtn.style.display = 'inline-block';
+      updateDisplay();
+    }
+  }
+
+  function restartGame() {
+    companyTime = 0;
+    skillsAcquired = 0;
+    jobOfferMessage.textContent = '';
+    acquireSkillBtn.disabled = false;
+    restartBtn.style.display = 'none';
+    updateDisplay();
+  }
+
+  acquireSkillBtn.addEventListener('click', acquireSkill);
+  restartBtn.addEventListener('click', restartGame);
+
+  updateDisplay();
+}

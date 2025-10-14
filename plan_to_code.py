@@ -95,11 +95,10 @@ GAME (Pygame or Tkinter):
 - The game MUST be restartable without closing the program.
 - Prefer Pygame (or Tkinter if GUI-based) unless the concept clearly fits a browser-based game (e.g., clicker, idle, or simple arcade web game).
 - Always include control instructions displayed in-game or in the console.
-- Keep it fun, simple, and under ~200 lines of code total.
+- Keep it fun and simple
 
 PROGRAM (CLI or script):
 - Must perform its task correctly with visible, correct output.
-- Keep it self-contained and under ~200 lines.
 - Prefer Python standard library or Tkinter if GUI is needed.
 
 WEB APP (HTML/CSS/JS):
@@ -115,7 +114,6 @@ WEB APP (HTML/CSS/JS):
 - All JS must remain inside initApp() with defined variables (const/let), no globals, and no embedded HTML/CSS.
 - Query each DOM element once, verify it exists before use, and ensure zero console errors.
 - No external libraries or APIs.
-- The final page must be visibly functional, interactive, and under ~200 lines total.
 
 If any ambiguity arises, assume the most playable and self-contained implementation.
 Now output ONLY the code in the specified format, with no commentary or markdown outside the file delimiters.
@@ -126,19 +124,20 @@ Now output ONLY the code in the specified format, with no commentary or markdown
         if error_message:
             prompt += f"\nAlso, fix this error and regenerate cleanly:\n{error_message}\n"
 
-        # --- Call Claude API ---
+# --- Call Claude API (with streaming) ---
         try:
-            response = claude.messages.create(
+            raw_code = ""
+            with claude.messages.stream(
                 model="claude-sonnet-4-20250514",
-                max_tokens=4000,
+                max_tokens=32000,
                 temperature=0.7,
                 messages=[{"role": "user", "content": prompt}]
-            )
-            raw_code = ""
-            if response and hasattr(response, "content"):
-                for part in response.content:
-                    if part.type == "text":
-                        raw_code += part.text
+            ) as stream:
+                for text in stream.text_stream:
+                    raw_code += text
+                    # Optional: print progress indicator
+                    # print(".", end="", flush=True)
+            
             if not raw_code.strip():
                 raise ValueError("Claude returned an empty response")
 

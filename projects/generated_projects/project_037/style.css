@@ -1,0 +1,177 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: #333;
+}
+
+header, footer {
+  background: #6c5ce7;
+  color: #fff;
+  text-align: center;
+  padding: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  margin: 0;
+  font-weight: 600;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.container, #app {
+  background: #fafafa;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+}
+
+button, .btn {
+  cursor: pointer;
+  padding: 12px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  background: #6c5ce7;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+button:hover, .btn:hover {
+  background: #5a4dd4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Claude Generated */
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background: linear-gradient(135deg, #87CEEB, #98FB98);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+h1 {
+  color: #2E8B57;
+  font-size: 2.5em;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.rhino-container {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  margin: 20px 0;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  border: 3px solid #FFD700;
+}
+
+.rhino-image {
+  font-size: 8em;
+  margin-bottom: 10px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.rhino-name {
+  font-size: 1.5em;
+  color: #4B0082;
+  margin: 0;
+  font-weight: bold;
+}
+
+.toy-button {
+  background: linear-gradient(45deg, #FF6347, #FF4500);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.3em;
+  border-radius: 25px;
+  cursor: pointer;
+  margin: 20px 0;
+  font-family: inherit;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.toy-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+  background: linear-gradient(45deg, #FF4500, #FF6347);
+}
+
+.toy-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.toy-display {
+  background: #FFFACD;
+  border: 3px solid #DAA520;
+  border-radius: 15px;
+  padding: 20px;
+  margin-top: 20px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toy-display p {
+  font-size: 1.4em;
+  color: #8B4513;
+  margin: 0;
+  font-weight: bold;
+}
+
+.toy-selected {
+  animation: toyPop 0.6s ease-out;
+}
+
+@keyframes toyPop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

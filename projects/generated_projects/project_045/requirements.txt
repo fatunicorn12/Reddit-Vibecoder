@@ -1,0 +1,1 @@
+None (uses standard HTML, CSS, and JavaScript, runnable locally by opening index.html in a browser)

@@ -1,0 +1,169 @@
+---index.html---
+<div class="container">
+  <h1>Rhino's Toy Time!</h1>
+  <div class="rhino-container">
+    <div class="rhino-image">🦏</div>
+    <p class="rhino-name">Rocco the Rhino</p>
+  </div>
+  <button id="toy-button" class="toy-button">Give Rocco a Toy!</button>
+  <div id="toy-display" class="toy-display">
+    <p>Click the button to give Rocco a toy!</p>
+  </div>
+</div>
+
+---style.css---
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  background: linear-gradient(135deg, #87CEEB, #98FB98);
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+h1 {
+  color: #2E8B57;
+  font-size: 2.5em;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.rhino-container {
+  background: white;
+  border-radius: 20px;
+  padding: 30px;
+  margin: 20px 0;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  border: 3px solid #FFD700;
+}
+
+.rhino-image {
+  font-size: 8em;
+  margin-bottom: 10px;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+.rhino-name {
+  font-size: 1.5em;
+  color: #4B0082;
+  margin: 0;
+  font-weight: bold;
+}
+
+.toy-button {
+  background: linear-gradient(45deg, #FF6347, #FF4500);
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  font-size: 1.3em;
+  border-radius: 25px;
+  cursor: pointer;
+  margin: 20px 0;
+  font-family: inherit;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: all 0.3s ease;
+}
+
+.toy-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+  background: linear-gradient(45deg, #FF4500, #FF6347);
+}
+
+.toy-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.toy-display {
+  background: #FFFACD;
+  border: 3px solid #DAA520;
+  border-radius: 15px;
+  padding: 20px;
+  margin-top: 20px;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.toy-display p {
+  font-size: 1.4em;
+  color: #8B4513;
+  margin: 0;
+  font-weight: bold;
+}
+
+.toy-selected {
+  animation: toyPop 0.6s ease-out;
+}
+
+@keyframes toyPop {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+---script.js---
+function initApp() {
+  const toys = [
+    '🎾 Bouncy Ball',
+    '🦆 Rubber Duck',
+    '🧸 Teddy Bear',
+    '🚗 Toy Car',
+    '🧩 Puzzle Pieces',
+    '🪀 Yo-Yo',
+    '🎲 Dice',
+    '🏀 Basketball',
+    '🎯 Dartboard',
+    '🪁 Kite',
+    '🎪 Circus Ball',
+    '🎨 Paint Set',
+    '📚 Storybook',
+    '🎵 Music Box',
+    '🔔 Bell'
+  ];
+
+  const toyButton = document.getElementById('toy-button');
+  const toyDisplay = document.getElementById('toy-display');
+
+  if (!toyButton || !toyDisplay) {
+    console.error('Required elements not found');
+    return;
+  }
+
+  toyButton.addEventListener('click', function() {
+    const randomIndex = Math.floor(Math.random() * toys.length);
+    const selectedToy = toys[randomIndex];
+    
+    toyDisplay.classList.remove('toy-selected');
+    
+    setTimeout(() => {
+      toyDisplay.innerHTML = `<p>Rocco got a ${selectedToy}!</p>`;
+      toyDisplay.classList.add('toy-selected');
+    }, 50);
+  });
+}

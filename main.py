@@ -6,6 +6,7 @@ from controls_detector import detect_controls_inputs
 import os
 import json
 from auto_screenshot import auto_screenshot_project
+from github_integration import create_repo_for_project
 
 # --- Helper: get next available project path ---
 def get_next_project_path(base_dir="projects/generated_projects"):
@@ -102,6 +103,14 @@ def main():
     except Exception as e:
         print(f"⚠️ Auto-screenshot failed for {project_dir}: {e}")
 
+    # # Step 7: Upload to GitHub
+    # try:
+    #     project_name = os.path.basename(project_dir)
+    #     print(f"🚀 Uploading {project_name} to GitHub...")
+    #     repo_url = create_repo_for_project(project_name, project_dir)
+    #     print(f"✅ Successfully uploaded to: {repo_url}")
+    # except Exception as e:
+    #     print(f"⚠️ GitHub upload failed for {project_dir}: {e}")
 
 if __name__ == "__main__":
     main()

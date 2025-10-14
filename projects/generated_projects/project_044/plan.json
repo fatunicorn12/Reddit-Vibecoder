@@ -1,0 +1,43 @@
+{
+  "description": "A static web application for users to quickly input tomorrow's main focus, secondary tasks, and one avoided task, which then instantly generates a concise, structured daily plan displayed directly in the browser.",
+  "features": [
+    "Dedicated input fields for Main Focus, Secondary Tasks (multiline), and Ugly/Avoided Task.",
+    "A 'Generate Plan' button to process inputs and display the structured plan.",
+    "A 'Reset' button to clear all input fields and the displayed plan.",
+    "Dynamic generation and display of a prioritized daily plan.",
+    "Basic, clean styling for improved user experience."
+  ],
+  "steps": [
+    "**1. `index.html` Structure:**",
+    "   - Create a basic HTML5 document.",
+    "   - Add a main heading (e.g., 'Daily Plan Generator').",
+    "   - Create input elements:",
+    "     - `<label>` and `<input type=\"text\" id=\"mainFocus\">` for 'Main Focus'.",
+    "     - `<label>` and `<textarea id=\"secondaryTasks\"></textarea>` for 'Secondary Tasks'.",
+    "     - `<label>` and `<input type=\"text\" id=\"uglyTask\">` for 'Ugly Task'.",
+    "   - Add two buttons: `<button id=\"generatePlanBtn\">Generate Plan</button>` and `<button id=\"resetBtn\">Reset</button>`.",
+    "   - Create a `<div id=\"planOutput\"></div>` to display the generated plan.",
+    "   - Link `style.css` in the `<head>`.",
+    "   - Link `script.js` at the end of the `<body>`.",
+    "**2. `style.css` Styling:**",
+    "   - Apply basic global styles (e.g., font-family, body margins).",
+    "   - Style the main container for proper layout and centering.",
+    "   - Style input fields, textarea, and buttons for a clean, user-friendly appearance.",
+    "   - Style the `#planOutput` div to make the generated plan clearly visible and readable.",
+    "**3. `script.js` Logic:**",
+    "   - **DOM Element Retrieval:** Get references to `mainFocusInput`, `secondaryTasksInput`, `uglyTaskInput`, `generatePlanBtn`, `resetBtn`, and `planOutputDiv` using their IDs.",
+    "   - **`generatePlanBtn` Event Listener:**",
+    "     - Attach a `click` event listener to `generatePlanBtn`.",
+    "     - Inside the listener, retrieve the `.value` from `mainFocusInput`, `secondaryTasksInput`, and `uglyTaskInput`.",
+    "     - Construct an HTML string representing the daily plan, ensuring prioritization:",
+    "       - Start with 'Main Focus' (e.g., `<h2>Today's Main Focus: ${mainFocus}</h2>`).",
+    "       - Follow with 'Ugly Task' (e.g., `<h3>Tackle This Early: ${uglyTask}</h3>`).",
+    "       - Conclude with 'Secondary Tasks' (e.g., split `secondaryTasks.split('\\n')` into a `<ul>` with `<li>` items).",
+    "     - Set `planOutputDiv.innerHTML` to the generated HTML string.",
+    "   - **`resetBtn` Event Listener:**",
+    "     - Attach a `click` event listener to `resetBtn`.",
+    "     - Clear the `.value` of all input fields (`mainFocusInput.value = '';`, etc.).",
+    "     - Clear the displayed plan by setting `planOutputDiv.innerHTML = '';`."
+  ],
+  "dependencies": []
+}

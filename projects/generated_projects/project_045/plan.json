@@ -1,0 +1,19 @@
+{
+  "description": "A static web application presenting 2-3 randomly chosen, disparate sentences from a predefined list, encouraging users to creatively identify an emergent, unintended narrative or thematic connection.",
+  "features": [
+    "Curated internal corpus of diverse sentences.",
+    "Logic to randomly select 2-3 unique sentences from the corpus.",
+    "Dynamic display of the selected sentences on the web page.",
+    "A button to regenerate and display a new set of random sentences.",
+    "Basic styling for a clear and readable user interface."
+  ],
+  "steps": [
+    "**Project Setup:** Create `index.html`, `style.css`, and `script.js` files in the project root.",
+    "**HTML Structure (`index.html`):**\n    - Set up a basic HTML5 document with a `<!DOCTYPE html>` declaration.\n    - Include a descriptive `<h1>` title for the application.\n    - Create a `div` element with an ID (e.g., `sentence-display`) where the generated sentences will be rendered.\n    - Add a `<button>` element with an ID (e.g., `generate-button`) to trigger sentence regeneration.\n    - Link `style.css` in the `<head>` section.\n    - Link `script.js` just before the closing `</body>` tag.",
+    "**CSS Styling (`style.css`):**\n    - Apply basic `body` styles (e.g., `font-family`, `text-align: center`, `margin`).\n    - Style the `sentence-display` div for readability (e.g., `padding`, `margin`, `font-size`, `line-height`).\n    - Style the `generate-button` for clear interaction (e.g., `padding`, `background-color`, `color`, `border`, `cursor`).",
+    "**JavaScript Logic (`script.js`):**\n    - Define a `const` array named `sentenceCorpus` containing at least 20-30 diverse and unrelated string sentences.\n    - Implement a function, `getRandomSentences()`, that:\n        - Randomly determines whether to pick 2 or 3 sentences.\n        - Selects the determined number of *unique* random sentences from `sentenceCorpus`.\n        - Returns an array containing the selected sentences.\n    - Implement a function, `displaySentences()`, that:\n        - Calls `getRandomSentences()` to get the new set of sentences.\n        - Gets a reference to the `sentence-display` div using its ID.\n        - Clears any existing content within the `sentence-display` div.\n        - Iterates through the selected sentences and appends each one as a new `<p>` element to the `sentence-display` div.\n    - Get a reference to the `generate-button` using its ID.\n    - Attach an `click` event listener to the `generate-button` that calls the `displaySentences()` function.\n    - Call `displaySentences()` once when the script loads (e.g., using `window.onload` or by placing the call directly) to display initial sentences upon page load."
+  ],
+  "dependencies": [
+    "None (uses standard HTML, CSS, and JavaScript, runnable locally by opening index.html in a browser)"
+  ]
+}

@@ -9,11 +9,9 @@ chromedriver_autoinstaller.install()
 import os
 import time
 import subprocess
-import pyautogui
 from PIL import Image
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-import pygetwindow as gw
 
 
 # --- Detect project type ---
@@ -69,80 +67,101 @@ def update_readme(project_path: str, screenshot_path: str):
 
 # --- Capture Python window only ---
 def capture_python_app(project_path: str, timeout: int = 6) -> str:
+    """Run a Python project that serves HTML (e.g. via Flask or Tkinter-like output) headlessly."""
     py_files = [f for f in os.listdir(project_path) if f.endswith(".py")]
     if not py_files:
         raise FileNotFoundError("No Python file found.")
     main_file = os.path.join(project_path, py_files[0])
+
     os.makedirs("screenshots", exist_ok=True)
     screenshot_path = os.path.join("screenshots", f"{os.path.basename(project_path)}.png")
 
-    print(f"🧩 Running Python project: {main_file}")
+    print(f"🧩 Running Python project headlessly: {main_file}")
+
+    # Run the Python script (best for CLI or local server)
     proc = subprocess.Popen(["python", main_file])
     time.sleep(timeout)
 
+    # Try to capture via Selenium if it launches a local server (optional)
+    chrome_options = Options()
+    chrome_options.add_argument("--headless=new")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    driver = webdriver.Chrome(options=chrome_options)
+
     try:
-        windows = gw.getWindowsWithTitle("")
-        # pick the most recently opened visible window
-        visible_windows = [w for w in windows if w.isVisible]
-        if visible_windows:
-            target = visible_windows[-1]
-            box = (target.left, target.top, target.right, target.bottom)
-            full_shot = pyautogui.screenshot()
-            cropped = full_shot.crop(box)
-            cropped.save(screenshot_path)
-            print(f"📸 Cropped to active window: {target.title}")
-        else:
-            raise Exception("No visible window found.")
+        # Attempt to connect to local server (common pattern: localhost:5000)
+        driver.get("http://localhost:5000")
+        time.sleep(2)
+        driver.save_screenshot(screenshot_path)
+        print(f"✅ Screenshot saved from local server: {screenshot_path}")
     except Exception as e:
-        print(f"⚠️ Could not locate window ({e}); capturing full screen instead.")
-        pyautogui.screenshot(screenshot_path)
+        print(f"⚠️ Could not capture via browser ({e}); creating placeholder.")
+        Image.new("RGB", (800, 600), color="gray").save(screenshot_path)
 
+    driver.quit()
     proc.terminate()
-    time.sleep(0.5)
-
-    # resize to consistent dimensions
-    img = Image.open(screenshot_path)
-    img.thumbnail((800, 600))
-    img.save(screenshot_path)
-
-    print(f"✅ Screenshot saved: {screenshot_path}")
     return screenshot_path
 
 
-# --- Capture HTML full page ---
+
+# --- Capture HTML full page (Docker-safe) ---
 def capture_html_app(project_path: str) -> str:
+    import tempfile, shutil
+
     index_path = os.path.join(project_path, "index.html")
     if not os.path.exists(index_path):
         raise FileNotFoundError("No index.html found.")
-    os.makedirs("screenshots", exist_ok=True)
-    screenshot_path = os.path.join("screenshots", f"{os.path.basename(project_path)}.png")
+
+    # ✅ Save screenshots inside project folder so they're visible after Docker exits
+    screenshot_dir = os.path.join(project_path, "screenshots")
+    os.makedirs(screenshot_dir, exist_ok=True)
+    screenshot_path = os.path.join(screenshot_dir, f"{os.path.basename(project_path)}.png")
 
     print(f"🌐 Rendering HTML project: {index_path}")
+
     chrome_options = Options()
-    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--headless=new")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--hide-scrollbars")
     chrome_options.add_argument("--window-size=1280,720")
 
+    temp_profile = tempfile.mkdtemp()
+    chrome_options.add_argument(f"--user-data-dir={temp_profile}")
+
     driver = webdriver.Chrome(options=chrome_options)
-    driver.get(f"file://{os.path.abspath(index_path)}")
+    try:
+        driver.get(f"file://{os.path.abspath(index_path)}")
+        driver.implicitly_wait(5)  # wait for elements
+        time.sleep(2)  # ensure full render
 
-    time.sleep(2)
-    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-    time.sleep(0.5)
+        # Scroll and ensure visibility
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+        time.sleep(1)
 
-    # dynamically fit height
-    page_height = driver.execute_script("return document.body.scrollHeight")
-    driver.set_window_size(1280, page_height)
-    driver.save_screenshot(screenshot_path)
-    driver.quit()
+        page_height = driver.execute_script("return Math.max(document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight)")
+        driver.set_window_size(1280, page_height)
+        driver.save_screenshot(screenshot_path)
 
-    # resize for uniformity
-    img = Image.open(screenshot_path)
-    img.thumbnail((800, 600))
-    img.save(screenshot_path)
+        if not os.path.exists(screenshot_path) or os.path.getsize(screenshot_path) == 0:
+            raise RuntimeError("Screenshot failed — file is empty.")
+        print(f"✅ Screenshot saved: {screenshot_path}")
 
-    print(f"✅ Screenshot saved: {screenshot_path}")
+    except Exception as e:
+        print(f"⚠️ Screenshot failed: {e}")
+    finally:
+        driver.quit()
+        shutil.rmtree(temp_profile, ignore_errors=True)
+
+    # Resize consistently
+    if os.path.exists(screenshot_path):
+        img = Image.open(screenshot_path)
+        img.thumbnail((800, 600))
+        img.save(screenshot_path)
+        print(f"🖼️ Resized screenshot: {screenshot_path}")
+
     return screenshot_path
 
 

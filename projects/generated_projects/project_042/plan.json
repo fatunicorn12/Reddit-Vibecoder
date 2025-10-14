@@ -1,0 +1,25 @@
+{
+  "description": "A static web application where users input modern ironic internet text, and the app generates a 'future archaeological interpretation' of the content, highlighting how literal translation might misrepresent original intent.",
+  "features": [
+    "Textarea for user input of ironic internet text.",
+    "Button to trigger the interpretation generation.",
+    "Display area for the generated 'future archaeological interpretation'.",
+    "Client-side processing (no server required)."
+  ],
+  "steps": [
+    "Create `index.html` with a `<textarea>` for input, a `<button>` for generation, and a `<div>` to display the output. Link `style.css` and `script.js`.",
+    "Create `style.css` for basic styling: center content, set font sizes, and make the input/output areas readable.",
+    "Create `script.js`: Get references to the input textarea, button, and output div.",
+    "In `script.js`, add an event listener to the button.",
+    "Inside the event listener: Retrieve the text from the textarea.",
+    "Implement a simple interpretation function in `script.js`:",
+    "  Define a set of common ironic internet phrases/emojis (e.g., 'literally', 'I can't even', 'this slaps', '\ud83d\udc80', '\ud83d\ude02').",
+    "  For each phrase, create a hardcoded 'literal archaeological misinterpretation' (e.g., 'literally' -> 'a term of emphasis, often used hyperbolically, now interpreted as indicating precise truth').",
+    "  Iterate through the user's input text, performing simple string replacements for detected ironic phrases with their literal interpretations.",
+    "  Wrap the modified text within a 'future archaeological report' template (e.g., 'Analyzing Fragment #37-B, inscribed text reads: \"[interpreted text]\". This provides crucial insight into the highly literal communication style of the early 21st century...').",
+    "Display the final interpreted text in the output div."
+  ],
+  "dependencies": [
+    "None (HTML, CSS, and vanilla JavaScript are sufficient)."
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "description": "A 'Perception vs. Reality' game where players are presented with two causes of death (one sensationalized, one statistically common) and must quickly choose which one accounts for more annual fatalities. Points are awarded for correct guesses within a time limit, with difficulty increasing as the game progresses.",
+  "features": [
+    "Present two contrasting causes of death for comparison.",
+    "Player makes a choice via button press.",
+    "Immediate feedback on correctness.",
+    "Visible current score and in-session high score.",
+    "Time limit for each decision, displayed on screen.",
+    "Difficulty scaling by reducing the time limit as the score increases.",
+    "Game over condition when time runs out or an incorrect choice is made (optional: only time out for simpler game).",
+    "Clean game restart functionality."
+  ],
+  "steps": [
+    "Initialize a Tkinter window with a title and fixed size.",
+    "Define a dataset of `(cause_1_name, cause_1_fatalities, cause_2_name, cause_2_fatalities)` tuples or dictionaries. Ensure one cause is typically sensationalized and the other statistically more common, with accurate relative fatality counts.",
+    "Set up game state variables: `current_score`, `high_score` (in-session), `time_left`, `current_question_index`.",
+    "Create Tkinter widgets: labels for 'Current Score', 'High Score', 'Time Left', and a main 'Question' text area. Add two `Button` widgets for the choices.",
+    "Implement a `start_game()` function to reset score, time, shuffle the question data, and display the first question.",
+    "Implement a `display_question()` function to randomly select a new pair of causes from the dataset and update the buttons' text.",
+    "Implement a `check_answer(chosen_cause_index)` function: compare player's choice with the actual higher fatality count. If correct, increment `current_score` and apply difficulty scaling (e.g., decrease `time_per_question`). If incorrect (or time runs out), trigger `game_over()`.",
+    "Implement a `timer_tick()` function: decrement `time_left`, update the 'Time Left' label. If `time_left` reaches zero, call `game_over()`. Schedule itself to run every second using `window.after()`.",
+    "Implement `game_over()` function: stop the timer, update `high_score` if `current_score` is greater, display 'Game Over' message, hide choice buttons, and show a 'Restart Game' button.",
+    "Implement `restart_game()` function: reset game elements, hide 'Game Over' message and 'Restart Game' button, then call `start_game()`.",
+    "Set up initial difficulty (e.g., 10 seconds per question). Implement a simple scaling: for every 5 correct answers, decrease `time_per_question` by 1 second, with a minimum of 3 seconds."
+  ],
+  "dependencies": [
+    "tkinter",
+    "random"
+  ]
+}

@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: #333;
+}
+
+header, footer {
+  background: #6c5ce7;
+  color: #fff;
+  text-align: center;
+  padding: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  margin: 0;
+  font-weight: 600;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.container, #app {
+  background: #fafafa;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+}
+
+button, .btn {
+  cursor: pointer;
+  padding: 12px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  background: #6c5ce7;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+button:hover, .btn:hover {
+  background: #5a4dd4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Claude Generated */
+.container {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 30px;
+  text-align: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  color: white;
+  font-family: 'Arial', sans-serif;
+}
+
+h1 {
+  margin: 0 0 10px 0;
+  font-size: 2.5em;
+  font-weight: 300;
+  letter-spacing: 1px;
+}
+
+.subtitle {
+  margin: 0 0 30px 0;
+  font-size: 1.1em;
+  opacity: 0.9;
+  line-height: 1.4;
+}
+
+.input-section {
+  margin-bottom: 30px;
+}
+
+#wordInput {
+  width: 100%;
+  max-width: 400px;
+  padding: 15px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  margin-bottom: 20px;
+  outline: none;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+#receiveBtn {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 12px 30px;
+  font-size: 16px;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+#receiveBtn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+.message-display {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 25px;
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2em;
+  line-height: 1.6;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.message-display.show {
+  opacity: 1;
+}
+
+.message-display:empty::before {
+  content: "Your comforting message will appear here...";
+  opacity: 0.6;
+  font-style: italic;
+}

@@ -1,0 +1,25 @@
+{
+  "description": "A replayable text-based console game where players choose from various advice options to manage a virtual partner's escalating anger. The objective is to survive as many turns as possible before the partner's anger reaches a 'meltdown' point, triggering a game over. The game tracks turns survived and a persistent high score.",
+  "features": [
+    "Display of current anger level, turns survived, and high score.",
+    "Presentation of multiple randomly selected advice options per turn, each with a different anger impact.",
+    "Player input to select an advice option.",
+    "Dynamic update of partner's anger level based on player's choice.",
+    "Game over condition when anger level exceeds a maximum threshold (the 'relationship meltdown').",
+    "Difficulty scaling: baseline anger increases slightly each turn, making choices more impactful over time.",
+    "Persistent high score tracking (within the game session).",
+    "Clean game restart functionality after a game over."
+  ],
+  "steps": [
+    "**Initialize Game State:** Define global variables for `anger_level = 0`, `turns_survived = 0`, `MAX_ANGER = 100`, and `high_score = 0`. Create a list of advice options, where each option is a tuple `(advice_text, anger_impact_value)`. Ensure a range of `anger_impact_value`s (positive for bad advice, slightly positive for less bad advice).",
+    "**Implement `display_game_state()` function:** This function will clear the console (optional, using `os.system()`) and print the current `anger_level`, `turns_survived`, and `high_score` to the player.",
+    "**Implement `get_random_advice_options()` function:** This function will randomly select 3 to 4 unique advice options from the predefined `ADVICE_OPTIONS` list for the current turn, returning them as a list of choices.",
+    "**Create `game_over()` function:** This function will be called when `anger_level` reaches `MAX_ANGER`. It should print a 'Relationship Meltdown!' message, display the final `turns_survived` score, update `high_score` if the current score is higher, and prompt the player to play again. If the player chooses to restart, reset all game state variables (`anger_level`, `turns_survived`) and re-enter the main game loop.",
+    "**Develop the `main_game_loop()` function:**\n    1. Call `display_game_state()`.\n    2. Call `get_random_advice_options()` and display them to the player, numbered for selection.\n    3. Prompt the player to choose an option by entering its number. Implement input validation to ensure a valid choice.\n    4. Update `anger_level` by adding the `anger_impact_value` of the chosen advice.\n    5. **Implement Difficulty Scaling:** Increase `anger_level` by a small baseline amount each turn (e.g., `anger_level += (turns_survived // 5) + 1`). This makes the game progressively harder as turns increase.\n    6. Increment `turns_survived`.\n    7. Check if `anger_level >= MAX_ANGER`. If true, call `game_over()` and break the loop. Otherwise, continue the loop for the next turn.",
+    "**Set up Game Entry Point:** Call `main_game_loop()` to start the game when the script is run."
+  ],
+  "dependencies": [
+    "random",
+    "os (optional, for clearing console screen)"
+  ]
+}

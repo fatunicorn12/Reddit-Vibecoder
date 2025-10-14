@@ -1,0 +1,161 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  color: #333;
+}
+
+header, footer {
+  background: #6c5ce7;
+  color: #fff;
+  text-align: center;
+  padding: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+header h1 {
+  margin: 0;
+  font-weight: 600;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.container, #app {
+  background: #fafafa;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  max-width: 700px;
+  width: 100%;
+  text-align: center;
+}
+
+button, .btn {
+  cursor: pointer;
+  padding: 12px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  background: #6c5ce7;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+button:hover, .btn:hover {
+  background: #5a4dd4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+/* Claude Generated */
+#app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.input-section {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+#complaintTopic {
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  width: 300px;
+  margin-right: 10px;
+}
+
+#startButton {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#startButton:hover {
+  background-color: #0056b3;
+}
+
+#startButton:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+#meters {
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 5px;
+}
+
+#costMeter {
+  color: #dc3545;
+}
+
+#impactMeter {
+  color: #fd7e14;
+}
+
+#postStream {
+  height: 400px;
+  overflow-y: scroll;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  padding: 10px;
+  background-color: #f8f9fa;
+}
+
+.social-post {
+  background-color: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.post-header {
+  font-weight: bold;
+  color: #495057;
+  margin-bottom: 8px;
+}
+
+.post-content {
+  color: #333;
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.post-timestamp {
+  font-size: 12px;
+  color: #6c757d;
+}

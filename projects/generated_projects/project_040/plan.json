@@ -1,0 +1,27 @@
+{
+  "description": "A static web application where users click to acquire 'company-funded skills', tracking 'company time' spent. The objective is to acquire enough skills to unlock a 'new job offer' while minimizing the 'company time' spent. The game tracks the current session's fastest time to achieve the offer.",
+  "features": [
+    "Display of current 'Company Time Spent'",
+    "Display of 'Skills Acquired'",
+    "Clickable button to 'Acquire Skill'",
+    "Win condition: Unlock 'New Job Offer' upon reaching a skill threshold",
+    "Display of 'boss's negative reaction' upon winning",
+    "Tracks and displays current session 'Fastest Time' to achieve the job offer",
+    "Game restart functionality after winning"
+  ],
+  "steps": [
+    "Create `index.html` with: a title, display elements for 'Company Time' and 'Skills Acquired', a 'Fastest Time' display, a 'Acquire Skill' button, a 'Job Offer' message area, and a 'Restart Game' button (initially hidden).",
+    "Create `style.css` for basic visual styling of text, buttons, and layout.",
+    "Create `script.js` and declare global variables: `companyTime = 0`, `skillsAcquired = 0`, `skillCostPerClick = 5`, `offerThresholdSkills = 20`, `fastestTime = Infinity` (for session tracking), and DOM references.",
+    "Implement `updateDisplay()` function to update the text content of 'Company Time', 'Skills Acquired', and 'Fastest Time' elements.",
+    "Attach an `onclick` event listener to the 'Acquire Skill' button.",
+    "In the 'Acquire Skill' button's event handler: increment `skillsAcquired` by 1, add `skillCostPerClick` to `companyTime`, call `updateDisplay()`.",
+    "Immediately after updating, check if `skillsAcquired` is greater than or equal to `offerThresholdSkills`.",
+    "If the skill threshold is met: Disable the 'Acquire Skill' button. Update `fastestTime` if the current `companyTime` is lower. Display a 'New Job Offer! Your boss is NOT happy about it. Total time spent: [companyTime].' message in the dedicated area. Show the 'Restart Game' button.",
+    "Implement `restartGame()` function: reset `companyTime` and `skillsAcquired` to 0, clear the job offer message, enable the 'Acquire Skill' button, hide the 'Restart Game' button, and call `updateDisplay()`.",
+    "Attach an `onclick` event listener to the 'Restart Game' button to call `restartGame()`."
+  ],
+  "dependencies": [
+    "None (standard browser APIs)"
+  ]
+}

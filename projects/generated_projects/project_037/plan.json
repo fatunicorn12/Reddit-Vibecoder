@@ -1,0 +1,17 @@
+{
+  "description": "A static web application that displays a cartoon rhino and, upon button click, presents it with a randomly selected toy from a predefined list.",
+  "features": [
+    "Display a static image of a cartoon rhino.",
+    "Provide a button to trigger toy selection.",
+    "Randomly select a toy from a hardcoded list of options.",
+    "Display the name of the selected toy to the user."
+  ],
+  "steps": [
+    "Create `index.html` with a `div` for the rhino image (using an `<img>` tag with a placeholder source or simple text), a `button` element, and a `p` or `div` element to display the chosen toy's name. Link `style.css` and `script.js`.",
+    "Create `style.css` to provide basic styling for the page layout, the rhino image container, the button, and the toy display area (e.g., centering content, font sizes).",
+    "Create `script.js`. Define an array of strings representing the toys (e.g., `['Ball', 'Rubber Duck', 'Building Blocks', 'Toy Car']`).",
+    "In `script.js`, get references to the button and the toy display element using their IDs or classes.",
+    "Attach an event listener to the button that, when clicked, generates a random index within the bounds of the toy array, selects the corresponding toy, and updates the `textContent` of the toy display element with the selected toy's name."
+  ],
+  "dependencies": []
+}

@@ -1,0 +1,217 @@
+---index.html---
+<div id="app">
+  <h1>Daily Plan Generator</h1>
+  
+  <div class="input-container">
+    <div class="input-group">
+      <label for="mainFocus">Main Focus:</label>
+      <input type="text" id="mainFocus" placeholder="What's your main priority for tomorrow?">
+    </div>
+    
+    <div class="input-group">
+      <label for="secondaryTasks">Secondary Tasks:</label>
+      <textarea id="secondaryTasks" placeholder="List your secondary tasks (one per line)"></textarea>
+    </div>
+    
+    <div class="input-group">
+      <label for="uglyTask">Ugly/Avoided Task:</label>
+      <input type="text" id="uglyTask" placeholder="What task have you been avoiding?">
+    </div>
+  </div>
+  
+  <div class="button-container">
+    <button id="generatePlanBtn">Generate Plan</button>
+    <button id="resetBtn">Reset</button>
+  </div>
+  
+  <div id="planOutput"></div>
+</div>
+
+---style.css---
+#app {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 30px;
+  font-size: 2.2em;
+}
+
+.input-container {
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  margin-bottom: 20px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+}
+
+.input-group:last-child {
+  margin-bottom: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #34495e;
+  font-size: 1.1em;
+}
+
+input[type="text"], textarea {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e1e8ed;
+  border-radius: 6px;
+  font-size: 16px;
+  font-family: inherit;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box;
+}
+
+input[type="text"]:focus, textarea:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.button-container {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  margin: 0 10px;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+#resetBtn {
+  background-color: #95a5a6;
+}
+
+#resetBtn:hover {
+  background-color: #7f8c8d;
+}
+
+#planOutput {
+  background: white;
+  padding: 25px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  display: none;
+}
+
+#planOutput.visible {
+  display: block;
+}
+
+#planOutput h2 {
+  color: #27ae60;
+  border-bottom: 3px solid #27ae60;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+}
+
+#planOutput h3 {
+  color: #e74c3c;
+  margin: 20px 0 15px 0;
+}
+
+#planOutput h4 {
+  color: #8e44ad;
+  margin: 20px 0 15px 0;
+}
+
+#planOutput ul {
+  padding-left: 20px;
+}
+
+#planOutput li {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+---script.js---
+function initApp() {
+  const mainFocusInput = document.getElementById('mainFocus');
+  const secondaryTasksInput = document.getElementById('secondaryTasks');
+  const uglyTaskInput = document.getElementById('uglyTask');
+  const generatePlanBtn = document.getElementById('generatePlanBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const planOutputDiv = document.getElementById('planOutput');
+
+  if (!mainFocusInput || !secondaryTasksInput || !uglyTaskInput || !generatePlanBtn || !resetBtn || !planOutputDiv) {
+    console.error('Required elements not found');
+    return;
+  }
+
+  generatePlanBtn.addEventListener('click', function() {
+    const mainFocus = mainFocusInput.value.trim();
+    const secondaryTasks = secondaryTasksInput.value.trim();
+    const uglyTask = uglyTaskInput.value.trim();
+
+    if (!mainFocus && !secondaryTasks && !uglyTask) {
+      planOutputDiv.innerHTML = '<p style="color: #e74c3c; text-align: center;">Please fill in at least one field to generate a plan.</p>';
+      planOutputDiv.classList.add('visible');
+      return;
+    }
+
+    let planHTML = '<div class="generated-plan">';
+
+    if (mainFocus) {
+      planHTML += `<h2>🎯 Today's Main Focus</h2><p>${mainFocus}</p>`;
+    }
+
+    if (uglyTask) {
+      planHTML += `<h3>🔥 Tackle This Early</h3><p>${uglyTask}</p>`;
+    }
+
+    if (secondaryTasks) {
+      planHTML += `<h4>📋 Secondary Tasks</h4><ul>`;
+      const tasks = secondaryTasks.split('\n').filter(task => task.trim() !== '');
+      tasks.forEach(task => {
+        planHTML += `<li>${task.trim()}</li>`;
+      });
+      planHTML += '</ul>';
+    }
+
+    planHTML += '</div>';
+
+    planOutputDiv.innerHTML = planHTML;
+    planOutputDiv.classList.add('visible');
+  });
+
+  resetBtn.addEventListener('click', function() {
+    mainFocusInput.value = '';
+    secondaryTasksInput.value = '';
+    uglyTaskInput.value = '';
+    planOutputDiv.innerHTML = '';
+    planOutputDiv.classList.remove('visible');
+  });
+}
