@@ -1,7 +1,7 @@
 # 🎧 Reddit-Vibecoder
 
-I was tired of watching this *vibe coding revolution*.  
-So I made a bot to **produce it** — generating new ideas and working programs from random Reddit posts.  
+I was tired of watching this *vibe coding revolution*. I also wanted my GitHub to be green through and through.  
+So I made a bot to **produce programs** — generating new ideas and working programs from random Reddit posts.  
 
 This project is a **multi-agent automation pipeline** that fetches a Reddit post, extracts a concept, transforms it into a project plan, generates executable code (Python/Pygame or HTML/JS), screenshots the result, and uploads everything to a new GitHub repository — all inside a **Dockerized environment**.
 
