@@ -1,0 +1,1328 @@
+---index.html---
+<div id="app">
+  <!-- Main Menu Screen -->
+  <div id="main-menu" class="screen active">
+    <div class="menu-container">
+      <h1>Subreddit Moderator</h1>
+      <p class="subtitle">Train your moderation skills</p>
+      <div class="menu-buttons">
+        <button class="menu-btn primary" data-screen="game-screen">Start Moderating</button>
+        <button class="menu-btn" data-screen="instructions-screen">How to Play</button>
+        <button class="menu-btn" data-screen="settings-screen">Rules Settings</button>
+        <button class="menu-btn" data-screen="high-scores-screen">High Scores</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="game-screen" class="screen">
+    <div class="game-header">
+      <div class="game-stats">
+        <div class="stat">
+          <span class="stat-label">Score:</span>
+          <span id="current-score">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Lives:</span>
+          <span id="current-lives">3</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Streak:</span>
+          <span id="current-streak">0</span>
+        </div>
+      </div>
+      <div class="difficulty-indicator">
+        <span class="difficulty-label">Difficulty:</span>
+        <div class="difficulty-bar">
+          <div id="difficulty-fill" class="difficulty-fill"></div>
+        </div>
+      </div>
+      <button class="return-btn" data-screen="main-menu">Return to Menu</button>
+    </div>
+
+    <div class="game-content">
+      <div id="post-display" class="post-card">
+        <div class="post-header">
+          <div class="post-meta">
+            <span class="author">u/<span id="post-author">loading...</span></span>
+            <span class="timestamp" id="post-timestamp">loading...</span>
+            <span class="upvotes">↑ <span id="post-upvotes">0</span></span>
+          </div>
+        </div>
+        <h3 id="post-title" class="post-title">Loading post...</h3>
+        <div id="post-body" class="post-body">Please wait...</div>
+        <div class="post-actions">
+          <button id="approve-btn" class="action-btn approve">Approve</button>
+          <button id="remove-btn" class="action-btn remove">Remove</button>
+          <button id="skip-btn" class="action-btn skip">Skip</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="feedback-overlay" class="feedback-overlay"></div>
+  </div>
+
+  <!-- Instructions Screen -->
+  <div id="instructions-screen" class="screen">
+    <div class="instructions-container">
+      <h2>How to Play</h2>
+      <div class="instructions-content">
+        <div class="instruction-section">
+          <h3>Objective</h3>
+          <p>Review posts and comments to identify rule violations. Make the correct moderation decision to earn points!</p>
+        </div>
+        
+        <div class="instruction-section">
+          <h3>Actions</h3>
+          <ul>
+            <li><strong>Approve:</strong> Use when content follows all rules</li>
+            <li><strong>Remove:</strong> Use when content violates any active rule</li>
+            <li><strong>Skip:</strong> Use when unsure (no points gained/lost)</li>
+          </ul>
+        </div>
+
+        <div class="instruction-section">
+          <h3>Scoring</h3>
+          <ul>
+            <li>Correct decisions: +10 points (×streak multiplier)</li>
+            <li>Incorrect decisions: -5 points, lose 1 life, reset streak</li>
+            <li>Skip: No points, no life lost, streak continues</li>
+            <li>Game over at 0 lives or -50 points</li>
+          </ul>
+        </div>
+
+        <div class="instruction-section">
+          <h3>Common Violations</h3>
+          <ul>
+            <li><strong>Personal Attacks:</strong> Insults, harassment, toxic behavior</li>
+            <li><strong>Spam:</strong> Repetitive content, excessive self-promotion</li>
+            <li><strong>Off-Topic:</strong> Content unrelated to subreddit theme</li>
+            <li><strong>Low Effort:</strong> Single words, memes in serious discussions</li>
+          </ul>
+        </div>
+      </div>
+      <button class="return-btn" data-screen="main-menu">Return to Menu</button>
+    </div>
+  </div>
+
+  <!-- Settings Screen -->
+  <div id="settings-screen" class="screen">
+    <div class="settings-container">
+      <h2>Rules Settings</h2>
+      <p class="settings-subtitle">Enable/disable rules for your moderation session</p>
+      <div id="rules-list" class="rules-list">
+        <!-- Rules will be populated by JavaScript -->
+      </div>
+      <div class="settings-actions">
+        <button id="save-settings" class="menu-btn primary">Save Settings</button>
+        <button class="return-btn" data-screen="main-menu">Return to Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- High Scores Screen -->
+  <div id="high-scores-screen" class="screen">
+    <div class="high-scores-container">
+      <h2>High Scores</h2>
+      <div class="high-score-display">
+        <div class="score-item">
+          <span class="score-label">All-Time Best:</span>
+          <span id="high-score-value" class="score-value">0</span>
+        </div>
+        <div class="score-item">
+          <span class="score-label">Last Session:</span>
+          <span id="last-score-value" class="score-value">0</span>
+        </div>
+      </div>
+      <button class="return-btn" data-screen="main-menu">Return to Menu</button>
+    </div>
+  </div>
+
+  <!-- Game Over Screen -->
+  <div id="game-over-screen" class="screen">
+    <div class="game-over-container">
+      <h2>Game Over</h2>
+      <div class="final-stats">
+        <div class="stat-item">
+          <span class="stat-label">Final Score:</span>
+          <span id="final-score" class="stat-value">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Best Streak:</span>
+          <span id="best-streak" class="stat-value">0</span>
+        </div>
+        <div id="new-high-score" class="new-high-score hidden">🎉 New High Score! 🎉</div>
+      </div>
+      <div class="game-over-actions">
+        <button id="play-again-btn" class="menu-btn primary">Play Again</button>
+        <button class="return-btn" data-screen="main-menu">Return to Menu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+---style.css---
+/* Global Styles */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+  color: #e94560;
+  min-height: 100vh;
+}
+
+#app {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Screen Management */
+.screen {
+  display: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.3s ease-in-out;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.screen.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Main Menu */
+.menu-container {
+  text-align: center;
+  padding: 40px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(233, 69, 96, 0.2);
+}
+
+.menu-container h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  background: linear-gradient(45deg, #e94560, #f39c12);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: #bbb;
+  margin-bottom: 40px;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+.menu-btn {
+  padding: 15px 30px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+}
+
+.menu-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(233, 69, 96, 0.3);
+  background: rgba(233, 69, 96, 0.2);
+  border-color: #e94560;
+}
+
+.menu-btn.primary {
+  background: linear-gradient(45deg, #e94560, #f39c12);
+  font-weight: bold;
+}
+
+.menu-btn.primary:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 15px 30px rgba(233, 69, 96, 0.4);
+}
+
+/* Game Screen */
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.game-stats {
+  display: flex;
+  gap: 30px;
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat-label {
+  display: block;
+  font-size: 0.9rem;
+  color: #bbb;
+  margin-bottom: 5px;
+}
+
+.stat-label + span {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #e94560;
+}
+
+.difficulty-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.difficulty-label {
+  color: #bbb;
+  font-size: 0.9rem;
+}
+
+.difficulty-bar {
+  width: 150px;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.difficulty-fill {
+  height: 100%;
+  width: 10%;
+  background: linear-gradient(90deg, #2ecc71, #f1c40f, #e74c3c);
+  transition: width 0.5s ease, background-color 0.5s ease;
+  border-radius: 5px;
+}
+
+.return-btn {
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(233, 69, 96, 0.3);
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.return-btn:hover {
+  background: rgba(233, 69, 96, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Post Card */
+.game-content {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.post-card {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 15px;
+  padding: 25px;
+  max-width: 700px;
+  width: 100%;
+  border: 1px solid rgba(233, 69, 96, 0.2);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.post-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  border-color: rgba(233, 69, 96, 0.4);
+}
+
+.post-header {
+  margin-bottom: 15px;
+}
+
+.post-meta {
+  display: flex;
+  gap: 20px;
+  font-size: 0.9rem;
+  color: #bbb;
+}
+
+.author {
+  color: #e94560;
+  font-weight: bold;
+}
+
+.upvotes {
+  color: #f39c12;
+}
+
+.post-title {
+  font-size: 1.4rem;
+  margin: 15px 0;
+  color: #fff;
+  line-height: 1.4;
+}
+
+.post-body {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #ddd;
+  margin-bottom: 25px;
+  padding: 15px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  border-left: 4px solid rgba(233, 69, 96, 0.3);
+}
+
+.post-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.action-btn {
+  padding: 12px 25px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 100px;
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.approve {
+  background: linear-gradient(45deg, #27ae60, #2ecc71);
+  color: white;
+}
+
+.approve:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(46, 204, 113, 0.4);
+}
+
+.remove {
+  background: linear-gradient(45deg, #e74c3c, #c0392b);
+  color: white;
+}
+
+.remove:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(231, 76, 60, 0.4);
+}
+
+.skip {
+  background: linear-gradient(45deg, #95a5a6, #7f8c8d);
+  color: white;
+}
+
+.skip:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(149, 165, 166, 0.4);
+}
+
+/* Feedback Animations */
+.feedback-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.feedback-message {
+  position: absolute;
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 15px 30px;
+  border-radius: 10px;
+  backdrop-filter: blur(10px);
+  animation: feedbackPop 2s ease-out forwards;
+}
+
+.feedback-correct {
+  background: rgba(46, 204, 113, 0.9);
+  color: white;
+  border: 2px solid #27ae60;
+}
+
+.feedback-incorrect {
+  background: rgba(231, 76, 60, 0.9);
+  color: white;
+  border: 2px solid #c0392b;
+}
+
+.score-popup {
+  position: absolute;
+  font-size: 1.5rem;
+  font-weight: bold;
+  pointer-events: none;
+  animation: scoreFloat 1.5s ease-out forwards;
+  z-index: 1001;
+}
+
+.score-positive {
+  color: #2ecc71;
+}
+
+.score-negative {
+  color: #e74c3c;
+}
+
+@keyframes feedbackPop {
+  0% {
+    transform: scale(0.5) translateX(-50%) translateY(-50%);
+    opacity: 0;
+  }
+  20% {
+    transform: scale(1.1) translateX(-50%) translateY(-50%);
+    opacity: 1;
+  }
+  80% {
+    transform: scale(1) translateX(-50%) translateY(-50%);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.8) translateX(-50%) translateY(-50%);
+    opacity: 0;
+  }
+}
+
+@keyframes scoreFloat {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-80px) scale(1.2);
+    opacity: 0;
+  }
+}
+
+.post-card.correct-flash {
+  animation: correctFlash 0.6s ease-out;
+}
+
+.post-card.incorrect-flash {
+  animation: incorrectFlash 0.6s ease-out;
+}
+
+@keyframes correctFlash {
+  0%, 100% { border-color: rgba(233, 69, 96, 0.2); }
+  50% { 
+    border-color: #2ecc71;
+    box-shadow: 0 0 30px rgba(46, 204, 113, 0.5);
+  }
+}
+
+@keyframes incorrectFlash {
+  0%, 100% { border-color: rgba(233, 69, 96, 0.2); }
+  50% { 
+    border-color: #e74c3c;
+    box-shadow: 0 0 30px rgba(231, 76, 60, 0.5);
+  }
+}
+
+/* Instructions Screen */
+.instructions-container {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 40px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(233, 69, 96, 0.2);
+}
+
+.instructions-container h2 {
+  text-align: center;
+  color: #e94560;
+  margin-bottom: 30px;
+  font-size: 2.5rem;
+}
+
+.instructions-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.instruction-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  border-left: 4px solid #e94560;
+}
+
+.instruction-section h3 {
+  color: #f39c12;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+}
+
+.instruction-section p, .instruction-section li {
+  color: #ddd;
+  line-height: 1.6;
+}
+
+.instruction-section ul {
+  padding-left: 20px;
+}
+
+.instruction-section li {
+  margin-bottom: 8px;
+}
+
+/* Settings Screen */
+.settings-container {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 40px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(233, 69, 96, 0.2);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.settings-container h2 {
+  text-align: center;
+  color: #e94560;
+  margin-bottom: 10px;
+  font-size: 2.5rem;
+}
+
+.settings-subtitle {
+  text-align: center;
+  color: #bbb;
+  margin-bottom: 30px;
+}
+
+.rules-list {
+  margin-bottom: 30px;
+}
+
+.rule-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  padding: 15px;
+  margin-bottom: 15px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  border: 1px solid rgba(233, 69, 96, 0.1);
+  transition: all 0.3s ease;
+}
+
+.rule-item:hover {
+  background: rgba(233, 69, 96, 0.1);
+  transform: translateX(10px);
+}
+
+.rule-checkbox {
+  width: 20px;
+  height: 20px;
+  accent-color: #e94560;
+  cursor: pointer;
+}
+
+.rule-info {
+  flex: 1;
+}
+
+.rule-name {
+  font-weight: bold;
+  color: #fff;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.rule-description {
+  color: #bbb;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.settings-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+/* High Scores Screen */
+.high-scores-container {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 40px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(233, 69, 96, 0.2);
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.high-scores-container h2 {
+  color: #e94560;
+  margin-bottom: 30px;
+  font-size: 2.5rem;
+}
+
+.high-score-display {
+  margin-bottom: 40px;
+}
+
+.score-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 15px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  border-left: 4px solid #f39c12;
+}
+
+.score-label {
+  font-size: 1.2rem;
+  color: #ddd;
+}
+
+.score-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #e94560;
+}
+
+/* Game Over Screen */
+.game-over-container {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 40px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(233, 69, 96, 0.2);
+  text-align: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.game-over-container h2 {
+  color: #e74c3c;
+  margin-bottom: 30px;
+  font-size: 2.5rem;
+}
+
+.final-stats {
+  margin-bottom: 30px;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  margin-bottom: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+}
+
+.stat-label {
+  color: #ddd;
+  font-size: 1.1rem;
+}
+
+.stat-value {
+  color: #e94560;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.new-high-score {
+  background: linear-gradient(45deg, #f39c12, #e94560);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 20px 0;
+  animation: pulse 2s infinite;
+}
+
+.new-high-score.hidden {
+  display: none;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.game-over-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .game-header {
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+  
+  .game-stats {
+    gap: 20px;
+  }
+  
+  .post-actions {
+    flex-direction: column;
+  }
+  
+  .action-btn {
+    width: 100%;
+  }
+  
+  .menu-container h1 {
+    font-size: 2rem;
+  }
+  
+  .settings-actions, .game-over-actions {
+    flex-direction: column;
+  }
+}
+
+---script.js---
+function initApp() {
+  // Game Rules Definition
+  const RULES = [
+    {
+      id: 'personal-attacks',
+      name: 'No Personal Attacks',
+      description: 'Prohibits insults, harassment, and toxic behavior toward other users',
+      keywords: ['idiot', 'stupid', 'moron', 'dumb', 'loser', 'pathetic', 'worthless', 'hate you', 'kill yourself', 'scum'],
+      severity: 2
+    },
+    {
+      id: 'spam',
+      name: 'No Spam',
+      description: 'Prevents repetitive content and excessive self-promotion',
+      keywords: ['buy now', 'click here', 'free money', 'get rich quick', 'limited time', 'act now', 'guaranteed', 'miracle'],
+      severity: 1
+    },
+    {
+      id: 'off-topic',
+      name: 'No Off-Topic Content',
+      description: 'Content must be relevant to the subreddit theme',
+      keywords: ['completely unrelated', 'wrong subreddit', 'this has nothing to do', 'random topic', 'irrelevant'],
+      severity: 1
+    },
+    {
+      id: 'low-effort',
+      name: 'No Low Effort Posts',
+      description: 'Requires substantial content and meaningful discussion',
+      keywords: ['lol', 'this', 'same', 'first', 'upvote if', 'am I the only one', 'does anyone else'],
+      severity: 1
+    },
+    {
+      id: 'misinformation',
+      name: 'No Misinformation',
+      description: 'Prohibits false or misleading information',
+      keywords: ['vaccines cause autism', 'earth is flat', 'fake news', 'conspiracy', 'proven fact that'],
+      severity: 3
+    }
+  ];
+
+  // Post Templates for Content Generation
+  const POST_TEMPLATES = [
+    {
+      titleParts: ['Question about', 'Help with', 'Discussion on', 'Thoughts on', 'Anyone else experienced'],
+      bodyParts: ['I was wondering if anyone could help me understand', 'Has anyone else noticed that', 'I think we should discuss', 'My experience with this has been'],
+      topics: ['programming', 'cooking', 'gaming', 'movies', 'books', 'travel', 'fitness', 'technology'],
+      violationHints: {
+        'personal-attacks': ['Anyone who disagrees is an idiot', 'People who think otherwise are stupid'],
+        'spam': ['Click here for amazing deals!', 'Buy now and get rich quick!'],
+        'off-topic': ['This is completely unrelated to anything', 'Wrong subreddit but whatever'],
+        'low-effort': ['lol', 'this', 'same here'],
+        'misinformation': ['Its a proven fact that vaccines cause autism', 'The earth is obviously flat']
+      }
+    }
+  ];
+
+  const AUTHORS = ['TechGuru2023', 'CookingMaster', 'GameLover99', 'BookWorm42', 'FitnessFreak', 'MovieBuff', 'TravelAddict', 'CodeNinja', 'FoodieLife', 'SportsFan'];
+
+  // Game State
+  let gameState = {
+    score: 0,
+    lives: 3,
+    difficulty: 1,
+    streak: 0,
+    bestStreak: 0,
+    activeRules: [],
+    currentPost: null,
+    isGameActive: false
+  };
+
+  // DOM Elements
+  const screens = {
+    mainMenu: document.getElementById('main-menu'),
+    game: document.getElementById('game-screen'),
+    instructions: document.getElementById('instructions-screen'),
+    settings: document.getElementById('settings-screen'),
+    highScores: document.getElementById('high-scores-screen'),
+    gameOver: document.getElementById('game-over-screen')
+  };
+
+  // Initialize Application
+  function init() {
+    setupEventListeners();
+    loadSettings();
+    loadHighScores();
+    populateRulesSettings();
+    showScreen('main-menu');
+  }
+
+  // Screen Management
+  function showScreen(screenId) {
+    // Hide all screens
+    Object.values(screens).forEach(screen => {
+      if (screen) {
+        screen.classList.remove('active');
+      }
+    });
+
+    // Show target screen
+    const targetScreen = document.getElementById(screenId);
+    if (targetScreen) {
+      setTimeout(() => {
+        targetScreen.classList.add('active');
+      }, 150);
+    }
+
+    // Handle specific screen logic
+    if (screenId === 'game-screen') {
+      startGame();
+    } else if (screenId === 'high-scores-screen') {
+      updateHighScoresDisplay();
+    }
+  }
+
+  // Event Listeners Setup
+  function setupEventListeners() {
+    // Menu navigation
+    document.querySelectorAll('[data-screen]').forEach(button => {
+      button.addEventListener('click', (e) => {
+        const targetScreen = e.target.getAttribute('data-screen');
+        showScreen(targetScreen);
+      });
+    });
+
+    // Game actions
+    const approveBtn = document.getElementById('approve-btn');
+    const removeBtn = document.getElementById('remove-btn');
+    const skipBtn = document.getElementById('skip-btn');
+
+    if (approveBtn) approveBtn.addEventListener('click', () => handleDecision('approve'));
+    if (removeBtn) removeBtn.addEventListener('click', () => handleDecision('remove'));
+    if (skipBtn) skipBtn.addEventListener('click', () => handleDecision('skip'));
+
+    // Settings
+    const saveSettingsBtn = document.getElementById('save-settings');
+    if (saveSettingsBtn) {
+      saveSettingsBtn.addEventListener('click', saveSettings);
+    }
+
+    // Play again
+    const playAgainBtn = document.getElementById('play-again-btn');
+    if (playAgainBtn) {
+      playAgainBtn.addEventListener('click', () => showScreen('game-screen'));
+    }
+  }
+
+  // Settings Management
+  function populateRulesSettings() {
+    const rulesList = document.getElementById('rules-list');
+    if (!rulesList) return;
+
+    rulesList.innerHTML = '';
+    RULES.forEach(rule => {
+      const ruleItem = document.createElement('div');
+      ruleItem.className = 'rule-item';
+      ruleItem.innerHTML = `
+        <input type="checkbox" class="rule-checkbox" id="rule-${rule.id}" ${gameState.activeRules.includes(rule.id) ? 'checked' : ''}>
+        <div class="rule-info">
+          <label for="rule-${rule.id}" class="rule-name">${rule.name}</label>
+          <div class="rule-description">${rule.description}</div>
+        </div>
+      `;
+      rulesList.appendChild(ruleItem);
+    });
+  }
+
+  function saveSettings() {
+    const activeRules = [];
+    document.querySelectorAll('.rule-checkbox:checked').forEach(checkbox => {
+      const ruleId = checkbox.id.replace('rule-', '');
+      activeRules.push(ruleId);
+    });
+    
+    gameState.activeRules = activeRules;
+    localStorage.setItem('activeRules', JSON.stringify(activeRules));
+    
+    // Show feedback
+    const saveBtn = document.getElementById('save-settings');
+    const originalText = saveBtn.textContent;
+    saveBtn.textContent = 'Saved!';
+    saveBtn.style.background = 'linear-gradient(45deg, #27ae60, #2ecc71)';
+    
+    setTimeout(() => {
+      saveBtn.textContent = originalText;
+      saveBtn.style.background = '';
+    }, 1500);
+  }
+
+  function loadSettings() {
+    try {
+      const savedRules = JSON.parse(localStorage.getItem('activeRules') || '[]');
+      gameState.activeRules = savedRules.length > 0 ? savedRules : ['personal-attacks', 'spam', 'off-topic'];
+    } catch (e) {
+      gameState.activeRules = ['personal-attacks', 'spam', 'off-topic'];
+    }
+  }
+
+  // High Score Management
+  function loadHighScores() {
+    try {
+      const highScore = parseInt(localStorage.getItem('highScore') || '0');
+      const lastScore = parseInt(localStorage.getItem('lastScore') || '0');
+      return { highScore, lastScore };
+    } catch (e) {
+      return { highScore: 0, lastScore: 0 };
+    }
+  }
+
+  function saveHighScore() {
+    const { highScore } = loadHighScores();
+    const isNewHighScore = gameState.score > highScore;
+    
+    if (isNewHighScore) {
+      localStorage.setItem('highScore', gameState.score.toString());
+    }
+    localStorage.setItem('lastScore', gameState.score.toString());
+    
+    return isNewHighScore;
+  }
+
+  function updateHighScoresDisplay() {
+    const { highScore, lastScore } = loadHighScores();
+    const highScoreEl = document.getElementById('high-score-value');
+    const lastScoreEl = document.getElementById('last-score-value');
+    
+    if (highScoreEl) highScoreEl.textContent = highScore;
+    if (lastScoreEl) lastScoreEl.textContent = lastScore;
+  }
+
+  // Game Logic
+  function startGame() {
+    gameState = {
+      score: 0,
+      lives: 3,
+      difficulty: 1,
+      streak: 0,
+      bestStreak: 0,
+      activeRules: gameState.activeRules,
+      currentPost: null,
+      isGameActive: true
+    };
+    
+    updateGameUI();
+    generateNewPost();
+  }
+
+  function updateGameUI() {
+    const scoreEl = document.getElementById('current-score');
+    const livesEl = document.getElementById('current-lives');
+    const streakEl = document.getElementById('current-streak');
+    const difficultyFill = document.getElementById('difficulty-fill');
+
+    if (scoreEl) scoreEl.textContent = gameState.score;
+    if (livesEl) livesEl.textContent = gameState.lives;
+    if (streakEl) streakEl.textContent = gameState.streak;
+    
+    if (difficultyFill) {
+      const difficultyPercent = Math.min((gameState.difficulty * 20), 100);
+      difficultyFill.style.width = difficultyPercent + '%';
+    }
+  }
+
+  function generateNewPost() {
+    if (!gameState.isGameActive) return;
+
+    const template = POST_TEMPLATES[0];
+    const topic = template.topics[Math.floor(Math.random() * template.topics.length)];
+    const author = AUTHORS[Math.floor(Math.random() * AUTHORS.length)];
+    
+    // Determine if this post should violate a rule
+    const shouldViolate = Math.random() < (0.4 + gameState.difficulty * 0.1);
+    let violatedRule = null;
+    let violationText = '';
+
+    if (shouldViolate && gameState.activeRules.length > 0) {
+      const activeRuleIds = gameState.activeRules;
+      const randomRuleId = activeRuleIds[Math.floor(Math.random() * activeRuleIds.length)];
+      violatedRule = RULES.find(rule => rule.id === randomRuleId);
+      
+      if (violatedRule && template.violationHints[randomRuleId]) {
+        const hints = template.violationHints[randomRuleId];
+        violationText = hints[Math.floor(Math.random() * hints.length)];
+      }
+    }
+
+    // Generate post content
+    const titlePart = template.titleParts[Math.floor(Math.random() * template.titleParts.length)];
+    const bodyPart = template.bodyParts[Math.floor(Math.random() * template.bodyParts.length)];
+    
+    let title = `${titlePart} ${topic}`;
+    let body = `${bodyPart} ${topic}. I've been thinking about this for a while and wanted to get everyone's thoughts.`;
+    
+    // Inject violation if needed
+    if (violationText) {
+      if (Math.random() < 0.5) {
+        title += ` - ${violationText}`;
+      } else {
+        body += ` ${violationText}`;
+      }
+    }
+
+    // Create post object
+    gameState.currentPost = {
+      title,
+      body,
+      author,
+      timestamp: generateTimestamp(),
+      upvotes: Math.floor(Math.random() * 1000),
+      isViolating: shouldViolate && violatedRule !== null,
+      violatedRule: violatedRule
+    };
+
+    displayPost(gameState.currentPost);
+    enableActionButtons();
+  }
+
+  function generateTimestamp() {
+    const now = new Date();
+    const hoursAgo = Math.floor(Math.random() * 24);
+    const pastTime = new Date(now.getTime() - hoursAgo * 60 * 60 * 1000);
+    return `${hoursAgo}h ago`;
+  }
+
+  function displayPost(post) {
+    const titleEl = document.getElementById('post-title');
+    const bodyEl = document.getElementById('post-body');
+    const authorEl = document.getElementById('post-author');
+    const timestampEl = document.getElementById('post-timestamp');
+    const upvotesEl = document.getElementById('post-upvotes');
+
+    if (titleEl) titleEl.textContent = post.title;
+    if (bodyEl) bodyEl.textContent = post.body;
+    if (authorEl) authorEl.textContent = post.author;
+    if (timestampEl) timestampEl.textContent = post.timestamp;
+    if (upvotesEl) upvotesEl.textContent = post.upvotes;
+  }
+
+  function handleDecision(decision) {
+    if (!gameState.isGameActive || !gameState.currentPost) return;
+
+    disableActionButtons();
+
+    let isCorrect = false;
+    const post = gameState.currentPost;
+
+    // Determine if decision is correct
+    if (decision === 'approve' && !post.isViolating) {
+      isCorrect = true;
+    } else if (decision === 'remove' && post.isViolating) {
+      isCorrect = true;
+    } else if (decision === 'skip') {
+      isCorrect = null; // Neutral
+    } else {
+      isCorrect = false;
+    }
+
+    // Update game state and show feedback
+    if (isCorrect === true) {
+      handleCorrectDecision();
+    } else if (isCorrect === false) {
+      handleIncorrectDecision();
+    } else {
+      handleSkip();
+    }
+
+    // Continue game or end
+    setTimeout(() => {
+      if (gameState.lives <= 0 || gameState.score < -50) {
+        endGame();
+      } else {
+        generateNewPost();
+      }
+    }, 2000);
+  }
+
+  function handleCorrectDecision() {
+    gameState.streak++;
+    if (gameState.streak > gameState.bestStreak) {
+      gameState.bestStreak = gameState.streak;
+    }
+    
+    const basePoints = 10;
+    const streakMultiplier = Math.floor(gameState.streak / 3) + 1;
+    const points = basePoints * streakMultiplier;
+    
+    gameState.score += points;
+    
+    showFeedback('correct', `+${points} points`);
+    updateDifficulty();
+    updateGameUI();
+  }
+
+  function handleIncorrectDecision() {
+    gameState.lives--;
+    gameState.streak = 0;
+    gameState.score -= 5;
+    
+    showFeedback('incorrect', '-5 points, -1 life');
+    updateGameUI();
+  }
+
+  function handleSkip() {
+    showFeedback('skip', 'Skipped');
+  }
+
+  function showFeedback(type, scoreText) {
+    const postCard = document.querySelector('.post-card');
+    const feedbackOverlay = document.getElementById('feedback-overlay');
+
+    // Flash the post card
+    if (type === 'correct') {
+      postCard.classList.add('correct-flash');
+      setTimeout(() => postCard.classList.remove('correct-flash'), 600);
+    } else if (type === 'incorrect') {
+      postCard.classList.add('incorrect-flash');
+      setTimeout(() => postCard.classList.remove('incorrect-flash'), 600);
+    }
+
+    // Show feedback message
+    const feedbackMsg = document.createElement('div');
+    feedbackMsg.className = `feedback-message feedback-${type === 'skip' ? 'correct' : type}`;
+    feedbackMsg.textContent = type === 'correct' ? 'Correct!' : type === 'incorrect' ? 'Incorrect!' : 'Skipped';
+    feedbackMsg.style.left = '50%';
+    feedbackMsg.style.top = '30%';
+    feedbackMsg.style.transform = 'translateX(-50%) translateY(-50%)';
+    
+    feedbackOverlay.appendChild(feedbackMsg);
+    
+    setTimeout(() => {
+      if (feedbackOverlay.contains(feedbackMsg)) {
+        feedbackOverlay.removeChild(feedbackMsg);
+      }
+    }, 2000);
+
+    // Show score popup if not skip
+    if (type !== 'skip') {
+      const scorePopup = document.createElement('div');
+      scorePopup.className = `score-popup score-${type === 'correct' ? 'positive' : 'negative'}`;
+      scorePopup.textContent = scoreText;
+      
+      const rect = postCard.getBoundingClientRect();
+      scorePopup.style.left = (rect.left + rect.width / 2) + 'px';
+      scorePopup.style.top = (rect.top + rect.height / 2) + 'px';
+      scorePopup.style.position = 'fixed';
+      
+      feedbackOverlay.appendChild(scorePopup);
+      
+      setTimeout(() => {
+        if (feedbackOverlay.contains(scorePopup)) {
+          feedbackOverlay.removeChild(scorePopup);
+        }
+      }, 1500);
+    }
+  }
+
+  function updateDifficulty() {
+    if (gameState.score > 0 && gameState.score % 50 === 0) {
+      gameState.difficulty = Math.min(gameState.difficulty + 1, 5);
+    }
+  }
+
+  function enableActionButtons() {
+    const buttons = ['approve-btn', 'remove-btn', 'skip-btn'];
+    buttons.forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.disabled = false;
+    });
+  }
+
+  function disableActionButtons() {
+    const buttons = ['approve-btn', 'remove-btn', 'skip-btn'];
+    buttons.forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.disabled = true;
+    });
+  }
+
+  function endGame() {
+    gameState.isGameActive = false;
+    const isNewHighScore = saveHighScore();
+    
+    // Update game over screen
+    const finalScoreEl = document.getElementById('final-score');
+    const bestStreakEl = document.getElementById('best-streak');
+    const newHighScoreEl = document.getElementById('new-high-score');
+    
+    if (finalScoreEl) finalScoreEl.textContent = gameState.score;
+    if (bestStreakEl) bestStreakEl.textContent = gameState.bestStreak;
+    
+    if (newHighScoreEl) {
+      if (isNewHighScore) {
+        newHighScoreEl.classList.remove('hidden');
+      } else {
+        newHighScoreEl.classList.add('hidden');
+      }
+    }
+    
+    showScreen('game-over-screen');
+  }
+
+  // Initialize the application
+  init();
+}

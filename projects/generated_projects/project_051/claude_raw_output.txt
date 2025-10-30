@@ -1,0 +1,1362 @@
+---index.html---
+<div id="app">
+  <div id="main-menu" class="screen">
+    <div class="menu-container">
+      <h1 class="game-title">BROOM SWEEP</h1>
+      <p class="game-subtitle">Clean the parking lot before sealing time!</p>
+      <div class="high-score-display">High Score: <span id="main-menu-high-score">0</span></div>
+      <div class="menu-buttons">
+        <button id="start-game-btn" class="menu-btn primary">Start Game</button>
+        <button id="instructions-btn" class="menu-btn">Instructions</button>
+        <button id="high-score-btn" class="menu-btn">High Score</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="instructions-screen" class="screen">
+    <div class="instructions-container">
+      <h2>How to Play</h2>
+      <div class="instructions-content">
+        <div class="controls-section">
+          <h3>Controls</h3>
+          <p><strong>WASD</strong> or <strong>Arrow Keys</strong> - Move broom</p>
+          <p><strong>ESC</strong> - Pause game</p>
+        </div>
+        <div class="objective-section">
+          <h3>Objective</h3>
+          <p>Sweep all debris from the parking lot before the sealing timer runs out!</p>
+        </div>
+        <div class="debris-section">
+          <h3>Debris Types</h3>
+          <p><span class="debris-standard">■</span> Standard - 1 sweep to clear</p>
+          <p><span class="debris-sticky">■</span> Sticky - 2 sweeps to clear</p>
+          <p><span class="debris-heavy">■</span> Heavy - 3 sweeps to clear</p>
+        </div>
+        <div class="powerups-section">
+          <h3>Power-ups</h3>
+          <p><span class="powerup-speed">⚡</span> Speed Boost - Move faster</p>
+          <p><span class="powerup-sweep">◆</span> Wider Sweep - Larger sweep radius</p>
+          <p><span class="powerup-time">⏰</span> Time Extension - More time</p>
+        </div>
+        <div class="obstacles-section">
+          <h3>Obstacles</h3>
+          <p><span class="obstacle-car">🚗</span> Cars - Cannot pass through</p>
+          <p><span class="obstacle-oil">●</span> Oil Slicks - Slows movement</p>
+        </div>
+      </div>
+      <button id="back-from-instructions-btn" class="menu-btn">Back</button>
+    </div>
+  </div>
+
+  <div id="high-score-screen" class="screen">
+    <div class="high-score-container">
+      <h2>High Score</h2>
+      <div class="high-score-value" id="high-score-display">0</div>
+      <button id="back-from-high-score-btn" class="menu-btn">Back</button>
+    </div>
+  </div>
+
+  <div id="game-screen" class="screen">
+    <div class="game-hud">
+      <div class="hud-left">
+        <div class="score">Score: <span id="score-display">0</span></div>
+        <div class="level">Level: <span id="level-display">1</span></div>
+      </div>
+      <div class="hud-center">
+        <div class="timer" id="timer-display">60</div>
+      </div>
+      <div class="hud-right">
+        <div class="debris-count">Debris: <span id="debris-count-display">0</span></div>
+      </div>
+    </div>
+    <canvas id="gameCanvas" width="800" height="600"></canvas>
+    <div id="perfect-sweep-overlay" class="overlay">
+      <div class="perfect-sweep-text">PERFECT SWEEP!</div>
+    </div>
+  </div>
+
+  <div id="game-over-screen" class="screen">
+    <div class="game-over-container">
+      <h2 id="game-over-title">Game Over</h2>
+      <div id="game-over-reason" class="game-over-reason">BAD SEAL!</div>
+      <div class="final-score">Final Score: <span id="final-score-display">0</span></div>
+      <div class="high-score-final">High Score: <span id="final-high-score-display">0</span></div>
+      <div class="game-over-buttons">
+        <button id="play-again-btn" class="menu-btn primary">Play Again</button>
+        <button id="main-menu-from-game-over-btn" class="menu-btn">Main Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="pause-menu" class="screen overlay-screen">
+    <div class="pause-container">
+      <h2>Paused</h2>
+      <div class="pause-buttons">
+        <button id="resume-btn" class="menu-btn primary">Resume</button>
+        <button id="main-menu-from-pause-btn" class="menu-btn">Main Menu</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+---style.css---
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  color: #fff;
+  overflow: hidden;
+}
+
+#app {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease-in-out;
+}
+
+.screen.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.overlay-screen {
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 100;
+}
+
+/* Main Menu */
+.menu-container {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 40px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.game-title {
+  font-size: 4rem;
+  margin-bottom: 10px;
+  color: #ffd700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  animation: titleGlow 2s ease-in-out infinite alternate;
+}
+
+@keyframes titleGlow {
+  from { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 20px rgba(255, 215, 0, 0.3); }
+  to { text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 215, 0, 0.6); }
+}
+
+.game-subtitle {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #ccc;
+}
+
+.high-score-display {
+  font-size: 1.1rem;
+  margin-bottom: 30px;
+  color: #ffd700;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.menu-btn {
+  padding: 15px 30px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.menu-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  background: linear-gradient(135deg, #764ba2, #667eea);
+}
+
+.menu-btn.primary {
+  background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+}
+
+.menu-btn.primary:hover {
+  background: linear-gradient(135deg, #ee5a24, #ff6b6b);
+}
+
+/* Instructions Screen */
+.instructions-container {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 40px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  max-width: 600px;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.instructions-container h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #ffd700;
+  font-size: 2.5rem;
+}
+
+.instructions-content {
+  display: grid;
+  gap: 20px;
+}
+
+.instructions-content h3 {
+  color: #ffd700;
+  margin-bottom: 10px;
+  font-size: 1.3rem;
+}
+
+.instructions-content p {
+  margin-bottom: 8px;
+  line-height: 1.5;
+}
+
+.debris-standard { color: #8B4513; }
+.debris-sticky { color: #DAA520; }
+.debris-heavy { color: #696969; }
+.powerup-speed { color: #00ff00; }
+.powerup-sweep { color: #00bfff; }
+.powerup-time { color: #ffd700; }
+.obstacle-car { color: #ff4444; }
+.obstacle-oil { color: #333; }
+
+/* High Score Screen */
+.high-score-container {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 40px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.high-score-container h2 {
+  color: #ffd700;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+}
+
+.high-score-value {
+  font-size: 4rem;
+  color: #ffd700;
+  margin-bottom: 30px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+/* Game Screen */
+#game-screen {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  padding: 20px;
+}
+
+.game-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 15px 30px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  backdrop-filter: blur(10px);
+}
+
+.hud-left, .hud-right {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.timer {
+  font-size: 2.5rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px 20px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  transition: color 0.3s ease;
+}
+
+.timer.urgent {
+  animation: timerPulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes timerPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.1); }
+}
+
+#gameCanvas {
+  background: #2c3e50;
+  border: 3px solid #34495e;
+  border-radius: 10px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Overlays */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 50;
+}
+
+.overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.perfect-sweep-text {
+  font-size: 4rem;
+  color: #ffd700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  animation: perfectSweepAnim 2s ease-out;
+}
+
+@keyframes perfectSweepAnim {
+  0% { transform: scale(0) rotate(-180deg); opacity: 0; }
+  50% { transform: scale(1.2) rotate(0deg); opacity: 1; }
+  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+/* Game Over Screen */
+.game-over-container {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 40px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.game-over-container h2 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+  color: #ff6b6b;
+}
+
+.game-over-reason {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  color: #ff4444;
+  font-weight: bold;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.final-score, .high-score-final {
+  font-size: 1.5rem;
+  margin-bottom: 15px;
+}
+
+.game-over-buttons {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  margin-top: 30px;
+}
+
+/* Pause Menu */
+.pause-container {
+  text-align: center;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 40px;
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.pause-container h2 {
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  color: #ffd700;
+}
+
+.pause-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Screen Shake */
+@keyframes screenShake {
+  0%, 100% { transform: translate(0, 0); }
+  25% { transform: translate(-2px, 2px); }
+  50% { transform: translate(2px, -2px); }
+  75% { transform: translate(-1px, -1px); }
+}
+
+.shake {
+  animation: screenShake 0.5s ease-in-out;
+}
+
+/* Bad Seal Effect */
+.bad-seal {
+  filter: brightness(0.8) sepia(0.5) hue-rotate(-50deg);
+}
+
+/* Score Popup Animation */
+@keyframes scorePopup {
+  0% { transform: translateY(0) scale(0.5); opacity: 0; }
+  20% { transform: translateY(-10px) scale(1.2); opacity: 1; }
+  100% { transform: translateY(-50px) scale(1); opacity: 0; }
+}
+
+.score-popup {
+  position: absolute;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ffd700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  animation: scorePopup 1s ease-out forwards;
+  z-index: 10;
+}
+
+---script.js---
+const GAME_CONFIG = {
+  CANVAS_WIDTH: 800,
+  CANVAS_HEIGHT: 600,
+  CELL_SIZE: 40,
+  PLAYER_SPEED: 200,
+  INITIAL_DEBRIS_COUNT: 15,
+  INITIAL_TIME_LIMIT: 60,
+  POWERUP_CHANCE: 0.1,
+  OBSTACLE_CHANCE: 0.15,
+  PERFECT_SWEEP_BONUS: 1000,
+  DEBRIS_POINTS: {
+    standard: 10,
+    sticky: 20,
+    heavy: 30
+  },
+  POWERUP_DURATION: 10000,
+  SPEED_BOOST_MULTIPLIER: 1.5,
+  SWEEP_RADIUS_BOOST: 1.5,
+  TIME_EXTENSION: 15
+};
+
+let gameState = {
+  currentScreen: 'main-menu',
+  gameRunning: false,
+  isPaused: false,
+  currentLevel: 1,
+  score: 0,
+  highScore: 0,
+  timeLeft: GAME_CONFIG.INITIAL_TIME_LIMIT,
+  lastTime: 0,
+  player: {
+    x: 0,
+    y: 0,
+    dx: 0,
+    dy: 0,
+    speed: GAME_CONFIG.PLAYER_SPEED,
+    sweepRadius: 25,
+    animationTime: 0,
+    lastMoveDirection: { x: 0, y: 0 }
+  },
+  grid: [],
+  debris: [],
+  powerUps: [],
+  obstacles: [],
+  particles: [],
+  scorePopups: [],
+  activePowerUps: [],
+  keys: {}
+};
+
+let canvas, ctx;
+
+function initApp() {
+  // Get canvas and context
+  canvas = document.getElementById('gameCanvas');
+  ctx = canvas.getContext('2d');
+  
+  // Load high score
+  loadHighScore();
+  updateHighScoreDisplays();
+  
+  // Set up event listeners
+  setupEventListeners();
+  
+  // Show main menu
+  showScreen('main-menu');
+  
+  // Start animation loop
+  requestAnimationFrame(gameLoop);
+}
+
+function setupEventListeners() {
+  // Menu buttons
+  document.getElementById('start-game-btn')?.addEventListener('click', startGame);
+  document.getElementById('instructions-btn')?.addEventListener('click', () => showScreen('instructions-screen'));
+  document.getElementById('high-score-btn')?.addEventListener('click', () => showScreen('high-score-screen'));
+  document.getElementById('back-from-instructions-btn')?.addEventListener('click', () => showScreen('main-menu'));
+  document.getElementById('back-from-high-score-btn')?.addEventListener('click', () => showScreen('main-menu'));
+  document.getElementById('play-again-btn')?.addEventListener('click', startGame);
+  document.getElementById('main-menu-from-game-over-btn')?.addEventListener('click', () => showScreen('main-menu'));
+  document.getElementById('resume-btn')?.addEventListener('click', togglePause);
+  document.getElementById('main-menu-from-pause-btn')?.addEventListener('click', () => {
+    gameState.gameRunning = false;
+    gameState.isPaused = false;
+    showScreen('main-menu');
+  });
+  
+  // Keyboard controls
+  document.addEventListener('keydown', handleKeyDown);
+  document.addEventListener('keyup', handleKeyUp);
+}
+
+function handleKeyDown(e) {
+  gameState.keys[e.key.toLowerCase()] = true;
+  
+  if (e.key === 'Escape' && gameState.currentScreen === 'game-screen') {
+    togglePause();
+  }
+}
+
+function handleKeyUp(e) {
+  gameState.keys[e.key.toLowerCase()] = false;
+}
+
+function showScreen(screenId) {
+  // Hide all screens
+  document.querySelectorAll('.screen').forEach(screen => {
+    screen.classList.remove('active');
+  });
+  
+  // Show target screen
+  const targetScreen = document.getElementById(screenId);
+  if (targetScreen) {
+    targetScreen.classList.add('active');
+    gameState.currentScreen = screenId;
+  }
+}
+
+function loadHighScore() {
+  const saved = localStorage.getItem('broomSweepHighScore');
+  gameState.highScore = saved ? parseInt(saved) : 0;
+}
+
+function saveHighScore() {
+  localStorage.setItem('broomSweepHighScore', gameState.highScore.toString());
+}
+
+function updateHighScoreDisplays() {
+  const mainMenuHighScore = document.getElementById('main-menu-high-score');
+  const highScoreDisplay = document.getElementById('high-score-display');
+  
+  if (mainMenuHighScore) mainMenuHighScore.textContent = gameState.highScore;
+  if (highScoreDisplay) highScoreDisplay.textContent = gameState.highScore;
+}
+
+function startGame() {
+  // Reset game state
+  gameState.gameRunning = true;
+  gameState.isPaused = false;
+  gameState.score = 0;
+  gameState.currentLevel = 1;
+  gameState.timeLeft = GAME_CONFIG.INITIAL_TIME_LIMIT;
+  gameState.debris = [];
+  gameState.powerUps = [];
+  gameState.obstacles = [];
+  gameState.particles = [];
+  gameState.scorePopups = [];
+  gameState.activePowerUps = [];
+  
+  // Reset player
+  gameState.player.speed = GAME_CONFIG.PLAYER_SPEED;
+  gameState.player.sweepRadius = 25;
+  gameState.player.dx = 0;
+  gameState.player.dy = 0;
+  
+  // Generate level
+  generateGrid();
+  spawnDebris();
+  spawnPowerUps();
+  spawnObstacles();
+  
+  // Place player
+  placePlayer();
+  
+  // Update UI
+  updateHUD();
+  
+  // Show game screen
+  showScreen('game-screen');
+}
+
+function generateGrid() {
+  const cols = Math.floor(GAME_CONFIG.CANVAS_WIDTH / GAME_CONFIG.CELL_SIZE);
+  const rows = Math.floor(GAME_CONFIG.CANVAS_HEIGHT / GAME_CONFIG.CELL_SIZE);
+  
+  gameState.grid = [];
+  for (let y = 0; y < rows; y++) {
+    gameState.grid[y] = [];
+    for (let x = 0; x < cols; x++) {
+      gameState.grid[y][x] = { type: 'floor' };
+    }
+  }
+}
+
+function spawnDebris() {
+  const cols = Math.floor(GAME_CONFIG.CANVAS_WIDTH / GAME_CONFIG.CELL_SIZE);
+  const rows = Math.floor(GAME_CONFIG.CANVAS_HEIGHT / GAME_CONFIG.CELL_SIZE);
+  const debrisCount = GAME_CONFIG.INITIAL_DEBRIS_COUNT + (gameState.currentLevel - 1) * 3;
+  
+  for (let i = 0; i < debrisCount; i++) {
+    let x, y;
+    do {
+      x = Math.floor(Math.random() * cols);
+      y = Math.floor(Math.random() * rows);
+    } while (isOccupied(x, y));
+    
+    const types = ['standard', 'sticky', 'heavy'];
+    const weights = [0.6, 0.3, 0.1];
+    const type = weightedRandom(types, weights);
+    
+    const debris = {
+      x: x * GAME_CONFIG.CELL_SIZE + GAME_CONFIG.CELL_SIZE / 2,
+      y: y * GAME_CONFIG.CELL_SIZE + GAME_CONFIG.CELL_SIZE / 2,
+      type: type,
+      requiredSweeps: type === 'standard' ? 1 : type === 'sticky' ? 2 : 3,
+      currentSweeps: 0
+    };
+    
+    gameState.debris.push(debris);
+  }
+}
+
+function spawnPowerUps() {
+  const cols = Math.floor(GAME_CONFIG.CANVAS_WIDTH / GAME_CONFIG.CELL_SIZE);
+  const rows = Math.floor(GAME_CONFIG.CANVAS_HEIGHT / GAME_CONFIG.CELL_SIZE);
+  
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      if (!isOccupied(x, y) && Math.random() < GAME_CONFIG.POWERUP_CHANCE) {
+        const types = ['speed', 'sweep', 'time'];
+        const type = types[Math.floor(Math.random() * types.length)];
+        
+        gameState.powerUps.push({
+          x: x * GAME_CONFIG.CELL_SIZE + GAME_CONFIG.CELL_SIZE / 2,
+          y: y * GAME_CONFIG.CELL_SIZE + GAME_CONFIG.CELL_SIZE / 2,
+          type: type
+        });
+      }
+    }
+  }
+}
+
+function spawnObstacles() {
+  const cols = Math.floor(GAME_CONFIG.CANVAS_WIDTH / GAME_CONFIG.CELL_SIZE);
+  const rows = Math.floor(GAME_CONFIG.CANVAS_HEIGHT / GAME_CONFIG.CELL_SIZE);
+  
+  for (let y = 0; y < rows; y++) {
+    for (let x = 0; x < cols; x++) {
+      if (!isOccupied(x, y) && Math.random() < GAME_CONFIG.OBSTACLE_CHANCE) {
+        const types = ['car', 'oil'];
+        const type = types[Math.floor(Math.random() * types.length)];
+        
+        gameState.obstacles.push({
+          x: x * GAME_CONFIG.CELL_SIZE + GAME_CONFIG.CELL_SIZE / 2,
+          y: y * GAME_CONFIG.CELL_SIZE + GAME_CONFIG.CELL_SIZE / 2,
+          type: type
+        });
+      }
+    }
+  }
+}
+
+function isOccupied(gridX, gridY) {
+  const pixelX = gridX * GAME_CONFIG.CELL_SIZE + GAME_CONFIG.CELL_SIZE / 2;
+  const pixelY = gridY * GAME_CONFIG.CELL_SIZE + GAME_CONFIG.CELL_SIZE / 2;
+  
+  // Check debris
+  if (gameState.debris.some(d => Math.abs(d.x - pixelX) < 5 && Math.abs(d.y - pixelY) < 5)) return true;
+  
+  // Check power-ups
+  if (gameState.powerUps.some(p => Math.abs(p.x - pixelX) < 5 && Math.abs(p.y - pixelY) < 5)) return true;
+  
+  // Check obstacles
+  if (gameState.obstacles.some(o => Math.abs(o.x - pixelX) < 5 && Math.abs(o.y - pixelY) < 5)) return true;
+  
+  // Keep center area clear for player spawn
+  if (Math.abs(pixelX - GAME_CONFIG.CANVAS_WIDTH / 2) < 60 && 
+      Math.abs(pixelY - GAME_CONFIG.CANVAS_HEIGHT / 2) < 60) return true;
+  
+  return false;
+}
+
+function placePlayer() {
+  gameState.player.x = GAME_CONFIG.CANVAS_WIDTH / 2;
+  gameState.player.y = GAME_CONFIG.CANVAS_HEIGHT / 2;
+}
+
+function weightedRandom(items, weights) {
+  const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
+  let random = Math.random() * totalWeight;
+  
+  for (let i = 0; i < items.length; i++) {
+    random -= weights[i];
+    if (random <= 0) return items[i];
+  }
+  
+  return items[items.length - 1];
+}
+
+function togglePause() {
+  if (!gameState.gameRunning) return;
+  
+  gameState.isPaused = !gameState.isPaused;
+  
+  if (gameState.isPaused) {
+    showScreen('pause-menu');
+  } else {
+    showScreen('game-screen');
+  }
+}
+
+function gameLoop(currentTime) {
+  const deltaTime = currentTime - gameState.lastTime;
+  gameState.lastTime = currentTime;
+  
+  if (gameState.gameRunning && !gameState.isPaused) {
+    update(deltaTime);
+    draw();
+  }
+  
+  requestAnimationFrame(gameLoop);
+}
+
+function update(deltaTime) {
+  // Update player movement
+  updatePlayer(deltaTime);
+  
+  // Update timer
+  gameState.timeLeft -= deltaTime / 1000;
+  updateTimerDisplay();
+  
+  // Update power-ups
+  updatePowerUps(deltaTime);
+  
+  // Update particles
+  updateParticles(deltaTime);
+  
+  // Update score popups
+  updateScorePopups(deltaTime);
+  
+  // Check sweeping
+  checkSweep();
+  
+  // Check win/loss conditions
+  checkGameConditions();
+  
+  // Update HUD
+  updateHUD();
+}
+
+function updatePlayer(deltaTime) {
+  // Get input
+  let dx = 0, dy = 0;
+  
+  if (gameState.keys['w'] || gameState.keys['arrowup']) dy = -1;
+  if (gameState.keys['s'] || gameState.keys['arrowdown']) dy = 1;
+  if (gameState.keys['a'] || gameState.keys['arrowleft']) dx = -1;
+  if (gameState.keys['d'] || gameState.keys['arrowright']) dx = 1;
+  
+  // Normalize diagonal movement
+  if (dx !== 0 && dy !== 0) {
+    dx *= 0.707;
+    dy *= 0.707;
+  }
+  
+  gameState.player.dx = dx;
+  gameState.player.dy = dy;
+  
+  // Store last move direction for animation
+  if (dx !== 0 || dy !== 0) {
+    gameState.player.lastMoveDirection = { x: dx, y: dy };
+  }
+  
+  // Calculate new position
+  const speed = gameState.player.speed * (deltaTime / 1000);
+  let newX = gameState.player.x + dx * speed;
+  let newY = gameState.player.y + dy * speed;
+  
+  // Check collision with obstacles
+  if (!checkObstacleCollision(newX, newY)) {
+    gameState.player.x = Math.max(20, Math.min(GAME_CONFIG.CANVAS_WIDTH - 20, newX));
+    gameState.player.y = Math.max(20, Math.min(GAME_CONFIG.CANVAS_HEIGHT - 20, newY));
+  }
+  
+  // Check if on oil slick
+  checkOilSlick();
+  
+  // Update animation time
+  gameState.player.animationTime += deltaTime;
+}
+
+function checkObstacleCollision(x, y) {
+  return gameState.obstacles.some(obstacle => {
+    if (obstacle.type === 'car') {
+      const dist = Math.sqrt((x - obstacle.x) ** 2 + (y - obstacle.y) ** 2);
+      return dist < 25;
+    }
+    return false;
+  });
+}
+
+function checkOilSlick() {
+  const onOil = gameState.obstacles.some(obstacle => {
+    if (obstacle.type === 'oil') {
+      const dist = Math.sqrt((gameState.player.x - obstacle.x) ** 2 + (gameState.player.y - obstacle.y) ** 2);
+      return dist < 20;
+    }
+    return false;
+  });
+  
+  if (onOil) {
+    gameState.player.speed = GAME_CONFIG.PLAYER_SPEED * 0.5;
+  } else {
+    // Reset to base speed (accounting for power-ups)
+    gameState.player.speed = GAME_CONFIG.PLAYER_SPEED;
+    const speedBoost = gameState.activePowerUps.find(p => p.type === 'speed');
+    if (speedBoost) {
+      gameState.player.speed *= GAME_CONFIG.SPEED_BOOST_MULTIPLIER;
+    }
+  }
+}
+
+function checkSweep() {
+  if (gameState.player.dx === 0 && gameState.player.dy === 0) return;
+  
+  // Check debris
+  for (let i = gameState.debris.length - 1; i >= 0; i--) {
+    const debris = gameState.debris[i];
+    const dist = Math.sqrt((gameState.player.x - debris.x) ** 2 + (gameState.player.y - debris.y) ** 2);
+    
+    if (dist < gameState.player.sweepRadius) {
+      debris.currentSweeps++;
+      
+      // Create particles
+      createDebrisParticles(debris.x, debris.y, debris.type);
+      
+      if (debris.currentSweeps >= debris.requiredSweeps) {
+        // Remove debris
+        gameState.debris.splice(i, 1);
+        
+        // Add score
+        const points = GAME_CONFIG.DEBRIS_POINTS[debris.type];
+        gameState.score += points;
+        
+        // Create score popup
+        createScorePopup(debris.x, debris.y, `+${points}`);
+      }
+    }
+  }
+  
+  // Check power-ups
+  for (let i = gameState.powerUps.length - 1; i >= 0; i--) {
+    const powerUp = gameState.powerUps[i];
+    const dist = Math.sqrt((gameState.player.x - powerUp.x) ** 2 + (gameState.player.y - powerUp.y) ** 2);
+    
+    if (dist < gameState.player.sweepRadius) {
+      // Apply power-up
+      applyPowerUp(powerUp.type);
+      
+      // Create particles
+      createPowerUpParticles(powerUp.x, powerUp.y, powerUp.type);
+      
+      // Remove power-up
+      gameState.powerUps.splice(i, 1);
+    }
+  }
+}
+
+function applyPowerUp(type) {
+  const powerUp = {
+    type: type,
+    timeLeft: GAME_CONFIG.POWERUP_DURATION
+  };
+  
+  // Remove existing power-up of same type
+  gameState.activePowerUps = gameState.activePowerUps.filter(p => p.type !== type);
+  
+  // Add new power-up
+  gameState.activePowerUps.push(powerUp);
+  
+  // Apply immediate effects
+  if (type === 'speed') {
+    gameState.player.speed = GAME_CONFIG.PLAYER_SPEED * GAME_CONFIG.SPEED_BOOST_MULTIPLIER;
+  } else if (type === 'sweep') {
+    gameState.player.sweepRadius = 25 * GAME_CONFIG.SWEEP_RADIUS_BOOST;
+  } else if (type === 'time') {
+    gameState.timeLeft += GAME_CONFIG.TIME_EXTENSION;
+  }
+}
+
+function updatePowerUps(deltaTime) {
+  for (let i = gameState.activePowerUps.length - 1; i >= 0; i--) {
+    const powerUp = gameState.activePowerUps[i];
+    powerUp.timeLeft -= deltaTime;
+    
+    if (powerUp.timeLeft <= 0) {
+      // Remove power-up effect
+      if (powerUp.type === 'speed') {
+        gameState.player.speed = GAME_CONFIG.PLAYER_SPEED;
+      } else if (powerUp.type === 'sweep') {
+        gameState.player.sweepRadius = 25;
+      }
+      
+      gameState.activePowerUps.splice(i, 1);
+    }
+  }
+}
+
+function createDebrisParticles(x, y, type) {
+  const colors = {
+    standard: '#8B4513',
+    sticky: '#DAA520',
+    heavy: '#696969'
+  };
+  
+  for (let i = 0; i < 8; i++) {
+    gameState.particles.push({
+      x: x,
+      y: y,
+      vx: (Math.random() - 0.5) * 100,
+      vy: (Math.random() - 0.5) * 100,
+      color: colors[type],
+      size: Math.random() * 4 + 2,
+      lifetime: 500,
+      maxLifetime: 500
+    });
+  }
+}
+
+function createPowerUpParticles(x, y, type) {
+  const colors = {
+    speed: '#00ff00',
+    sweep: '#00bfff',
+    time: '#ffd700'
+  };
+  
+  for (let i = 0; i < 12; i++) {
+    gameState.particles.push({
+      x: x,
+      y: y,
+      vx: (Math.random() - 0.5) * 150,
+      vy: (Math.random() - 0.5) * 150,
+      color: colors[type],
+      size: Math.random() * 6 + 3,
+      lifetime: 800,
+      maxLifetime: 800
+    });
+  }
+}
+
+function createScorePopup(x, y, text) {
+  gameState.scorePopups.push({
+    x: x,
+    y: y,
+    text: text,
+    lifetime: 1000,
+    maxLifetime: 1000
+  });
+}
+
+function updateParticles(deltaTime) {
+  for (let i = gameState.particles.length - 1; i >= 0; i--) {
+    const particle = gameState.particles[i];
+    
+    particle.x += particle.vx * (deltaTime / 1000);
+    particle.y += particle.vy * (deltaTime / 1000);
+    particle.lifetime -= deltaTime;
+    
+    if (particle.lifetime <= 0) {
+      gameState.particles.splice(i, 1);
+    }
+  }
+}
+
+function updateScorePopups(deltaTime) {
+  for (let i = gameState.scorePopups.length - 1; i >= 0; i--) {
+    const popup = gameState.scorePopups[i];
+    
+    popup.y -= 50 * (deltaTime / 1000);
+    popup.lifetime -= deltaTime;
+    
+    if (popup.lifetime <= 0) {
+      gameState.scorePopups.splice(i, 1);
+    }
+  }
+}
+
+function checkGameConditions() {
+  if (gameState.timeLeft <= 0) {
+    if (gameState.debris.length > 0) {
+      gameOver('bad_seal');
+    } else {
+      levelComplete();
+    }
+  } else if (gameState.debris.length === 0) {
+    levelComplete();
+  }
+}
+
+function levelComplete() {
+  // Add perfect sweep bonus
+  gameState.score += GAME_CONFIG.PERFECT_SWEEP_BONUS;
+  
+  // Show perfect sweep overlay
+  showPerfectSweepOverlay();
+  
+  // Level up
+  gameState.currentLevel++;
+  
+  setTimeout(() => {
+    hidePerfectSweepOverlay();
+    startGame();
+  }, 2000);
+}
+
+function gameOver(reason) {
+  gameState.gameRunning = false;
+  
+  // Update high score
+  if (gameState.score > gameState.highScore) {
+    gameState.highScore = gameState.score;
+    saveHighScore();
+  }
+  
+  // Update game over screen
+  const reasonElement = document.getElementById('game-over-reason');
+  const finalScoreElement = document.getElementById('final-score-display');
+  const finalHighScoreElement = document.getElementById('final-high-score-display');
+  
+  if (reasonElement) reasonElement.textContent = reason === 'bad_seal' ? 'BAD SEAL!' : 'GAME OVER';
+  if (finalScoreElement) finalScoreElement.textContent = gameState.score;
+  if (finalHighScoreElement) finalHighScoreElement.textContent = gameState.highScore;
+  
+  // Apply screen shake and bad seal effect
+  if (reason === 'bad_seal') {
+    screenShake();
+    applyBadSealEffect();
+  }
+  
+  // Show game over screen
+  setTimeout(() => {
+    showScreen('game-over-screen');
+    updateHighScoreDisplays();
+  }, 1000);
+}
+
+function showPerfectSweepOverlay() {
+  const overlay = document.getElementById('perfect-sweep-overlay');
+  if (overlay) overlay.classList.add('show');
+}
+
+function hidePerfectSweepOverlay() {
+  const overlay = document.getElementById('perfect-sweep-overlay');
+  if (overlay) overlay.classList.remove('show');
+}
+
+function screenShake() {
+  const app = document.getElementById('app');
+  if (app) {
+    app.classList.add('shake');
+    setTimeout(() => app.classList.remove('shake'), 500);
+  }
+}
+
+function applyBadSealEffect() {
+  const gameScreen = document.getElementById('game-screen');
+  if (gameScreen) {
+    gameScreen.classList.add('bad-seal');
+    setTimeout(() => gameScreen.classList.remove('bad-seal'), 1000);
+  }
+}
+
+function updateTimerDisplay() {
+  const timerElement = document.getElementById('timer-display');
+  if (!timerElement) return;
+  
+  const timeRemaining = Math.max(0, Math.ceil(gameState.timeLeft));
+  timerElement.textContent = timeRemaining;
+  
+  // Color coding
+  const percentage = gameState.timeLeft / (GAME_CONFIG.INITIAL_TIME_LIMIT + (gameState.currentLevel - 1) * -5);
+  
+  if (percentage > 0.5) {
+    timerElement.style.color = '#00ff00';
+    timerElement.classList.remove('urgent');
+  } else if (percentage > 0.25) {
+    timerElement.style.color = '#ffff00';
+    timerElement.classList.remove('urgent');
+  } else if (percentage > 0.1) {
+    timerElement.style.color = '#ff8800';
+    timerElement.classList.add('urgent');
+  } else {
+    timerElement.style.color = '#ff0000';
+    timerElement.classList.add('urgent');
+  }
+}
+
+function updateHUD() {
+  const scoreElement = document.getElementById('score-display');
+  const levelElement = document.getElementById('level-display');
+  const debrisCountElement = document.getElementById('debris-count-display');
+  
+  if (scoreElement) scoreElement.textContent = gameState.score;
+  if (levelElement) levelElement.textContent = gameState.currentLevel;
+  if (debrisCountElement) debrisCountElement.textContent = gameState.debris.length;
+}
+
+function draw() {
+  if (!ctx) return;
+  
+  // Clear canvas
+  ctx.fillStyle = '#2c3e50';
+  ctx.fillRect(0, 0, GAME_CONFIG.CANVAS_WIDTH, GAME_CONFIG.CANVAS_HEIGHT);
+  
+  // Draw grid
+  drawGrid();
+  
+  // Draw obstacles
+  drawObstacles();
+  
+  // Draw debris
+  drawDebris();
+  
+  // Draw power-ups
+  drawPowerUps();
+  
+  // Draw player
+  drawPlayer();
+  
+  // Draw particles
+  drawParticles();
+  
+  // Draw score popups
+  drawScorePopups();
+  
+  // Draw sweep radius (for debugging/feedback)
+  if (gameState.player.dx !== 0 || gameState.player.dy !== 0) {
+    drawSweepRadius();
+  }
+}
+
+function drawGrid() {
+  ctx.strokeStyle = '#34495e';
+  ctx.lineWidth = 1;
+  
+  for (let x = 0; x <= GAME_CONFIG.CANVAS_WIDTH; x += GAME_CONFIG.CELL_SIZE) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, GAME_CONFIG.CANVAS_HEIGHT);
+    ctx.stroke();
+  }
+  
+  for (let y = 0; y <= GAME_CONFIG.CANVAS_HEIGHT; y += GAME_CONFIG.CELL_SIZE) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(GAME_CONFIG.CANVAS_WIDTH, y);
+    ctx.stroke();
+  }
+}
+
+function drawObstacles() {
+  gameState.obstacles.forEach(obstacle => {
+    if (obstacle.type === 'car') {
+      ctx.fillStyle = '#ff4444';
+      ctx.fillRect(obstacle.x - 15, obstacle.y - 10, 30, 20);
+      
+      // Car details
+      ctx.fillStyle = '#333';
+      ctx.fillRect(obstacle.x - 12, obstacle.y - 7, 24, 14);
+      ctx.fillStyle = '#666';
+      ctx.fillRect(obstacle.x - 10, obstacle.y - 5, 20, 10);
+    } else if (obstacle.type === 'oil') {
+      ctx.fillStyle = '#333';
+      ctx.beginPath();
+      ctx.arc(obstacle.x, obstacle.y, 15, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Oil shine
+      ctx.fillStyle = '#555';
+      ctx.beginPath();
+      ctx.arc(obstacle.x - 3, obstacle.y - 3, 5, 0, Math.PI * 2);
+      ctx.fill();
+    }
+  });
+}
+
+function drawDebris() {
+  gameState.debris.forEach(debris => {
+    const colors = {
+      standard: '#8B4513',
+      sticky: '#DAA520',
+      heavy: '#696969'
+    };
+    
+    ctx.fillStyle = colors[debris.type];
+    
+    // Draw debris with sweep indication
+    const size = 8 - (debris.currentSweeps * 2);
+    ctx.fillRect(debris.x - size/2, debris.y - size/2, size, size);
+    
+    // Draw progress indicator for multi-sweep debris
+    if (debris.requiredSweeps > 1) {
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+      ctx.font = '10px Arial';
+      ctx.textAlign = 'center';
+      ctx.fillText((debris.requiredSweeps - debris.currentSweeps).toString(), debris.x, debris.y - 12);
+    }
+  });
+}
+
+function drawPowerUps() {
+  gameState.powerUps.forEach(powerUp => {
+    const colors = {
+      speed: '#00ff00',
+      sweep: '#00bfff',
+      time: '#ffd700'
+    };
+    
+    const symbols = {
+      speed: '⚡',
+      sweep: '◆',
+      time: '⏰'
+    };
+    
+    // Pulsing effect
+    const pulse = Math.sin(gameState.player.animationTime * 0.005) * 0.2 + 1;
+    
+    ctx.fillStyle = colors[powerUp.type];
+    ctx.beginPath();
+    ctx.arc(powerUp.x, powerUp.y, 8 * pulse, 0, Math.PI * 2);
+    ctx.fill();
+    
+    // Symbol
+    ctx.fillStyle = '#fff';
+    ctx.font = '12px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(symbols[powerUp.type], powerUp.x, powerUp.y + 4);
+  });
+}
+
+function drawPlayer() {
+  const player = gameState.player;
+  
+  // Broom handle
+  ctx.strokeStyle = '#8B4513';
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  
+  // Idle sway or movement direction
+  let angle = 0;
+  if (player.dx !== 0 || player.dy !== 0) {
+    angle = Math.atan2(player.lastMoveDirection.y, player.lastMoveDirection.x);
+  } else {
+    angle = Math.sin(player.animationTime * 0.003) * 0.1;
+  }
+  
+  const handleLength = 20;
+  const handleEndX = player.x + Math.cos(angle) * handleLength;
+  const handleEndY = player.y + Math.sin(angle) * handleLength;
+  
+  ctx.moveTo(player.x, player.y);
+  ctx.lineTo(handleEndX, handleEndY);
+  ctx.stroke();
+  
+  // Broom bristles
+  ctx.strokeStyle = '#DAA520';
+  ctx.lineWidth = 8;
+  ctx.beginPath();
+  ctx.moveTo(handleEndX - 5, handleEndY - 5);
+  ctx.lineTo(handleEndX + 5, handleEndY + 5);
+  ctx.stroke();
+  
+  // Player center
+  ctx.fillStyle = '#ff6b6b';
+  ctx.beginPath();
+  ctx.arc(player.x, player.y, 6, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function drawSweepRadius() {
+  ctx.strokeStyle = 'rgba(255, 255, 255, 0.3)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(gameState.player.x, gameState.player.y, gameState.player.sweepRadius, 0, Math.PI * 2);
+  ctx.stroke();
+}
+
+function drawParticles() {
+  gameState.particles.forEach(particle => {
+    const alpha = particle.lifetime / particle.maxLifetime;
+    ctx.fillStyle = particle.color + Math.floor(alpha * 255).toString(16).padStart(2, '0');
+    
+    ctx.beginPath();
+    ctx.arc(particle.x, particle.y, particle.size * alpha, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function drawScorePopups() {
+  gameState.scorePopups.forEach(popup => {
+    const alpha = popup.lifetime / popup.maxLifetime;
+    ctx.fillStyle = `rgba(255, 215, 0, ${alpha})`;
+    ctx.font = 'bold 16px Arial';
+    ctx.textAlign = 'center';
+    ctx.fillText(popup.text, popup.x, popup.y);
+  });
+}

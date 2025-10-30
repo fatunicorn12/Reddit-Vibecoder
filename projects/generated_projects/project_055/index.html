@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillPath Explorer</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>SkillPath Explorer</h1>
+    <p class="project-description">A static web app for discovering transferable skills from non-traditional life experiences, generating ready-to-use resu...</p>
+  </header>
+  <main>
+    <div id="app">
+      <div id="app">
+  <div class="app-container">
+    <!-- Search Section -->
+    <div class="search-section">
+      <input type="text" id="searchInput" placeholder="Search experiences..." class="search-input">
+      <button id="helpToggle" class="help-button">Help</button>
+    </div>
+
+    <!-- Help Section (Initially Hidden) -->
+    <div id="helpSection" class="help-section hidden">
+      <h3>How to Use SkillPath Explorer</h3>
+      <div class="help-content">
+        <div class="help-item">
+          <h4>1. Select Experiences</h4>
+          <p>Choose from various life experiences like volunteering, caregiving, or freelance work. Each experience reveals transferable skills.</p>
+        </div>
+        <div class="help-item">
+          <h4>2. Filter Skills</h4>
+          <p>Use category filters to focus on specific skill types like Leadership, Communication, or Technical skills.</p>
+        </div>
+        <div class="help-item">
+          <h4>3. View Resume Bullets</h4>
+          <p>Each skill shows ready-to-use resume bullet points. Hover over skills to see detailed descriptions.</p>
+        </div>
+        <div class="help-item">
+          <h4>4. Save & Export</h4>
+          <p>Save your skill combinations as snapshots or export them as text files for your resume.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="main-content">
+      <!-- Left Panel: Experience Selection -->
+      <div class="left-panel">
+        <div class="panel-header">
+          <h2>Select Your Experiences</h2>
+          <div class="category-filters">
+            <button class="filter-btn active" data-category="all">All Categories</button>
+          </div>
+        </div>
+        <div id="experienceList" class="experience-list"></div>
+        
+        <!-- Add Custom Experience -->
+        <div class="custom-experience-section">
+          <button id="addCustomBtn" class="add-custom-btn">+ Add Custom Experience</button>
+        </div>
+      </div>
+
+      <!-- Right Panel: Skills Display -->
+      <div class="right-panel">
+        <div class="panel-header">
+          <h2>Your Transferable Skills</h2>
+          <div class="skill-category-filters">
+            <button class="skill-filter-btn active" data-category="all">All Skills</button>
+          </div>
+        </div>
+        <div id="skillsDisplay" class="skills-display">
+          <div class="empty-state">
+            <p>Select experiences to discover your transferable skills</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Control Panel -->
+    <div class="control-panel">
+      <div class="control-group">
+        <button id="saveSnapshotBtn" class="control-btn primary">Save Skill Snapshot</button>
+        <button id="exportBtn" class="control-btn secondary">Export Skills</button>
+      </div>
+      <div class="snapshots-section">
+        <h3>My Saved Snapshots</h3>
+        <div id="snapshotsList" class="snapshots-list"></div>
+      </div>
+    </div>
+
+    <!-- Custom Experience Modal -->
+    <div id="customExperienceModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3>Add Custom Experience</h3>
+          <button class="close-btn" id="closeModal">&times;</button>
+        </div>
+        <form id="customExperienceForm">
+          <div class="form-group">
+            <label for="experienceName">Experience Name</label>
+            <input type="text" id="experienceName" required>
+          </div>
+          <div class="form-group">
+            <label for="experienceCategory">Category</label>
+            <select id="experienceCategory" required>
+              <option value="">Select Category</option>
+              <option value="volunteer">Volunteer Work</option>
+              <option value="caregiving">Caregiving</option>
+              <option value="freelance">Freelance/Gig Work</option>
+              <option value="education">Education/Learning</option>
+              <option value="personal">Personal Projects</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="experienceSkills">Skills (comma-separated)</label>
+            <textarea id="experienceSkills" placeholder="e.g., Communication, Problem Solving, Time Management" required></textarea>
+          </div>
+          <div class="form-group">
+            <label for="experienceBullets">Resume Bullet Points (one per line)</label>
+            <textarea id="experienceBullets" placeholder="• Managed multiple projects simultaneously&#10;• Developed strong communication skills" required></textarea>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="control-btn secondary" id="cancelCustom">Cancel</button>
+            <button type="submit" class="control-btn primary">Add Experience</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Tooltip -->
+    <div id="tooltip" class="tooltip hidden"></div>
+  </div>
+</div>
+      <!-- Claude will inject here -->
+    </div>
+  </main>
+  <footer>
+    <p>Generated by Reddit Vibecoder</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

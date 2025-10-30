@@ -1,0 +1,1236 @@
+---index.html---
+<div class="game-container">
+  <!-- Start Screen -->
+  <div id="start-screen" class="screen">
+    <div class="title-container">
+      <h1 class="game-title">BLINK SURVIVAL</h1>
+      <p class="game-subtitle">Complete tasks before time runs out</p>
+    </div>
+    
+    <div class="stats-container">
+      <div class="stat-item">
+        <span class="stat-label">Best Score:</span>
+        <span id="high-score-display" class="stat-value">0</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-label">Global Deaths:</span>
+        <span id="global-deaths-display" class="stat-value">0</span>
+      </div>
+    </div>
+    
+    <div class="button-container">
+      <button id="start-game-btn" class="primary-btn">Start Game</button>
+      <button id="tutorial-btn" class="secondary-btn">How to Play</button>
+    </div>
+  </div>
+
+  <!-- Game Area -->
+  <div id="game-area" class="screen hidden">
+    <div class="game-hud">
+      <div class="score-info">
+        <span class="hud-label">Round:</span>
+        <span id="current-score-display" class="hud-value">0</span>
+      </div>
+      <div class="timer-container">
+        <div id="timer-bar" class="timer-bar"></div>
+      </div>
+      <button id="pause-btn" class="pause-btn">⏸</button>
+    </div>
+    
+    <div id="task-container" class="task-container">
+      <!-- Dynamic tasks will be spawned here -->
+    </div>
+    
+    <div id="task-instructions" class="task-instructions"></div>
+  </div>
+
+  <!-- Pause Menu -->
+  <div id="pause-menu" class="screen modal hidden">
+    <div class="modal-content">
+      <h2>Game Paused</h2>
+      <button id="resume-btn" class="primary-btn">Resume</button>
+    </div>
+  </div>
+
+  <!-- Game Over Screen -->
+  <div id="game-over-screen" class="screen hidden">
+    <div class="game-over-container">
+      <h1 class="game-over-title">Game Over!</h1>
+      
+      <div class="final-stats">
+        <div class="stat-item">
+          <span class="stat-label">Rounds Survived:</span>
+          <span id="final-score-display" class="stat-value">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Best Score:</span>
+          <span id="final-high-score-display" class="stat-value">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Global Deaths:</span>
+          <span id="final-global-deaths-display" class="stat-value">0</span>
+        </div>
+      </div>
+      
+      <button id="play-again-btn" class="primary-btn">Play Again</button>
+    </div>
+  </div>
+
+  <!-- Tutorial Modal -->
+  <div id="tutorial-modal" class="screen modal hidden">
+    <div class="modal-content">
+      <h2>How to Play</h2>
+      <div class="tutorial-content">
+        <div class="tutorial-section">
+          <h3>🎯 Click Tasks</h3>
+          <p>Click on all highlighted targets before time runs out</p>
+        </div>
+        <div class="tutorial-section">
+          <h3>⌨️ Key Press Tasks</h3>
+          <p>Press the displayed key on your keyboard</p>
+        </div>
+        <div class="tutorial-section">
+          <h3>🔢 Sequential Tasks</h3>
+          <p>Press the keys in the correct order</p>
+        </div>
+        <div class="tutorial-section">
+          <h3>⚡ Survival</h3>
+          <p>Each round gets faster and harder. How long can you survive?</p>
+        </div>
+      </div>
+      <button id="close-tutorial-btn" class="primary-btn">Got It!</button>
+    </div>
+  </div>
+
+  <!-- Particle Container -->
+  <div id="particle-container"></div>
+  
+  <!-- Floating Text Container -->
+  <div id="floating-text-container"></div>
+</div>
+
+---style.css---
+:root {
+  --primary-color: #00ff88;
+  --secondary-color: #ff0088;
+  --bg-color: #0a0a0a;
+  --surface-color: #1a1a1a;
+  --text-color: #ffffff;
+  --accent-color: #ffaa00;
+  --danger-color: #ff4444;
+  --success-color: #44ff44;
+  
+  --difficulty-hue: 180;
+  --game-intensity: 1;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  overflow: hidden;
+  user-select: none;
+}
+
+.game-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  background: linear-gradient(135deg, 
+    hsl(var(--difficulty-hue), 50%, 5%) 0%,
+    hsl(var(--difficulty-hue), 30%, 8%) 50%,
+    hsl(var(--difficulty-hue), 50%, 5%) 100%);
+  transition: all 0.5s ease;
+}
+
+.screen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.screen.hidden {
+  opacity: 0;
+  visibility: hidden;
+  transform: scale(0.95);
+}
+
+.modal {
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.modal-content {
+  background: var(--surface-color);
+  padding: 2rem;
+  border-radius: 15px;
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+}
+
+/* Start Screen */
+.title-container {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.game-title {
+  font-size: 4rem;
+  font-weight: bold;
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 0.5rem;
+  text-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+  animation: titlePulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes titlePulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.05); }
+}
+
+.game-subtitle {
+  font-size: 1.2rem;
+  color: #aaa;
+  margin-bottom: 1rem;
+}
+
+.stats-container {
+  display: flex;
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.primary-btn {
+  background: linear-gradient(45deg, var(--primary-color), #00cc66);
+  color: #000;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  min-width: 200px;
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(0, 255, 136, 0.4);
+  filter: brightness(1.1);
+}
+
+.secondary-btn {
+  background: transparent;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  min-width: 200px;
+}
+
+.secondary-btn:hover {
+  background: var(--primary-color);
+  color: #000;
+  transform: translateY(-2px);
+}
+
+/* Game Area */
+#game-area {
+  justify-content: flex-start;
+  padding: 0;
+}
+
+.game-hud {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: rgba(26, 26, 26, 0.9);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  border-bottom: 2px solid var(--primary-color);
+  z-index: 10;
+}
+
+.score-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.hud-label {
+  font-size: 1rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hud-value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--primary-color);
+  text-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+.timer-container {
+  flex: 1;
+  max-width: 400px;
+  height: 20px;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 0 2rem;
+  border: 1px solid #333;
+}
+
+.timer-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--success-color), var(--accent-color), var(--danger-color));
+  border-radius: 10px;
+  transition: width 0.1s linear;
+  box-shadow: 0 0 10px rgba(0, 255, 136, 0.5);
+}
+
+.timer-bar.blink-warning {
+  animation: timerWarning 0.2s ease-in-out infinite alternate;
+}
+
+@keyframes timerWarning {
+  0% { box-shadow: 0 0 10px rgba(255, 68, 68, 0.8); }
+  100% { box-shadow: 0 0 20px rgba(255, 68, 68, 1); }
+}
+
+.pause-btn {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-color);
+  border: 1px solid #333;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.pause-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--primary-color);
+}
+
+.task-container {
+  position: absolute;
+  top: 80px;
+  left: 0;
+  right: 0;
+  bottom: 100px;
+  overflow: hidden;
+}
+
+.task-instructions {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(26, 26, 26, 0.9);
+  padding: 1rem 2rem;
+  border-radius: 10px;
+  border: 1px solid var(--primary-color);
+  font-size: 1.2rem;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+/* Target Styles */
+.target {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, var(--primary-color), #00cc66);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #000;
+  font-size: 1.2rem;
+  transition: all 0.2s ease;
+  animation: targetPulse 1s ease-in-out infinite alternate;
+  box-shadow: 0 0 20px rgba(0, 255, 136, 0.6);
+  border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+@keyframes targetPulse {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.1); }
+}
+
+.target:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 30px rgba(0, 255, 136, 0.8);
+}
+
+.target.hit {
+  animation: targetHit 0.3s ease-out forwards;
+}
+
+@keyframes targetHit {
+  0% { transform: scale(1.2); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.8; }
+  100% { transform: scale(0); opacity: 0; }
+}
+
+.key-task {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+  color: #000;
+  padding: 2rem;
+  border-radius: 20px;
+  font-size: 3rem;
+  font-weight: bold;
+  text-align: center;
+  min-width: 150px;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 40px rgba(255, 170, 0, 0.6);
+  animation: keyTaskPulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes keyTaskPulse {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  100% { transform: translate(-50%, -50%) scale(1.05); }
+}
+
+.sequence-task {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+  color: #fff;
+  padding: 2rem;
+  border-radius: 20px;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 0 40px rgba(255, 0, 136, 0.6);
+  animation: sequenceTaskPulse 1s ease-in-out infinite alternate;
+}
+
+@keyframes sequenceTaskPulse {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  100% { transform: translate(-50%, -50%) scale(1.02); }
+}
+
+.sequence-progress {
+  margin-top: 1rem;
+  font-size: 1rem;
+  opacity: 0.8;
+}
+
+/* Game Over Screen */
+.game-over-container {
+  text-align: center;
+}
+
+.game-over-title {
+  font-size: 3rem;
+  color: var(--danger-color);
+  margin-bottom: 2rem;
+  animation: gameOverShake 0.5s ease-in-out;
+}
+
+@keyframes gameOverShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+.final-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+/* Tutorial */
+.tutorial-content {
+  text-align: left;
+  margin: 1.5rem 0;
+}
+
+.tutorial-section {
+  margin-bottom: 1.5rem;
+}
+
+.tutorial-section h3 {
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  font-size: 1.2rem;
+}
+
+.tutorial-section p {
+  color: #ccc;
+  line-height: 1.5;
+}
+
+/* Particles */
+#particle-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.particle {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+}
+
+.particle.success {
+  background: var(--success-color);
+  animation: particleSuccess 1s ease-out forwards;
+}
+
+.particle.failure {
+  background: var(--danger-color);
+  animation: particleFailure 0.8s ease-out forwards;
+}
+
+@keyframes particleSuccess {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0) translateY(-100px);
+    opacity: 0;
+  }
+}
+
+@keyframes particleFailure {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.2) translateY(-50px);
+    opacity: 0;
+  }
+}
+
+/* Floating Text */
+#floating-text-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 101;
+}
+
+.floating-text {
+  position: absolute;
+  font-weight: bold;
+  font-size: 2rem;
+  pointer-events: none;
+  animation: floatUp 2s ease-out forwards;
+}
+
+.floating-text.success {
+  color: var(--success-color);
+  text-shadow: 0 0 10px rgba(68, 255, 68, 0.8);
+}
+
+.floating-text.failure {
+  color: var(--danger-color);
+  text-shadow: 0 0 10px rgba(255, 68, 68, 0.8);
+}
+
+.floating-text.score {
+  color: var(--accent-color);
+  text-shadow: 0 0 10px rgba(255, 170, 0, 0.8);
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100px) scale(0.8);
+    opacity: 0;
+  }
+}
+
+/* Screen Shake */
+.shake {
+  animation: screenShake 0.5s ease-in-out;
+}
+
+@keyframes screenShake {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translateX(-10px); }
+  20% { transform: translateX(10px); }
+  30% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  50% { transform: translateX(-6px); }
+  60% { transform: translateX(6px); }
+  70% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+  90% { transform: translateX(-2px); }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .game-title {
+    font-size: 2.5rem;
+  }
+  
+  .stats-container {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .target {
+    width: 50px;
+    height: 50px;
+    font-size: 1rem;
+  }
+  
+  .key-task {
+    font-size: 2rem;
+    padding: 1.5rem;
+    min-width: 120px;
+    min-height: 120px;
+  }
+}
+
+---script.js---
+function initApp() {
+  // Game States
+  const GAME_STATES = {
+    START: 'start',
+    PLAYING: 'playing',
+    PAUSED: 'paused',
+    GAME_OVER: 'game_over',
+    TUTORIAL: 'tutorial'
+  };
+
+  // Task Types
+  const TASK_TYPES = {
+    CLICK: 'click',
+    KEY_PRESS: 'key_press',
+    SEQUENCE: 'sequence'
+  };
+
+  // Game State
+  let currentGameState = GAME_STATES.START;
+  let currentScore = 0;
+  let difficultyLevel = 1;
+  let blinkIntervalDuration = 3000; // Initial 3 seconds
+  let highScore = parseInt(localStorage.getItem('blinkSurvivalHighScore')) || 0;
+  let globalDeaths = parseInt(localStorage.getItem('blinkSurvivalGlobalDeaths')) || 0;
+
+  // Game Loop Variables
+  let gameLoopId = null;
+  let blinkTimeoutId = null;
+  let roundStartTime = 0;
+  let isPaused = false;
+  let pausedTimeRemaining = 0;
+
+  // Current Task Variables
+  let currentTaskType = null;
+  let activeTasks = [];
+  let currentSequence = [];
+  let sequenceProgress = 0;
+  let requiredKey = '';
+
+  // DOM Elements
+  const gameContainer = document.querySelector('.game-container');
+  const startScreen = document.getElementById('start-screen');
+  const gameArea = document.getElementById('game-area');
+  const gameOverScreen = document.getElementById('game-over-screen');
+  const pauseMenu = document.getElementById('pause-menu');
+  const tutorialModal = document.getElementById('tutorial-modal');
+  const taskContainer = document.getElementById('task-container');
+  const taskInstructions = document.getElementById('task-instructions');
+  const timerBar = document.getElementById('timer-bar');
+  const currentScoreDisplay = document.getElementById('current-score-display');
+  const highScoreDisplay = document.getElementById('high-score-display');
+  const globalDeathsDisplay = document.getElementById('global-deaths-display');
+  const finalScoreDisplay = document.getElementById('final-score-display');
+  const finalHighScoreDisplay = document.getElementById('final-high-score-display');
+  const finalGlobalDeathsDisplay = document.getElementById('final-global-deaths-display');
+  const particleContainer = document.getElementById('particle-container');
+  const floatingTextContainer = document.getElementById('floating-text-container');
+
+  // Buttons
+  const startGameBtn = document.getElementById('start-game-btn');
+  const tutorialBtn = document.getElementById('tutorial-btn');
+  const pauseBtn = document.getElementById('pause-btn');
+  const resumeBtn = document.getElementById('resume-btn');
+  const playAgainBtn = document.getElementById('play-again-btn');
+  const closeTutorialBtn = document.getElementById('close-tutorial-btn');
+
+  // Verify DOM elements exist
+  const elements = [
+    gameContainer, startScreen, gameArea, gameOverScreen, pauseMenu, tutorialModal,
+    taskContainer, taskInstructions, timerBar, currentScoreDisplay, highScoreDisplay,
+    globalDeathsDisplay, finalScoreDisplay, finalHighScoreDisplay, finalGlobalDeathsDisplay,
+    particleContainer, floatingTextContainer, startGameBtn, tutorialBtn, pauseBtn,
+    resumeBtn, playAgainBtn, closeTutorialBtn
+  ];
+
+  if (elements.some(el => !el)) {
+    console.error('Some DOM elements are missing');
+    return;
+  }
+
+  // Initialize
+  function init() {
+    updateStartScreenStats();
+    showScreen(GAME_STATES.START);
+    setupEventListeners();
+    updateDynamicColors();
+  }
+
+  // Screen Management
+  function showScreen(state) {
+    hideAllScreens();
+    currentGameState = state;
+    
+    switch(state) {
+      case GAME_STATES.START:
+        startScreen.classList.remove('hidden');
+        updateStartScreenStats();
+        break;
+      case GAME_STATES.PLAYING:
+        gameArea.classList.remove('hidden');
+        break;
+      case GAME_STATES.PAUSED:
+        pauseMenu.classList.remove('hidden');
+        break;
+      case GAME_STATES.GAME_OVER:
+        gameOverScreen.classList.remove('hidden');
+        updateGameOverStats();
+        break;
+      case GAME_STATES.TUTORIAL:
+        tutorialModal.classList.remove('hidden');
+        break;
+    }
+  }
+
+  function hideAllScreens() {
+    const screens = [startScreen, gameArea, gameOverScreen, pauseMenu, tutorialModal];
+    screens.forEach(screen => screen.classList.add('hidden'));
+  }
+
+  // Event Listeners
+  function setupEventListeners() {
+    startGameBtn.addEventListener('click', startGame);
+    tutorialBtn.addEventListener('click', () => showScreen(GAME_STATES.TUTORIAL));
+    pauseBtn.addEventListener('click', pauseGame);
+    resumeBtn.addEventListener('click', resumeGame);
+    playAgainBtn.addEventListener('click', startGame);
+    closeTutorialBtn.addEventListener('click', () => showScreen(GAME_STATES.START));
+
+    // Keyboard events
+    document.addEventListener('keydown', handleKeyDown);
+    
+    // Prevent context menu on right click
+    document.addEventListener('contextmenu', e => e.preventDefault());
+  }
+
+  // Game Logic
+  function startGame() {
+    currentScore = 0;
+    difficultyLevel = 1;
+    blinkIntervalDuration = 3000;
+    isPaused = false;
+    pausedTimeRemaining = 0;
+    
+    clearTasks();
+    updateScore();
+    updateDynamicColors();
+    
+    showScreen(GAME_STATES.PLAYING);
+    startBlinkInterval();
+  }
+
+  function startBlinkInterval() {
+    if (isPaused) return;
+    
+    roundStartTime = Date.now();
+    spawnTask();
+    startGameLoop();
+    
+    blinkTimeoutId = setTimeout(() => {
+      if (!isPaused && currentGameState === GAME_STATES.PLAYING) {
+        gameOver();
+      }
+    }, blinkIntervalDuration);
+  }
+
+  function startGameLoop() {
+    function loop() {
+      if (currentGameState === GAME_STATES.PLAYING && !isPaused) {
+        updateTimerBar();
+        gameLoopId = requestAnimationFrame(loop);
+      }
+    }
+    gameLoopId = requestAnimationFrame(loop);
+  }
+
+  function updateTimerBar() {
+    if (!timerBar) return;
+    
+    const elapsed = Date.now() - roundStartTime;
+    const progress = Math.max(0, 1 - (elapsed / blinkIntervalDuration));
+    
+    timerBar.style.width = `${progress * 100}%`;
+    
+    if (progress < 0.3) {
+      timerBar.classList.add('blink-warning');
+    } else {
+      timerBar.classList.remove('blink-warning');
+    }
+  }
+
+  function spawnTask() {
+    clearTasks();
+    
+    // Determine task type based on difficulty
+    let taskType;
+    if (difficultyLevel < 3) {
+      taskType = TASK_TYPES.CLICK;
+    } else if (difficultyLevel < 6) {
+      taskType = Math.random() < 0.7 ? TASK_TYPES.CLICK : TASK_TYPES.KEY_PRESS;
+    } else {
+      const rand = Math.random();
+      if (rand < 0.5) taskType = TASK_TYPES.CLICK;
+      else if (rand < 0.8) taskType = TASK_TYPES.KEY_PRESS;
+      else taskType = TASK_TYPES.SEQUENCE;
+    }
+    
+    currentTaskType = taskType;
+    
+    switch(taskType) {
+      case TASK_TYPES.CLICK:
+        spawnClickTask();
+        break;
+      case TASK_TYPES.KEY_PRESS:
+        spawnKeyPressTask();
+        break;
+      case TASK_TYPES.SEQUENCE:
+        spawnSequenceTask();
+        break;
+    }
+  }
+
+  function spawnClickTask() {
+    const numTargets = Math.min(1 + Math.floor(difficultyLevel / 3), 5);
+    activeTasks = [];
+    
+    taskInstructions.textContent = `Click all ${numTargets} target${numTargets > 1 ? 's' : ''}!`;
+    
+    for (let i = 0; i < numTargets; i++) {
+      const target = document.createElement('div');
+      target.className = 'target';
+      target.textContent = i + 1;
+      
+      // Random position within task container
+      const containerRect = taskContainer.getBoundingClientRect();
+      const margin = 60;
+      const x = Math.random() * (containerRect.width - margin * 2) + margin;
+      const y = Math.random() * (containerRect.height - margin * 2) + margin;
+      
+      target.style.left = `${x - 30}px`;
+      target.style.top = `${y - 30}px`;
+      
+      target.addEventListener('click', () => handleTargetClick(target));
+      
+      taskContainer.appendChild(target);
+      activeTasks.push(target);
+    }
+  }
+
+  function spawnKeyPressTask() {
+    const keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    requiredKey = keys[Math.floor(Math.random() * keys.length)];
+    
+    taskInstructions.textContent = `Press the "${requiredKey}" key!`;
+    
+    const keyTask = document.createElement('div');
+    keyTask.className = 'key-task';
+    keyTask.textContent = requiredKey;
+    
+    taskContainer.appendChild(keyTask);
+    activeTasks = [keyTask];
+  }
+
+  function spawnSequenceTask() {
+    const keys = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const sequenceLength = Math.min(2 + Math.floor(difficultyLevel / 8), 5);
+    
+    currentSequence = [];
+    for (let i = 0; i < sequenceLength; i++) {
+      currentSequence.push(keys[Math.floor(Math.random() * keys.length)]);
+    }
+    
+    sequenceProgress = 0;
+    
+    taskInstructions.textContent = `Press keys in order: ${currentSequence.join(' → ')}`;
+    
+    const sequenceTask = document.createElement('div');
+    sequenceTask.className = 'sequence-task';
+    sequenceTask.innerHTML = `
+      <div>${currentSequence.join(' → ')}</div>
+      <div class="sequence-progress">Press: ${currentSequence[0]}</div>
+    `;
+    
+    taskContainer.appendChild(sequenceTask);
+    activeTasks = [sequenceTask];
+  }
+
+  function handleTargetClick(target) {
+    if (currentGameState !== GAME_STATES.PLAYING || isPaused) return;
+    
+    target.classList.add('hit');
+    createParticles(target.getBoundingClientRect().left + 30, target.getBoundingClientRect().top + 30, 'success');
+    createFloatingText('+1', target.getBoundingClientRect().left + 30, target.getBoundingClientRect().top + 30, 'score');
+    
+    setTimeout(() => {
+      if (target.parentNode) {
+        target.parentNode.removeChild(target);
+      }
+    }, 300);
+    
+    activeTasks = activeTasks.filter(t => t !== target);
+    
+    if (activeTasks.length === 0) {
+      taskCompleted();
+    }
+  }
+
+  function handleKeyDown(event) {
+    if (currentGameState !== GAME_STATES.PLAYING || isPaused) return;
+    
+    const key = event.key.toUpperCase();
+    
+    if (currentTaskType === TASK_TYPES.KEY_PRESS) {
+      if (key === requiredKey) {
+        const taskElement = activeTasks[0];
+        if (taskElement) {
+          const rect = taskElement.getBoundingClientRect();
+          createParticles(rect.left + rect.width / 2, rect.top + rect.height / 2, 'success');
+          createFloatingText('Perfect!', rect.left + rect.width / 2, rect.top + rect.height / 2, 'success');
+        }
+        taskCompleted();
+      } else {
+        createFailureEffects();
+      }
+    } else if (currentTaskType === TASK_TYPES.SEQUENCE) {
+      if (key === currentSequence[sequenceProgress]) {
+        sequenceProgress++;
+        
+        const taskElement = activeTasks[0];
+        if (taskElement) {
+          const progressElement = taskElement.querySelector('.sequence-progress');
+          if (sequenceProgress < currentSequence.length) {
+            progressElement.textContent = `Press: ${currentSequence[sequenceProgress]}`;
+          } else {
+            progressElement.textContent = 'Complete!';
+          }
+          
+          const rect = taskElement.getBoundingClientRect();
+          createParticles(rect.left + rect.width / 2, rect.top + rect.height / 2, 'success');
+        }
+        
+        if (sequenceProgress >= currentSequence.length) {
+          createFloatingText('Perfect!', window.innerWidth / 2, window.innerHeight / 2, 'success');
+          taskCompleted();
+        }
+      } else {
+        createFailureEffects();
+      }
+    }
+    
+    // Pause functionality
+    if (key === 'P' || key === 'ESCAPE') {
+      if (currentGameState === GAME_STATES.PLAYING) {
+        pauseGame();
+      } else if (currentGameState === GAME_STATES.PAUSED) {
+        resumeGame();
+      }
+    }
+  }
+
+  function taskCompleted() {
+    if (blinkTimeoutId) {
+      clearTimeout(blinkTimeoutId);
+    }
+    if (gameLoopId) {
+      cancelAnimationFrame(gameLoopId);
+    }
+    
+    currentScore++;
+    updateScore();
+    nextRound();
+  }
+
+  function nextRound() {
+    difficultyLevel++;
+    
+    // Decrease blink interval duration
+    blinkIntervalDuration = Math.max(800, blinkIntervalDuration * 0.92);
+    
+    updateDynamicColors();
+    
+    // Screen shake on difficulty milestones
+    if (difficultyLevel % 5 === 0) {
+      gameContainer.classList.add('shake');
+      setTimeout(() => gameContainer.classList.remove('shake'), 500);
+    }
+    
+    // Brief pause before next round
+    setTimeout(() => {
+      if (currentGameState === GAME_STATES.PLAYING) {
+        startBlinkInterval();
+      }
+    }, 500);
+  }
+
+  function gameOver() {
+    if (blinkTimeoutId) {
+      clearTimeout(blinkTimeoutId);
+    }
+    if (gameLoopId) {
+      cancelAnimationFrame(gameLoopId);
+    }
+    
+    // Update high score
+    if (currentScore > highScore) {
+      highScore = currentScore;
+      localStorage.setItem('blinkSurvivalHighScore', highScore.toString());
+    }
+    
+    // Increment global deaths
+    globalDeaths++;
+    localStorage.setItem('blinkSurvivalGlobalDeaths', globalDeaths.toString());
+    
+    // Screen shake effect
+    gameContainer.classList.add('shake');
+    setTimeout(() => gameContainer.classList.remove('shake'), 500);
+    
+    // Show failure effects
+    createFloatingText('GAME OVER!', window.innerWidth / 2, window.innerHeight / 2, 'failure');
+    createParticles(window.innerWidth / 2, window.innerHeight / 2, 'failure');
+    
+    clearTasks();
+    
+    setTimeout(() => {
+      showScreen(GAME_STATES.GAME_OVER);
+    }, 1000);
+  }
+
+  function pauseGame() {
+    if (currentGameState !== GAME_STATES.PLAYING) return;
+    
+    isPaused = true;
+    pausedTimeRemaining = blinkIntervalDuration - (Date.now() - roundStartTime);
+    
+    if (blinkTimeoutId) {
+      clearTimeout(blinkTimeoutId);
+    }
+    if (gameLoopId) {
+      cancelAnimationFrame(gameLoopId);
+    }
+    
+    showScreen(GAME_STATES.PAUSED);
+  }
+
+  function resumeGame() {
+    if (currentGameState !== GAME_STATES.PAUSED) return;
+    
+    isPaused = false;
+    roundStartTime = Date.now() - (blinkIntervalDuration - pausedTimeRemaining);
+    
+    showScreen(GAME_STATES.PLAYING);
+    startGameLoop();
+    
+    blinkTimeoutId = setTimeout(() => {
+      if (!isPaused && currentGameState === GAME_STATES.PLAYING) {
+        gameOver();
+      }
+    }, pausedTimeRemaining);
+  }
+
+  function clearTasks() {
+    taskContainer.innerHTML = '';
+    activeTasks = [];
+    currentSequence = [];
+    sequenceProgress = 0;
+    requiredKey = '';
+    taskInstructions.textContent = '';
+  }
+
+  // UI Updates
+  function updateScore() {
+    if (currentScoreDisplay) {
+      currentScoreDisplay.textContent = currentScore.toString();
+    }
+  }
+
+  function updateStartScreenStats() {
+    if (highScoreDisplay) {
+      highScoreDisplay.textContent = highScore.toString();
+    }
+    if (globalDeathsDisplay) {
+      globalDeathsDisplay.textContent = globalDeaths.toString();
+    }
+  }
+
+  function updateGameOverStats() {
+    if (finalScoreDisplay) {
+      finalScoreDisplay.textContent = currentScore.toString();
+    }
+    if (finalHighScoreDisplay) {
+      finalHighScoreDisplay.textContent = highScore.toString();
+    }
+    if (finalGlobalDeathsDisplay) {
+      finalGlobalDeathsDisplay.textContent = globalDeaths.toString();
+    }
+  }
+
+  function updateDynamicColors() {
+    const hue = Math.max(0, 180 - difficultyLevel * 8);
+    const intensity = Math.min(2, 1 + difficultyLevel * 0.05);
+    
+    document.documentElement.style.setProperty('--difficulty-hue', hue.toString());
+    document.documentElement.style.setProperty('--game-intensity', intensity.toString());
+  }
+
+  // Effects
+  function createParticles(x, y, type) {
+    if (!particleContainer) return;
+    
+    const numParticles = type === 'success' ? 8 : 5;
+    
+    for (let i = 0; i < numParticles; i++) {
+      const particle = document.createElement('div');
+      particle.className = `particle ${type}`;
+      
+      const size = Math.random() * 8 + 4;
+      particle.style.width = `${size}px`;
+      particle.style.height = `${size}px`;
+      particle.style.left = `${x + (Math.random() - 0.5) * 40}px`;
+      particle.style.top = `${y + (Math.random() - 0.5) * 40}px`;
+      
+      particleContainer.appendChild(particle);
+      
+      setTimeout(() => {
+        if (particle.parentNode) {
+          particle.parentNode.removeChild(particle);
+        }
+      }, 1000);
+    }
+  }
+
+  function createFloatingText(text, x, y, type) {
+    if (!floatingTextContainer) return;
+    
+    const floatingText = document.createElement('div');
+    floatingText.className = `floating-text ${type}`;
+    floatingText.textContent = text;
+    floatingText.style.left = `${x}px`;
+    floatingText.style.top = `${y}px`;
+    floatingText.style.transform = 'translate(-50%, -50%)';
+    
+    floatingTextContainer.appendChild(floatingText);
+    
+    setTimeout(() => {
+      if (floatingText.parentNode) {
+        floatingText.parentNode.removeChild(floatingText);
+      }
+    }, 2000);
+  }
+
+  function createFailureEffects() {
+    createFloatingText('MISS!', window.innerWidth / 2, window.innerHeight / 2 - 100, 'failure');
+    createParticles(window.innerWidth / 2, window.innerHeight / 2 - 100, 'failure');
+    
+    // Subtle screen shake
+    gameContainer.classList.add('shake');
+    setTimeout(() => gameContainer.classList.remove('shake'), 300);
+  }
+
+  // Initialize the game
+  init();
+}

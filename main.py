@@ -72,7 +72,7 @@ def main():
         with open(os.path.join(project_dir, "requirements.txt"), "w", encoding="utf-8") as f:
             f.write("\n".join(plan["dependencies"]))
 
-    # Save README
+    # Save README with enhanced structure
     with open(os.path.join(project_dir, "README.md"), "w", encoding="utf-8") as f:
         f.write(f"# {idea}\n\n{plan['description']}\n\n")
 
@@ -80,10 +80,18 @@ def main():
         f.write("## Source Reddit Post\n")
         f.write(f"[View original post]({post_url})\n\n")
 
+        # --- Features ---
         f.write("## Features\n")
         f.write("\n".join(f"- {feat}" for feat in plan["features"]))
         f.write("\n\n")
 
+        # --- UI Polish (if present in plan) ---
+        if "ui_polish" in plan and plan["ui_polish"]:
+            f.write("## Visual Polish\n")
+            f.write("\n".join(f"- {polish}" for polish in plan["ui_polish"]))
+            f.write("\n\n")
+
+        # --- How to Run ---
         f.write("## How to Run\n")
         project_type = detect_project_type(code, plan)
 
@@ -92,7 +100,7 @@ def main():
         elif project_type == "python":
             f.write("- Run with: `python main.py`\n\n")
         else:
-            f.write("- (Unknown project type — check generated files)\n\n")
+            f.write("- (Unknown project type – check generated files)\n\n")
 
         print(f"\n✅ Project files saved to {project_dir}")
 
@@ -103,7 +111,7 @@ def main():
     except Exception as e:
         print(f"⚠️ Auto-screenshot failed for {project_dir}: {e}")
 
-    # # Step 7: Upload to GitHub
+    # # Step 7: Upload to GitHub (commented out by default)
     # try:
     #     project_name = os.path.basename(project_dir)
     #     print(f"🚀 Uploading {project_name} to GitHub...")

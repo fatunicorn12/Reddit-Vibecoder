@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A static web application (HTML/CSS/JS) designed to simulate ...</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>A static web application (HTML/CSS/JS) designed to simulate ...</h1>
+    <p class="project-description">A static web application (HTML/CSS/JS) designed to simulate the experience of moderating a subreddit. Users are presente...</p>
+  </header>
+  <main>
+    <div id="app">
+      <div id="app">
+  <!-- Main Menu Screen -->
+  <div id="main-menu" class="screen active">
+    <div class="menu-container">
+      <h1>Subreddit Moderator</h1>
+      <p class="subtitle">Train your moderation skills</p>
+      <div class="menu-buttons">
+        <button class="menu-btn primary" data-screen="game-screen">Start Moderating</button>
+        <button class="menu-btn" data-screen="instructions-screen">How to Play</button>
+        <button class="menu-btn" data-screen="settings-screen">Rules Settings</button>
+        <button class="menu-btn" data-screen="high-scores-screen">High Scores</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Game Screen -->
+  <div id="game-screen" class="screen">
+    <div class="game-header">
+      <div class="game-stats">
+        <div class="stat">
+          <span class="stat-label">Score:</span>
+          <span id="current-score">0</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Lives:</span>
+          <span id="current-lives">3</span>
+        </div>
+        <div class="stat">
+          <span class="stat-label">Streak:</span>
+          <span id="current-streak">0</span>
+        </div>
+      </div>
+      <div class="difficulty-indicator">
+        <span class="difficulty-label">Difficulty:</span>
+        <div class="difficulty-bar">
+          <div id="difficulty-fill" class="difficulty-fill"></div>
+        </div>
+      </div>
+      <button class="return-btn" data-screen="main-menu">Return to Menu</button>
+    </div>
+
+    <div class="game-content">
+      <div id="post-display" class="post-card">
+        <div class="post-header">
+          <div class="post-meta">
+            <span class="author">u/<span id="post-author">loading...</span></span>
+            <span class="timestamp" id="post-timestamp">loading...</span>
+            <span class="upvotes">↑ <span id="post-upvotes">0</span></span>
+          </div>
+        </div>
+        <h3 id="post-title" class="post-title">Loading post...</h3>
+        <div id="post-body" class="post-body">Please wait...</div>
+        <div class="post-actions">
+          <button id="approve-btn" class="action-btn approve">Approve</button>
+          <button id="remove-btn" class="action-btn remove">Remove</button>
+          <button id="skip-btn" class="action-btn skip">Skip</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="feedback-overlay" class="feedback-overlay"></div>
+  </div>
+
+  <!-- Instructions Screen -->
+  <div id="instructions-screen" class="screen">
+    <div class="instructions-container">
+      <h2>How to Play</h2>
+      <div class="instructions-content">
+        <div class="instruction-section">
+          <h3>Objective</h3>
+          <p>Review posts and comments to identify rule violations. Make the correct moderation decision to earn points!</p>
+        </div>
+        
+        <div class="instruction-section">
+          <h3>Actions</h3>
+          <ul>
+            <li><strong>Approve:</strong> Use when content follows all rules</li>
+            <li><strong>Remove:</strong> Use when content violates any active rule</li>
+            <li><strong>Skip:</strong> Use when unsure (no points gained/lost)</li>
+          </ul>
+        </div>
+
+        <div class="instruction-section">
+          <h3>Scoring</h3>
+          <ul>
+            <li>Correct decisions: +10 points (×streak multiplier)</li>
+            <li>Incorrect decisions: -5 points, lose 1 life, reset streak</li>
+            <li>Skip: No points, no life lost, streak continues</li>
+            <li>Game over at 0 lives or -50 points</li>
+          </ul>
+        </div>
+
+        <div class="instruction-section">
+          <h3>Common Violations</h3>
+          <ul>
+            <li><strong>Personal Attacks:</strong> Insults, harassment, toxic behavior</li>
+            <li><strong>Spam:</strong> Repetitive content, excessive self-promotion</li>
+            <li><strong>Off-Topic:</strong> Content unrelated to subreddit theme</li>
+            <li><strong>Low Effort:</strong> Single words, memes in serious discussions</li>
+          </ul>
+        </div>
+      </div>
+      <button class="return-btn" data-screen="main-menu">Return to Menu</button>
+    </div>
+  </div>
+
+  <!-- Settings Screen -->
+  <div id="settings-screen" class="screen">
+    <div class="settings-container">
+      <h2>Rules Settings</h2>
+      <p class="settings-subtitle">Enable/disable rules for your moderation session</p>
+      <div id="rules-list" class="rules-list">
+        <!-- Rules will be populated by JavaScript -->
+      </div>
+      <div class="settings-actions">
+        <button id="save-settings" class="menu-btn primary">Save Settings</button>
+        <button class="return-btn" data-screen="main-menu">Return to Menu</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- High Scores Screen -->
+  <div id="high-scores-screen" class="screen">
+    <div class="high-scores-container">
+      <h2>High Scores</h2>
+      <div class="high-score-display">
+        <div class="score-item">
+          <span class="score-label">All-Time Best:</span>
+          <span id="high-score-value" class="score-value">0</span>
+        </div>
+        <div class="score-item">
+          <span class="score-label">Last Session:</span>
+          <span id="last-score-value" class="score-value">0</span>
+        </div>
+      </div>
+      <button class="return-btn" data-screen="main-menu">Return to Menu</button>
+    </div>
+  </div>
+
+  <!-- Game Over Screen -->
+  <div id="game-over-screen" class="screen">
+    <div class="game-over-container">
+      <h2>Game Over</h2>
+      <div class="final-stats">
+        <div class="stat-item">
+          <span class="stat-label">Final Score:</span>
+          <span id="final-score" class="stat-value">0</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Best Streak:</span>
+          <span id="best-streak" class="stat-value">0</span>
+        </div>
+        <div id="new-high-score" class="new-high-score hidden">🎉 New High Score! 🎉</div>
+      </div>
+      <div class="game-over-actions">
+        <button id="play-again-btn" class="menu-btn primary">Play Again</button>
+        <button class="return-btn" data-screen="main-menu">Return to Menu</button>
+      </div>
+    </div>
+  </div>
+</div>
+      <!-- Claude will inject here -->
+    </div>
+  </main>
+  <footer>
+    <p>Generated by Reddit Vibecoder</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

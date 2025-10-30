@@ -15,24 +15,37 @@ def clean_json_response(raw_text: str) -> str:
     Cleans Gemini's response so it's valid JSON:
     - Removes triple backtick code fences
     - Removes 'json' language hint
+    - Fixes common escape sequence issues
     - Strips whitespace
     """
     # Remove opening/closing code fences like ```json or ```
     cleaned = re.sub(r"^```(?:json)?", "", raw_text.strip(), flags=re.IGNORECASE | re.MULTILINE)
     cleaned = re.sub(r"```$", "", cleaned.strip(), flags=re.MULTILINE)
+    
+    # Fix common JSON issues that Gemini produces:
+    # 1. Replace invalid escape sequences like \' with just '
+    # This regex looks for \' that's not part of a valid escape sequence
+    cleaned = re.sub(r"\\(')", r"\1", cleaned)
+    
+    # 2. Fix any remaining problematic escapes in strings
+    # Replace \" inside already-quoted strings (keep track of quote context)
+    # This is more conservative - just removes unnecessary backslashes before quotes
+    
     return cleaned.strip()
 
 def generate_project_plan(idea: str):
     prompt = f"""
     Given this project idea: "{idea}"
 
-    Create a structured MVP development plan.
+    Create a structured, AMBITIOUS MVP development plan that will result in an impressive, polished demo.
     The plan must be in strict JSON format with these keys:
 
     {{
+      "title": "short, catchy project name (2-4 words, like 'Snake Challenge' or 'Calorie Tracker Pro')",
       "description": "short summary of the program",
-      "features": ["list of core features"],
-      "steps": ["step-by-step instructions to implement"],
+      "features": ["list of 7-12 core features - be generous with feature count"],
+      "ui_polish": ["list of 3-5 visual enhancements: animations, transitions, particle effects, visual feedback, color schemes, hover states, etc."],
+      "steps": ["detailed step-by-step instructions to implement ALL features and polish"],
       "dependencies": ["list of required libraries"]
     }}
 
@@ -41,30 +54,51 @@ def generate_project_plan(idea: str):
     * The game must be procedural and endlessly replayable (not story-driven or choice-based).
     * The game must have clear objectives, visible scoring, and a loss condition.
     * The game must increase difficulty as time or score progresses (e.g., speed, spawn rate, or challenge scaling).
-    * The game must track and display both current score and a persistent high score within the same session.
-    * The game must restart cleanly after a game-over.
-    * Prefer Pygame for most games, or Tkinter if GUI-based.
-    * Only use a Web-based implementation (HTML/JS) if the game concept *naturally fits* the browser (e.g., clicker, idle, or simple arcade games).
+    * The game must track and display both current score and a persistent high score (use localStorage for web apps).
+    * The game must have a main menu screen with options (Start Game, View Instructions, etc.).
+    * The game must ALWAYS include a "Return to Main Menu" button accessible during gameplay and game-over.
+    * The game must restart cleanly after a game-over with smooth transitions.
+    * STRONGLY prefer Web-based (HTML/JS) for games unless it requires complex physics or 3D.
+    * Include power-ups, obstacles, or variety to prevent monotony.
+    * Add visual juice: particle effects on events, screen shake, smooth animations, score pop-ups, color changes.
     * Avoid narrative text adventures, quizzes, or branching-choice games—focus on mechanical gameplay.
 
-  - If it's a PROGRAM:
-    * Must perform a clear, useful, or interesting task (e.g., generator, calculator, analyzer, data visualizer).
-    * Must execute fully and show visible, correct output.
-    * Prefer Python standard library; use Tkinter only if a graphical interface improves clarity.
+  - If it's a FUNCTIONAL TOOL/PROGRAM:
+    * Must solve a real, specific problem mentioned or implied in the Reddit post.
+    * Must have a complete, intuitive UI with clear instructions.
+    * Should include data persistence (localStorage), input validation, error handling.
+    * Must provide immediate visual feedback for all user actions.
+    * Add helpful features: export data, reset functionality, tooltips, examples.
+    * Make it USEFUL and COMPLETE, not just a proof-of-concept.
+    * Prefer Web apps (HTML/JS) for accessibility - anyone can open a browser.
 
-  - If it's a WEB APP:
+  - If it's a WEB APP (PREFERRED):
     * Must output static files: index.html, style.css, script.js.
     * Must be runnable locally by opening index.html in a browser (no servers or frameworks).
-    * Reserve this format for non-game interactive tools or when the concept explicitly requires a browser interface (e.g., dashboards, visualizers, simulators).
+    * Use CSS animations, transitions, and hover effects generously.
+    * Ensure responsive behavior within a container (don't worry about mobile).
+    * Add loading states, success/error messages, and visual feedback.
+    * Use localStorage for any data persistence needs.
 
-  - Always choose the *most natural medium* for the concept (Python vs. web).
+  - AMBITION LEVEL:
+    * Aim for 8-10 features minimum - think "impressive portfolio piece" not "hello world".
+    * Every interaction should have visual feedback.
+    * Include edge case handling in the steps.
+    * Make it feel polished and complete, not bare-bones.
+
+  - CRITICAL JSON RULES:
+    * Use double quotes for all JSON strings, never single quotes.
+    * Avoid backslash escapes in JSON string values - use plain apostrophes instead.
+    * If you need an apostrophe in text, just use it directly (e.g., "I'm" not "I\'m").
+    * Keep all content within JSON values simple and avoid special characters that need escaping.
+    * Do not include code examples with quotes/escapes inside JSON string values.
+
+  - Always prefer WEB APPS over Python unless the concept fundamentally requires a different medium.
   - Do NOT create vague demos or incomplete apps.
   - Output structured JSON only—no explanations or commentary.
 
 
     """
-
-
 
     response = client.models.generate_content(
         model="gemini-2.5-flash",
@@ -72,7 +106,7 @@ def generate_project_plan(idea: str):
     )
 
     raw_text = response.text.strip()
-    print("🔍 Raw response:\n", raw_text)
+    print("📄 Raw response:\n", raw_text)
 
     # Clean fences before parsing
     cleaned_text = clean_json_response(raw_text)
@@ -81,7 +115,32 @@ def generate_project_plan(idea: str):
         plan = json.loads(cleaned_text)
     except json.JSONDecodeError as e:
         print("❌ Failed to parse JSON:", e)
-        return None
+        print("\n🔍 Problematic section:")
+        # Show the area around the error
+        start = max(0, e.pos - 100)
+        end = min(len(cleaned_text), e.pos + 100)
+        print(cleaned_text[start:end])
+        print(" " * min(100, e.pos - start) + "^ Error here")
+        
+        # Try one more time with additional cleaning
+        print("\n🔧 Attempting additional JSON repairs...")
+        
+        # More aggressive cleaning
+        repaired = cleaned_text
+        # Remove any stray backslashes before quotes
+        repaired = repaired.replace("\\'", "'")
+        repaired = repaired.replace('\\"', '"')
+        
+        try:
+            plan = json.loads(repaired)
+            print("✅ Successfully parsed after repairs!")
+        except json.JSONDecodeError:
+            print("❌ Still unable to parse JSON after repairs.")
+            print("\n💡 Tip: The AI generated invalid JSON. This usually happens with:")
+            print("   - Escape sequences in strings (like \\')")
+            print("   - Missing commas or brackets")
+            print("   - Code examples inside JSON strings")
+            return None
 
     return plan
 

@@ -1,0 +1,763 @@
+---index.html---
+<div id="app">
+  <header>
+    <h1>Album Recs</h1>
+    <span id="progress-counter">0</span>
+  </header>
+  <div id="main-content">
+    <div id="album-card">
+      <img id="album-cover" alt="Album Cover" src="">
+      <h2 id="album-title"></h2>
+      <h3 id="album-artist"></h3>
+      <p id="album-genre"></p>
+      <p id="album-description"></p>
+      <a id="listen-link" href="#" target="_blank">Listen Now</a>
+    </div>
+    <div id="controls">
+      <button id="mark-listened">Mark as Listened</button>
+      <button id="skip-album">Skip Album</button>
+      <button id="reset-progress">Reset Progress</button>
+    </div>
+  </div>
+  <aside id="history-sidebar">
+    <h2>Listen History</h2>
+    <ul id="history-list"></ul>
+  </aside>
+</div>
+
+---style.css---
+:root {
+  --primary-color: #6366f1;
+  --secondary-color: #8b5cf6;
+  --accent-color: #ec4899;
+  --background-dark: #1e1b4b;
+  --background-light: #312e81;
+  --text-primary: #f8fafc;
+  --text-secondary: #cbd5e1;
+  --card-bg: rgba(255, 255, 255, 0.1);
+  --border-radius: 12px;
+  --shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(-45deg, #1e1b4b, #312e81, #6366f1, #8b5cf6);
+  background-size: 400% 400%;
+  animation: gradientAnimation 20s ease infinite;
+  color: var(--text-primary);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+@keyframes gradientAnimation {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+#app {
+  display: flex;
+  min-height: 100vh;
+  backdrop-filter: blur(10px);
+}
+
+header {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  z-index: 100;
+}
+
+header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  background: linear-gradient(45deg, var(--primary-color), var(--accent-color));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+#progress-counter {
+  background: var(--card-bg);
+  padding: 8px 16px;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  font-size: 1.1rem;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+#progress-counter.streak-animation {
+  transform: scale(1.2);
+  background: var(--accent-color);
+  box-shadow: 0 0 20px var(--accent-color);
+}
+
+#main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 120px 40px 40px;
+  position: relative;
+}
+
+#album-card {
+  background: var(--card-bg);
+  border-radius: var(--border-radius);
+  padding: 30px;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+#album-card.is-leaving {
+  transform: rotateY(-90deg);
+  opacity: 0;
+}
+
+#album-card.is-entering {
+  transform: rotateY(90deg);
+  opacity: 0;
+}
+
+#album-cover {
+  width: 100%;
+  max-width: 250px;
+  height: 250px;
+  object-fit: cover;
+  border-radius: var(--border-radius);
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+#album-cover:hover {
+  transform: scale(1.05);
+}
+
+#album-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+#album-artist {
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-bottom: 12px;
+  color: var(--text-secondary);
+}
+
+#album-genre {
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  color: var(--accent-color);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#album-description {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  color: var(--text-secondary);
+}
+
+#listen-link {
+  display: inline-block;
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  color: white;
+  text-decoration: none;
+  padding: 12px 24px;
+  border-radius: var(--border-radius);
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+#listen-link:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
+}
+
+#listen-link:active {
+  transform: translateY(0) scale(0.98);
+}
+
+#controls {
+  margin-top: 30px;
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+button {
+  background: var(--card-bg);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 12px 20px;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+button:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  border-color: var(--primary-color);
+}
+
+button:hover::before {
+  left: 100%;
+}
+
+button:active {
+  transform: translateY(-1px) scale(1.02);
+}
+
+#mark-listened {
+  background: linear-gradient(45deg, #10b981, #059669);
+  border-color: #10b981;
+}
+
+#skip-album {
+  background: linear-gradient(45deg, #f59e0b, #d97706);
+  border-color: #f59e0b;
+}
+
+#reset-progress {
+  background: linear-gradient(45deg, #ef4444, #dc2626);
+  border-color: #ef4444;
+}
+
+#history-sidebar {
+  width: 320px;
+  background: rgba(30, 27, 75, 0.9);
+  backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 40px 20px;
+  overflow-y: auto;
+  height: 100vh;
+}
+
+#history-sidebar::-webkit-scrollbar {
+  width: 8px;
+}
+
+#history-sidebar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+}
+
+#history-sidebar::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+#history-sidebar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, var(--secondary-color), var(--accent-color));
+}
+
+#history-sidebar h2 {
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  color: var(--text-primary);
+  text-align: center;
+  border-bottom: 2px solid var(--primary-color);
+  padding-bottom: 10px;
+}
+
+#history-list {
+  list-style: none;
+}
+
+#history-list li {
+  background: var(--card-bg);
+  margin-bottom: 12px;
+  padding: 15px;
+  border-radius: var(--border-radius);
+  border-left: 4px solid var(--accent-color);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#history-list li.history-item-entering {
+  opacity: 0;
+  transform: translateY(10px);
+}
+
+#history-list li:hover {
+  transform: translateX(5px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+#history-list li strong {
+  display: block;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  margin-bottom: 4px;
+}
+
+#history-list li span {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.streak-notification {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent-color);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: bold;
+  font-size: 1.2rem;
+  animation: streakFloat 1.5s ease-out forwards;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+@keyframes streakFloat {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-30px) scale(1.2);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-50px) scale(0.8);
+  }
+}
+
+.empty-state {
+  text-align: center;
+  color: var(--text-secondary);
+  font-style: italic;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius);
+  margin: 10px 0;
+}
+
+@media (max-width: 768px) {
+  #app {
+    flex-direction: column;
+  }
+  
+  #history-sidebar {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    order: 2;
+  }
+  
+  #main-content {
+    order: 1;
+    padding: 100px 20px 20px;
+  }
+  
+  #controls {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  button {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+---script.js---
+function initApp() {
+  const ALBUMS = [
+    {
+      id: 1,
+      title: "In the Aeroplane Over the Sea",
+      artist: "Neutral Milk Hotel",
+      genre: "Indie Folk",
+      description: "A deeply emotional concept album about Anne Frank and love, featuring unique instrumentation and Jeff Mangum's distinctive vocals.",
+      cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop",
+      listenUrl: "https://open.spotify.com/album/5COXoP5kdc9tHm2IgBHPar"
+    },
+    {
+      id: 2,
+      title: "Cosmogramma",
+      artist: "Flying Lotus",
+      genre: "Electronic Jazz",
+      description: "An experimental fusion of electronic beats, jazz harmonies, and cosmic themes that pushes the boundaries of instrumental music.",
+      cover: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=400&h=400&fit=crop",
+      listenUrl: "https://open.spotify.com/album/1WjlFCHVONpcWNTNAFy5Vr"
+    },
+    {
+      id: 3,
+      title: "Carrie & Lowell",
+      artist: "Sufjan Stevens",
+      genre: "Indie Folk",
+      description: "An intimate meditation on family, loss, and forgiveness, featuring delicate fingerpicked guitar and whispered vocals.",
+      cover: "https://images.unsplash.com/photo-1487180144351-b8472da7d491?w=400&h=400&fit=crop",
+      listenUrl: "https://open.spotify.com/album/0U8DeqqKDgIhIiWOdqiQXE"
+    },
+    {
+      id: 4,
+      title: "Deathconsciousness",
+      artist: "Have a Nice Life",
+      genre: "Post-Punk",
+      description: "A haunting double album exploring themes of depression and mortality with wall-of-sound production and ethereal melodies.",
+      cover: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop",
+      listenUrl: "https://open.spotify.com/album/7FRrWLJVTNHjeRKjVTEsWo"
+    },
+    {
+      id: 5,
+      title: "Illinois",
+      artist: "Sufjan Stevens",
+      genre: "Baroque Pop",
+      description: "An orchestral indie masterpiece celebrating and deconstructing American mythology through the lens of Illinois history.",
+      cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop",
+      listenUrl: "https://open.spotify.com/album/6b8Zo4OrpjFVNrZN8VkzVs"
+    },
+    {
+      id: 6,
+      title: "Spiderland",
+      artist: "Slint",
+      genre: "Post-Rock",
+      description: "A groundbreaking album that defined post-rock with its quiet-loud dynamics, mathematical precision, and narrative spoken vocals.",
+      cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop",
+      listenUrl: "https://open.spotify.com/album/6VaRDloOGLhq6PNhvFmMKa"
+    },
+    {
+      id: 7,
+      title: "The Glow Pt. 2",
+      artist: "The Microphones",
+      genre: "Lo-Fi Indie",
+      description: "Phil Elvrum's magnum opus of lo-fi indie rock, featuring nature imagery, distorted production, and deeply personal songwriting.",
+      cover: "https://images.unsplash.com/photo-1487180144351-b8472da7d491?w=400&h=400&fit=crop",
+      listenUrl: "https://open.spotify.com/album/6b8Zo4OrpjFVNrZN8VkzVs"
+    },
+    {
+      id: 8,
+      title: "Since I Left You",
+      artist: "The Avalanches",
+      genre: "Plunderphonics",
+      description: "A sample-based masterpiece built from thousands of vinyl records, creating a cohesive journey through decades of music history.",
+      cover: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=400&h=400&fit=crop",
+      listenUrl: "https://open.spotify.com/album/4VyQTZttCXp8DlKKKfgkDn"
+    },
+    {
+      id: 9,
+      title: "Laughing Stock",
+      artist: "Talk Talk",
+      genre: "Post-Rock",
+      description: "A pioneering work of ambient post-rock that influenced countless artists with its impressionistic approach to song structure.",
+      cover: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop",
+      listenUrl: "https://open.spotify.com/album/5COXoP5kdc9tHm2IgBHPar"
+    },
+    {
+      id: 10,
+      title: "Hissing Fauna, Are You the Destroyer?",
+      artist: "of Montreal",
+      genre: "Psychedelic Pop",
+      description: "Kevin Barnes' exploration of mental health and identity crisis through kaleidoscopic psychedelic pop arrangements.",
+      cover: "https://images.unsplash.com/photo-1487180144351-b8472da7d491?w=400&h=400&fit=crop",
+      listenUrl: "https://open.spotify.com/album/1WjlFCHVONpcWNTNAFy5Vr"
+    },
+    {
+      id: 11,
+      title: "Drukqs",
+      artist: "Aphex Twin",
+      genre: "IDM",
+      description: "Richard D. James' double album showcasing both brutal breakbeats and delicate prepared piano compositions in perfect balance.",
+      cover: "https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=400&h=400&fit=crop",
+      listenUrl: "https://open.spotify.com/album/7FRrWLJVTNHjeRKjVTEsWo"
+    },
+    {
+      id: 12,
+      title: "Red House Painters",
+      artist: "Red House Painters",
+      genre: "Slowcore",
+      description: "Mark Kozelek's sprawling debut of melancholic slowcore, featuring extended guitar passages and introspective lyricism.",
+      cover: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop",
+      listenUrl: "https://open.spotify.com/album/6VaRDloOGLhq6PNhvFmMKa"
+    }
+  ];
+
+  let state = {
+    currentAlbumId: null,
+    listenedAlbumIds: [],
+    allAlbumsPlayed: false
+  };
+
+  // DOM Elements
+  const progressCounter = document.getElementById('progress-counter');
+  const albumCard = document.getElementById('album-card');
+  const albumCover = document.getElementById('album-cover');
+  const albumTitle = document.getElementById('album-title');
+  const albumArtist = document.getElementById('album-artist');
+  const albumGenre = document.getElementById('album-genre');
+  const albumDescription = document.getElementById('album-description');
+  const listenLink = document.getElementById('listen-link');
+  const markListenedBtn = document.getElementById('mark-listened');
+  const skipAlbumBtn = document.getElementById('skip-album');
+  const resetProgressBtn = document.getElementById('reset-progress');
+  const historyList = document.getElementById('history-list');
+
+  if (!progressCounter || !albumCard || !albumCover || !albumTitle || !albumArtist || 
+      !albumGenre || !albumDescription || !listenLink || !markListenedBtn || 
+      !skipAlbumBtn || !resetProgressBtn || !historyList) {
+    console.error('Required DOM elements not found');
+    return;
+  }
+
+  function loadState() {
+    const savedState = localStorage.getItem('albumApp_state');
+    if (savedState) {
+      try {
+        state = JSON.parse(savedState);
+      } catch (e) {
+        console.error('Error parsing saved state:', e);
+        state = {
+          currentAlbumId: null,
+          listenedAlbumIds: [],
+          allAlbumsPlayed: false
+        };
+      }
+    }
+  }
+
+  function saveState() {
+    localStorage.setItem('albumApp_state', JSON.stringify(state));
+  }
+
+  function getAlbumById(id) {
+    return ALBUMS.find(album => album.id === id);
+  }
+
+  function selectNextAlbumId(isSkipping = false) {
+    const unplayedAlbums = ALBUMS.filter(album => 
+      !state.listenedAlbumIds.includes(album.id)
+    );
+
+    let selectedId;
+
+    if (unplayedAlbums.length > 0) {
+      let availableAlbums = unplayedAlbums;
+      
+      if (isSkipping && unplayedAlbums.length > 1 && state.currentAlbumId) {
+        availableAlbums = unplayedAlbums.filter(album => 
+          album.id !== state.currentAlbumId
+        );
+        if (availableAlbums.length === 0) {
+          availableAlbums = unplayedAlbums;
+        }
+      }
+      
+      selectedId = availableAlbums[Math.floor(Math.random() * availableAlbums.length)].id;
+      state.allAlbumsPlayed = false;
+    } else {
+      let availableAlbums = ALBUMS;
+      
+      if (isSkipping && state.currentAlbumId) {
+        availableAlbums = ALBUMS.filter(album => album.id !== state.currentAlbumId);
+        if (availableAlbums.length === 0) {
+          availableAlbums = ALBUMS;
+        }
+      }
+      
+      selectedId = availableAlbums[Math.floor(Math.random() * availableAlbums.length)].id;
+      state.allAlbumsPlayed = true;
+    }
+
+    state.currentAlbumId = selectedId;
+    saveState();
+    return selectedId;
+  }
+
+  function renderAlbumCard(albumId) {
+    const album = getAlbumById(albumId);
+    if (!album) return;
+
+    albumCover.src = album.cover;
+    albumCover.alt = `${album.title} by ${album.artist}`;
+    albumTitle.textContent = album.title;
+    albumArtist.textContent = album.artist;
+    albumGenre.textContent = album.genre;
+    
+    let description = album.description;
+    if (state.allAlbumsPlayed) {
+      description += "\n\n🔄 You've listened to all unique albums! Now cycling through your collection.";
+    }
+    albumDescription.textContent = description;
+    
+    listenLink.href = album.listenUrl;
+    listenLink.textContent = "Listen Now";
+  }
+
+  function updateProgressCounter() {
+    progressCounter.textContent = `${state.listenedAlbumIds.length} albums completed`;
+  }
+
+  function addAlbumToHistoryList(album) {
+    const li = document.createElement('li');
+    li.classList.add('history-item-entering');
+    li.innerHTML = `
+      <strong>${album.title}</strong>
+      <span>by ${album.artist}</span>
+    `;
+    
+    historyList.prepend(li);
+    
+    requestAnimationFrame(() => {
+      li.classList.remove('history-item-entering');
+    });
+  }
+
+  function renderHistory() {
+    historyList.innerHTML = '';
+    
+    if (state.listenedAlbumIds.length === 0) {
+      const emptyLi = document.createElement('li');
+      emptyLi.className = 'empty-state';
+      emptyLi.textContent = 'No albums listened yet!';
+      historyList.appendChild(emptyLi);
+      return;
+    }
+
+    const reversedIds = [...state.listenedAlbumIds].reverse();
+    reversedIds.forEach((id, index) => {
+      const album = getAlbumById(id);
+      if (album) {
+        setTimeout(() => {
+          addAlbumToHistoryList(album);
+        }, index * 100);
+      }
+    });
+  }
+
+  function createStreakAnimation() {
+    progressCounter.classList.add('streak-animation');
+    
+    const streakNotification = document.createElement('div');
+    streakNotification.className = 'streak-notification';
+    streakNotification.textContent = '+1';
+    
+    progressCounter.parentElement.style.position = 'relative';
+    progressCounter.parentElement.appendChild(streakNotification);
+    
+    setTimeout(() => {
+      progressCounter.classList.remove('streak-animation');
+    }, 300);
+    
+    setTimeout(() => {
+      if (streakNotification.parentElement) {
+        streakNotification.parentElement.removeChild(streakNotification);
+      }
+    }, 1500);
+  }
+
+  function performCardTransition(callback) {
+    albumCard.classList.add('is-leaving');
+    
+    setTimeout(() => {
+      if (callback) callback();
+      albumCard.classList.remove('is-leaving');
+      albumCard.classList.add('is-entering');
+      
+      setTimeout(() => {
+        albumCard.classList.remove('is-entering');
+      }, 100);
+    }, 250);
+  }
+
+  function markAsListened() {
+    if (!state.currentAlbumId) return;
+    
+    const currentAlbum = getAlbumById(state.currentAlbumId);
+    if (!currentAlbum) return;
+
+    if (!state.listenedAlbumIds.includes(state.currentAlbumId)) {
+      state.listenedAlbumIds.push(state.currentAlbumId);
+      createStreakAnimation();
+      addAlbumToHistoryList(currentAlbum);
+    }
+
+    saveState();
+    updateProgressCounter();
+
+    performCardTransition(() => {
+      selectNextAlbumId();
+      renderAlbumCard(state.currentAlbumId);
+    });
+  }
+
+  function skipAlbum() {
+    performCardTransition(() => {
+      selectNextAlbumId(true);
+      renderAlbumCard(state.currentAlbumId);
+    });
+  }
+
+  function resetProgress() {
+    if (confirm('Are you sure you want to reset all your listening progress?')) {
+      localStorage.removeItem('albumApp_state');
+      window.location.reload();
+    }
+  }
+
+  // Event Listeners
+  markListenedBtn.addEventListener('click', markAsListened);
+  skipAlbumBtn.addEventListener('click', skipAlbum);
+  resetProgressBtn.addEventListener('click', resetProgress);
+
+  // Initialize App
+  loadState();
+  
+  if (!state.currentAlbumId) {
+    selectNextAlbumId();
+  }
+  
+  renderAlbumCard(state.currentAlbumId);
+  updateProgressCounter();
+  renderHistory();
+}

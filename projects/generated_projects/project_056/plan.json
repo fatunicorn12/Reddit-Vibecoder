@@ -1,0 +1,37 @@
+{
+  "title": "Santa's Global Gift Dash",
+  "description": "A static HTML/CSS/JS web application that visually simulates Santa's Christmas Eve journey across a world map, sequentially highlighting cities, showing his animated sleigh, and displaying a real-time countdown to Christmas.",
+  "features": [
+    "Interactive World Map Visualization with predefined journey path.",
+    "Animated Santa Sleigh icon moving smoothly between cities along the route.",
+    "Real-time Christmas Countdown (Days, Hours, Minutes, Seconds) display.",
+    "Dynamic City Highlighting for current and next destinations.",
+    "Detailed Info Panel displaying current city name, next city name, and estimated arrival time.",
+    "Visual Journey Progress Bar indicating overall completion.",
+    "Full Playback Controls: Start, Pause, Resume, and Reset Journey.",
+    "Adjustable Journey Speed Control via a slider.",
+    "Automatic Map Panning/Zooming to keep Santa's current location in view.",
+    "Persistent User Preferences (e.g., last selected journey speed) using localStorage.",
+    "Festive visual and optional audio ambiance for an immersive experience."
+  ],
+  "ui_polish": [
+    "Smooth easing animations for Santa's sleigh movement between city points.",
+    "Pulsating/Glowing CSS effects for the current and next highlighted cities.",
+    "Subtle particle effects (e.g., 'sparkles' or 'snow dust') trailing Santa's sleigh.",
+    "Elegant CSS transitions for UI panel expansions, button hover states, and information updates.",
+    "A carefully chosen festive color palette (deep reds, forest greens, gold, sparkling whites) applied consistently throughout the UI."
+  ],
+  "steps": [
+    "**1. Project Setup & Core HTML Structure:**\n    - Create `index.html`, `style.css`, and `script.js` files.\n    - Set up a basic HTML layout: a main container for the map, a sidebar/panel for controls and information, and a dedicated area for the Christmas countdown.\n    - Include a `div` for the world map, e.g., `<div id=\"world-map\"></div>`.",
+    "**2. Integrate World Map & Define Journey Data:**\n    - Source a high-resolution, royalty-free world map image or SVG. Embed it within the `#world-map` div.\n    - In `script.js`, define a JavaScript array of objects, each representing a city on Santa's journey. Each object should include `name`, `latitude`, `longitude`, and an `order` property for the sequence.\n    - Calculate pixel coordinates for each city on the map based on its lat/long for precise placement.",
+    "**3. Implement Real-time Christmas Countdown:**\n    - Write a JavaScript function to determine the target Christmas Eve date/time (e.g., December 24th, 8:00 PM in a common timezone like UTC-5).\n    - Create a `setInterval` loop that updates a dedicated countdown display element every second, showing remaining Days, Hours, Minutes, and Seconds.\n    - Style the countdown display with a large, festive font and contrasting colors.",
+    "**4. Santa's Sleigh & Path Animation Logic:**\n    - Create a `div` or `img` element representing Santa's sleigh. Position it absolutely within the map container.\n    - Implement a `requestAnimationFrame` loop to control Santa's movement.\n    - For each leg of the journey (city to city), calculate intermediate positions using linear interpolation (or a Bezier curve for smoother, arcing paths) between the start and end city coordinates.\n    - Introduce a `journeyProgress` variable (0-1) and a `speedMultiplier` to control animation pace.\n    - Update Santa's `transform` (translate) CSS property to move him smoothly.",
+    "**5. City Highlighting and Information Display:**\n    - For each city in the journey array, dynamically create a small marker (e.g., `div` with a `background-image` or a styled `span`) and absolutely position it on the map based on its coordinates.\n    - In the journey loop, apply a CSS class (e.g., `current-city-highlight`) to the active city's marker and `next-city-highlight` to the upcoming one. Remove these classes as Santa moves on.\n    - Update a dedicated info panel with the current city's name, the next city's name, and an estimated arrival time (calculated based on `journeyProgress` and `speedMultiplier`).",
+    "**6. Journey Controls and Progress Bar:**\n    - Create HTML buttons for 'Start Journey', 'Pause', 'Resume', and 'Reset Journey'. Attach JavaScript event listeners to control the animation loop (start/stop `requestAnimationFrame`) and reset journey state.\n    - Implement an HTML `input type=\"range\"` slider for 'Journey Speed'. Update the `speedMultiplier` variable in JavaScript based on the slider's value.\n    - Develop a CSS-driven horizontal progress bar that visually fills up proportionally to the `journeyProgress` variable.",
+    "**7. Dynamic Map Panning:**\n    - Implement JavaScript to adjust the `transform: translate()` of the map container (or the `viewBox` attribute if using SVG) to keep Santa's current position roughly centered on the screen, providing a dynamic 'follow' camera effect.\n    - Ensure the pan is smooth using CSS transitions or `requestAnimationFrame` for interpolation.",
+    "**8. Local Storage for User Preferences:**\n    - On the 'Journey Speed' slider's `change` event, save its current value to `localStorage` (e.g., `localStorage.setItem('journeySpeed', speedValue)`).\n    - On page load, check `localStorage` for a saved speed. If found, apply it to the slider and the `speedMultiplier` variable.",
+    "**9. Ambitious UI Polish Implementation:**\n    - **Santa Particle Effect:** Use a pseudo-element (`::after`) or a small, absolutely positioned `div` attached to Santa's sleigh, animated with CSS `keyframes` to create fading 'sparkles' or 'snow dust' as he moves.\n    - **Pulsating Highlights:** Apply `keyframes` animations to the `.current-city-highlight` and `.next-city-highlight` CSS classes to make them glow or pulsate softly (e.g., changing `box-shadow` or `filter: brightness`).\n    - **Smooth UI Transitions:** Add `transition: all 0.3s ease-in-out;` to interactive UI elements (buttons, info panels) for smooth visual feedback.\n    - **Festive Colors:** Define a CSS variable-based color scheme with reds, greens, golds, and whites, and apply it comprehensively to backgrounds, text, borders, and highlights.\n    - **Animated Countdown:** Use CSS `transform: translateY()` or `opacity` transitions on individual countdown digits when they change to create a subtle 'flip' or 'fade' effect.",
+    "**10. Responsive Design & Edge Cases:**\n    - Apply Flexbox and/or Grid to ensure the main layout (map + info panel) is responsive within its container, adapting gracefully to different browser window sizes.\n    - Add basic input validation/error handling (e.g., prevent multiple journey starts, ensure 'Reset' works cleanly).\n    - Implement a clear 'Journey Complete!' state, disabling controls and displaying a celebratory message when Santa reaches his last destination."
+  ],
+  "dependencies": []
+}

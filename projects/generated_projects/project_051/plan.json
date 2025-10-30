@@ -1,0 +1,57 @@
+{
+  "description": "A fast-paced, top-down arcade game where players control a virtual broom to sweep all debris from a procedurally generated parking lot grid before a 'sealing' timer runs out. Achieve perfect sweeps for bonus points and progression, facing increasing difficulty, power-ups, and obstacles, all while striving for a persistent high score.",
+  "features": [
+    "Player-controlled broom with 8-directional movement.",
+    "Procedurally generated parking lot grids for endless replayability.",
+    "Multiple debris types (standard, sticky, heavy) with distinct sweeping mechanics.",
+    "Dynamic 'Sealing' countdown timer with visual urgency feedback.",
+    "Score tracking (debris swept, perfect sweep bonus) and persistent high score via localStorage.",
+    "Difficulty scaling: increasing debris, faster timer, more obstacles, and new debris types per level.",
+    "Interactive Main Menu (Start Game, Instructions, View High Score).",
+    "Power-ups: Speed Boost, Wider Sweep, Time Extension, randomly spawnable.",
+    "Obstacles: Impassable cars, oil slicks (slows broom movement).",
+    "Game Over screen with final score, high score, and 'Play Again'/'Main Menu' options.",
+    "In-game Pause Menu with 'Resume' and 'Return to Main Menu' options.",
+    "Clean game restart and smooth transitions between screens."
+  ],
+  "ui_polish": [
+    "Smooth broom animation (idle sway, sweeping motion based on direction).",
+    "Particle effects for debris disappearance, power-up activation, and 'Perfect Sweep' celebration.",
+    "Score pop-ups with bounce animation on point gain and 'Perfect Sweep' text animations.",
+    "Screen shake effect on critical events (low timer, 'Bad Seal' game over).",
+    "Dynamic timer color change (e.g., green to yellow to red) indicating urgency.",
+    "Responsive UI elements with hover states, subtle transitions, and fade effects for menu navigation."
+  ],
+  "steps": [
+    "**1. Project Setup:** Create `index.html`, `style.css`, `script.js`. Link CSS in head, JS at end of body. Define basic HTML structure with a main `#app` container and child divs for `#main-menu`, `#instructions-screen`, `#high-score-screen`, `#game-screen`, `#game-over-screen`, and `#pause-menu`.",
+    "**2. Base CSS Styling:** Apply a CSS reset. Style `#app` for centering and fixed dimensions. Hide all screen containers initially except `#main-menu` using `display: none` or `opacity: 0; pointer-events: none;`. Style buttons with padding, background, font, and add `transition` for `hover` effects.",
+    "**3. JavaScript Core - Constants & State:** Define `GAME_CONFIG` object with canvas dimensions, cell size, player speed, initial debris count, initial time limit, power-up chances, etc. Declare global game state variables (`currentScreen`, `gameRunning`, `isPaused`, `currentLevel`, `score`, `highScore`, `timeLeft`, `player`, `grid`, `debris`, `powerUps`, `obstacles`, `particles`, `scorePopups`).",
+    "**4. HTML Canvas Setup:** Get the `<canvas id='gameCanvas'>` element and its 2D rendering context (`ctx`). Set canvas `width` and `height` based on `GAME_CONFIG`.",
+    "**5. Game Screen Management:** Implement `showScreen(screenId)` function to hide all screens and display the specified `screenId`. Attach `click` event listeners to all menu buttons (`Start Game`, `Instructions`, `High Score`, `Play Again`, `Resume`, `Main Menu`, `Back`).",
+    "**6. Persistence (High Score):** Implement `loadHighScore()` to retrieve `localStorage.getItem('broomSweepHighScore')` and `saveHighScore()` to store `localStorage.setItem('broomSweepHighScore', highScore)`. Load high score on app initialization and display it on main menu/high score screen.",
+    "**7. Game Loop (`requestAnimationFrame`):** Create `gameLoop()` function that calls `update()` and `draw()` functions. Use `requestAnimationFrame` to schedule `gameLoop` continuously when `gameRunning` is true.",
+    "**8. Procedural Grid Generation:** Implement `generateGrid()`: Initialize a 2D array with 'floor' tiles. Randomly place 'obstacle' tiles (e.g., 'car', 'oil_slick') ensuring they don't completely block paths or isolate areas. Place player at a safe starting position.",
+    "**9. Debris & Power-up Spawning:** Implement `spawnDebris()`: Iterate through empty grid cells and randomly place debris objects (standard, sticky, heavy with `requiredSweeps`) and power-up objects (speed, widen, time) based on `GAME_CONFIG.POWERUP_CHANCE`.",
+    "**10. Player Movement & Sweeping Logic:** Create `player` object with `x`, `y`, `dx`, `dy`, `speed`, `sweepRadius`. Implement `keydown` and `keyup` event listeners for WASD/Arrow keys to set `player.dx`/`dy`. In `update()`, update `player.x`/`y`, clamp to canvas bounds. Implement `checkSweep()`: If player is moving and close to debris/power-up (within `player.sweepRadius`), process it (remove debris, apply power-up effect, decrement sticky debris `requiredSweeps`).",
+    "**11. Collision Detection:** In `update()`, before moving player, check if the target cell contains an 'obstacle'. If so, prevent movement. For 'oil_slick' obstacles, temporarily reduce `player.speed` while on that tile.",
+    "**12. Timer Implementation:** In `update()`, decrement `timeLeft` based on `deltaTime`. Update the HUD timer display. If `timeLeft` drops below a threshold (e.g., 10s), trigger visual urgency (step 24).",
+    "**13. Game Initialization (`startGame()`):** Reset `score`, `currentLevel`, `timeLeft`, `player` position. Call `generateGrid()`, `spawnDebris()`. Set `gameRunning = true`, `isPaused = false`. `showScreen('game-screen')`. Ensure game loop is active.",
+    "**14. Win/Loss Conditions:** In `update()`: If `timeLeft <= 0`: if `debris.length > 0`, call `gameOver('bad_seal')`. If `debris.length == 0`, call `levelComplete()`. If `debris.length == 0` during gameplay (before timer runs out), also call `levelComplete()` for an early perfect clear.",
+    "**15. Level Progression (`levelComplete()`):** Add 'Perfect Sweep' bonus to `score`. Increment `currentLevel`. Adjust `GAME_CONFIG` values (e.g., increase `INITIAL_DEBRIS_COUNT`, decrease `INITIAL_TIME_LIMIT`) based on `currentLevel`. After a brief delay (e.g., 1-2s for celebration), call `startGame()` again to load the next, harder level.",
+    "**16. Game Over (`gameOver(reason)`):** Set `gameRunning = false`. Display `game-over-screen` with `score`, `highScore`, and the `reason` ('BAD SEAL!'). If `score > highScore`, update and `saveHighScore()`. Trigger screen shake and red overlay (step 26).",
+    "**17. Pause Functionality:** Implement `togglePause()` to flip `isPaused` boolean and show/hide `#pause-menu`. Add `keydown` listener for `Escape` key to call `togglePause()`.",
+    "**18. Power-up Effects Management:** When a power-up is collected, add its effect (e.g., `speedBoost` with `duration`, `widerSweep` with `duration`) to an `activePowerUps` array. In `update()`, decrement durations and remove effects when they expire.",
+    "**19. Canvas Drawing (`draw()`):** Clear canvas. Iterate through the `grid` to draw floor tiles, obstacles, debris. Draw the `player` broom. Draw active `particles` and `scorePopups` (steps 21, 22).",
+    "**20. Visual Polish - Broom Animation:** Use a broom sprite sheet or dynamic CSS `transform` for broom drawing. Animate broom 'idle sway' when stationary. Change broom orientation/frame based on `player.dx`, `player.dy` when moving.",
+    "**21. Visual Polish - Particle Effects:** Create a `particles` array. When debris is swept or power-up collected, add new particle objects (`x, y, vx, vy, color, size, lifetime`) to this array. In `update()`, move particles and decrement their `lifetime`. In `draw()`, render particles as small circles or squares, fading them out.",
+    "**22. Visual Polish - Score Pop-ups:** Create a `scorePopups` array. When score is gained, add `{ text: '+X', x, y, alpha, vy, lifetime }` to `scorePopups`. In `update()`, animate `y` upward, decrease `alpha`, and reduce `lifetime`. In `draw()`, render these text elements with `ctx.fillText`.",
+    "**23. Visual Polish - Screen Shake:** Implement `screenShake(duration, intensity)` function. When called, apply temporary, small random `transform: translate()` values to the `#app` container via CSS, clearing after `duration`. Trigger on low timer warning and 'Bad Seal' game over.",
+    "**24. Visual Polish - Dynamic Timer Color:** In `update()`, calculate `timeLeft` percentage. Based on this, dynamically change the CSS `color` property of the timer display element (e.g., green > yellow > orange > red) for visual urgency.",
+    "**25. Visual Polish - Smooth UI Transitions:** Apply `transition: opacity 0.4s ease-in-out;` to all screen containers. Use `opacity: 0; pointer-events: none;` for hidden screens and `opacity: 1; pointer-events: auto;` for visible screens when switching via `showScreen()`.",
+    "**26. Visual Polish - 'Perfect Sweep' & 'Bad Seal' Feedback:** For 'Perfect Sweep': display a large, animated text element (opacity, scale, slight bounce) centrally with a particle burst. For 'Bad Seal': apply a temporary CSS filter (e.g., `filter: brightness(0.8) sepia(0.5);`) or a red `::before` overlay to the `#game-screen` and display 'BAD SEAL!' text with a screen shake.",
+    "**27. Instructions Screen Content:** Populate `#instructions-screen` with clear instructions on controls (WASD/Arrows), objective (sweep all debris), scoring, power-ups, and obstacles."
+  ],
+  "dependencies": [
+    "None (Vanilla JavaScript, HTML, CSS)"
+  ]
+}

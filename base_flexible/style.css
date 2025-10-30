@@ -1,0 +1,216 @@
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+/* ===== BASE RESETS ===== */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  background: linear-gradient(135deg, #fdfbfb, #ebedee);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ===== HEADER & FOOTER ===== */
+header {
+  background: #6c5ce7;
+  color: #fff;
+  text-align: center;
+  padding: 1.2rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+
+header h1 {
+  margin: 0 0 0.3rem 0;
+  font-weight: 600;
+  font-size: 1.8rem;
+}
+
+header .project-description {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.95;
+  font-weight: 400;
+}
+
+footer {
+  background: #6c5ce7;
+  color: #fff;
+  text-align: center;
+  padding: 0.8rem;
+  font-size: 0.85rem;
+  box-shadow: 0 -2px 6px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+footer p {
+  margin: 0;
+}
+
+/* ===== MAIN CONTENT AREA ===== */
+/* CRITICAL: Main is now flexible and doesn't force centering */
+main {
+  flex: 1;
+  width: 100%;
+  padding: 20px;
+  overflow: auto;
+}
+
+/* ===== APP CONTAINER ===== */
+/* CRITICAL: #app has minimal constraints - Claude controls layout */
+#app {
+  /* NO background, padding, centering, or size constraints by default */
+  /* Claude will add these as needed */
+  width: 100%;
+  height: 100%;
+  min-height: 400px;
+}
+
+/* ===== OPTIONAL UTILITY CLASSES ===== */
+/* Claude can use these if desired, but they're not forced */
+.app-container {
+  background: #fafafa;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.app-centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 500px;
+}
+
+/* ===== BUTTON BASELINE STYLES ===== */
+button, .btn {
+  cursor: pointer;
+  padding: 12px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 50px;
+  font-size: 15px;
+  font-weight: 600;
+  background: #6c5ce7;
+  color: white;
+  transition: all 0.3s ease;
+  font-family: 'Quicksand', sans-serif;
+}
+
+button:hover, .btn:hover {
+  background: #5a4dd4;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+button:active, .btn:active {
+  transform: translateY(0);
+}
+
+button:disabled, .btn:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ===== COMMON GAME STYLES ===== */
+canvas {
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* ===== FORM BASELINE STYLES ===== */
+input[type="text"],
+input[type="number"],
+input[type="email"],
+textarea,
+select {
+  padding: 10px 15px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: 'Quicksand', sans-serif;
+  transition: border-color 0.3s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
+  border-color: #6c5ce7;
+}
+
+/* ===== UTILITY ANIMATIONS ===== */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+.slide-in {
+  animation: slideIn 0.4s ease-out;
+}
+
+/* ===== LAYOUT STABILITY ===== */
+/* Prevent layout shift from dynamic content */
+
+/* Images and videos should fit within their containers */
+img, video {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Use transforms for visual effects - prevents layout shift */
+.smooth-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.smooth-hover:hover {
+  transform: translateY(-2px) scale(1.02);
+}
+
+/* Loading states should reserve space */
+[data-loading] {
+  min-height: 200px;
+  position: relative;
+}
+
+/* Modals and overlays should not affect document flow */
+.modal, .overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Content containers should have defined heights */
+.content-container {
+  min-height: 400px;
+  position: relative;
+}
+
+/* Prevent button size changes from shifting layout */
+button, .btn {
+  /* Size is stable, use transforms for effects */
+  will-change: transform;
+}
